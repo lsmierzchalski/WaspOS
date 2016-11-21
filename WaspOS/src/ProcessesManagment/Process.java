@@ -2,6 +2,10 @@ package ProcessesManagment;
 
 public class Process {
 
+	//===ZMIENNE=========================================================================================
+	
+		protected String ProgramPath;
+	
 	//---PCB---------------------------------------------------------------------------------------------
 	
 		protected int ProcessID;
@@ -9,23 +13,26 @@ public class Process {
 		protected int BaseProcessPriority;
 		protected int CurrentProcessPriority;
 		// do dodania DANE PROCESORA
-		protected String ProgramPath;
+		
 	
 	
 	
 	
 	
 	
+	//===METODY==========================================================================================
 	
-	
-	
-	
-	void NewProcess(String ProgramPath_Original){
+	//---Stworz nowy proces------------------------------------------------------------------------------
+		
+	void CreateProcess(String ProgramPath_Original){
 		
 		ProgramPath = ProgramPath_Original;
+	}
+	
+	void CreateProcess(String ProgramPath_Original, String Name) {
 		
-		
-		
+		ProgramPath = ProgramPath_Original;
+		ProcessName = Name;
 	}
 	
 }
