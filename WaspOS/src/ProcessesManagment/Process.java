@@ -4,14 +4,14 @@ public class Process {
 
 	//===ZMIENNE=========================================================================================
 	
-		protected String ProgramPath;
+		private String ProgramPath;
 	
 	//---PCB---------------------------------------------------------------------------------------------
 	
-		protected int ProcessID;
-		protected String ProcessName;
-		protected int BaseProcessPriority;
-		protected int CurrentProcessPriority;
+		public int ProcessID;
+		private String ProcessName;
+		private int BaseProcessPriority;
+		private int CurrentProcessPriority;
 		// do dodania DANE PROCESORA
 		
 	
@@ -24,13 +24,20 @@ public class Process {
 	
 	//---Stworz nowy proces------------------------------------------------------------------------------
 		
-	void CreateProcess(String ProgramPath_Original){
+	protected void CreateProcess(int ID){
+			
+		ProcessID = ID;
+	}
 		
+	protected void CreateProcess(int ID,String ProgramPath_Original){
+		
+		ProcessID = ID;
 		ProgramPath = ProgramPath_Original;
 	}
 	
-	void CreateProcess(String ProgramPath_Original, String Name) {
+	protected void CreateProcess(int ID,String ProgramPath_Original, String Name) {
 		
+		ProcessID = ID;
 		ProgramPath = ProgramPath_Original;
 		ProcessName = Name;
 	}

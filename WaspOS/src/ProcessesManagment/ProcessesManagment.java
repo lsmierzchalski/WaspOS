@@ -7,29 +7,42 @@ public class ProcessesManagment extends Process {
 
 	//===ZMIENNE=========================================================================================
 	
-	private List<Process> ProcessesList;
+	public List<Process> ProcessesList;
+	
+	private ID_Overseer overseer;
 	
 	//===METODY==========================================================================================
 	
-	void Start(){
+	//---Konstruktor-------------------------------------------------------------------------------------
+	
+	public ProcessesManagment(){
 		
 		ProcessesList = new LinkedList<Process>();
+		overseer = new ID_Overseer();
 	}
 	
 	//---Dodaj nowy proces--------------------------------------------------------------------------------
 	
-	void NewProcess(String ProgramPath_Original){
+	public void NewProcess(){
 		
 		Process process = new Process();
-		process.CreateProcess(ProgramPath_Original);
+		process.CreateProcess(overseer.PickID());
+	
+		ProcessesList.add(process);
+	}
+
+	public void NewProcess(String ProgramPath_Original){
+		
+		Process process = new Process();
+		process.CreateProcess(overseer.PickID(),ProgramPath_Original);
 	
 		ProcessesList.add(process);
 	}
 	
-	void NewProcess(String ProgramPath_Original, String Name) {
+	public void NewProcess(String ProgramPath_Original, String Name) {
 		
 		Process process = new Process();
-		process.CreateProcess(ProgramPath_Original, Name);;
+		process.CreateProcess(overseer.PickID(),ProgramPath_Original, Name);;
 	
 		ProcessesList.add(process);
 	}
