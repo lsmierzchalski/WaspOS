@@ -37,6 +37,6 @@ public class ID_Overseer {
 			}
 		}
 		
-		return 0;
+		return 0; // CO z bledem jak nie ma dostepnego id???
 	}
 }
