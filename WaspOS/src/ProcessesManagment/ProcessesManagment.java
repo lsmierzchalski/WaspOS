@@ -3,11 +3,11 @@ import java.lang.Object;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ProcessesManagment extends Process {
+public class ProcessesManagment extends Proces {
 
 	//===ZMIENNE=========================================================================================
 	
-	public List<Process> ProcessesList;
+	public List<Proces> ProcessesList;
 	
 	private ID_Overseer overseer;
 	
@@ -17,7 +17,7 @@ public class ProcessesManagment extends Process {
 	
 	public ProcessesManagment(){
 		
-		ProcessesList = new LinkedList<Process>();
+		ProcessesList = new LinkedList<Proces>();
 		overseer = new ID_Overseer();
 	}
 	
@@ -25,7 +25,7 @@ public class ProcessesManagment extends Process {
 	
 	public void NewProcess(){
 		
-		Process process = new Process();
+		Proces process = new Proces();
 		process.CreateProcess(overseer.PickID());
 	
 		ProcessesList.add(process);
@@ -33,7 +33,7 @@ public class ProcessesManagment extends Process {
 
 	public void NewProcess(String ProgramPath_Original){
 		
-		Process process = new Process();
+		Proces process = new Proces();
 		process.CreateProcess(overseer.PickID(),ProgramPath_Original);
 	
 		ProcessesList.add(process);
@@ -41,7 +41,7 @@ public class ProcessesManagment extends Process {
 	
 	public void NewProcess(String ProgramPath_Original, String Name) {
 		
-		Process process = new Process();
+		Proces process = new Proces();
 		process.CreateProcess(overseer.PickID(),ProgramPath_Original, Name);;
 	
 		ProcessesList.add(process);

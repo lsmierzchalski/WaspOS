@@ -1,19 +1,23 @@
 package ProcessesManagment;
 
-public class Process {
+public class Proces {
 
 	//===ZMIENNE=========================================================================================
 	
 		private String ProgramPath;
+		public PCB pcb;;
 	
 	//---PCB---------------------------------------------------------------------------------------------
 	
+		public class PCB {
 		public int ProcessID;
 		private String ProcessName;
+		public int ProcessState;
 		private int BaseProcessPriority;
 		private int CurrentProcessPriority;
+		private boolean blocked;
 		// do dodania DANE PROCESORA
-		
+		}
 	
 	
 	
@@ -26,20 +30,20 @@ public class Process {
 		
 	protected void CreateProcess(int ID){
 			
-		ProcessID = ID;
+		pcb.ProcessID = ID;
 	}
 		
 	protected void CreateProcess(int ID,String ProgramPath_Original){
 		
-		ProcessID = ID;
+		pcb.ProcessID = ID;
 		ProgramPath = ProgramPath_Original;
 	}
 	
 	protected void CreateProcess(int ID,String ProgramPath_Original, String Name) {
 		
-		ProcessID = ID;
+		pcb.ProcessID = ID;
 		ProgramPath = ProgramPath_Original;
-		ProcessName = Name;
+		pcb.ProcessName = Name;
 	}
 	
 }
