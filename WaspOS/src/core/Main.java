@@ -10,11 +10,11 @@ public class Main {
 		ProcessesManagment m = new ProcessesManagment();
 	
 		m.NewProcess();
-		//m.NewProcess();
-		//m.NewProcess();
+		m.NewProcess();
+		m.NewProcess();
 		
 		m.ReadProcessInformations(0);
-		//m.ReadProcessInformations(1);
-		//m.ReadProcessInformations(2);
+		m.ReadProcessInformations(1);
+		m.ReadProcessInformations(2);
 	}
 }

@@ -5,6 +5,8 @@ import java.util.List;
 
 public class ProcessesManagment extends Proces {
 
+	// TO JEST KLASA Z METODAMI DLA WAS RESZTY NIE RUSZAC
+	
 	//===ZMIENNE=========================================================================================
 	
 	public List<Proces> processesList;
