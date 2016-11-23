@@ -7,7 +7,7 @@ public class ProcessesManagment extends Proces {
 
 	//===ZMIENNE=========================================================================================
 	
-	public List<Proces> ProcessesList;
+	public List<Proces> processesList;
 	
 	private ID_Overseer overseer;
 	
@@ -17,7 +17,7 @@ public class ProcessesManagment extends Proces {
 	
 	public ProcessesManagment(){
 		
-		ProcessesList = new LinkedList<Proces>();
+		processesList = new LinkedList<Proces>();
 		overseer = new ID_Overseer();
 	}
 	
@@ -28,7 +28,7 @@ public class ProcessesManagment extends Proces {
 		Proces process = new Proces();
 		process.CreateProcess(overseer.PickID());
 	
-		ProcessesList.add(process);
+		processesList.add(process);
 	}
 
 	public void NewProcess(String ProgramPath_Original){
@@ -36,7 +36,7 @@ public class ProcessesManagment extends Proces {
 		Proces process = new Proces();
 		process.CreateProcess(overseer.PickID(),ProgramPath_Original);
 	
-		ProcessesList.add(process);
+		processesList.add(process);
 	}
 	
 	public void NewProcess(String ProgramPath_Original, String Name) {
@@ -44,16 +44,35 @@ public class ProcessesManagment extends Proces {
 		Proces process = new Proces();
 		process.CreateProcess(overseer.PickID(),ProgramPath_Original, Name);;
 	
-		ProcessesList.add(process);
+		processesList.add(process);
+	}
+	
+	//---odszukiwanie procesu o podanym ID---------------------------------------------------------------
+	
+	public int FindProcessWithID(int ID) {
+		
+		Proces proces_kopia;
+		
+		for(int i = 0; i < processesList.size(); i++) {
+			
+			proces_kopia = processesList.get(i);
+			
+			if(proces_kopia.GetID() == ID) {
+				
+				return i;
+			}	
+		}
+		
+		return -1;
 	}
 	
 	//---odczytaj dane procesu----------------------------------------------------------------------------
 	
 	public void ReadProcessInformations(int ID) {
 		
-		// do poprawienia zeby szukalo po id nie indeksie w liscie
-		Proces p1 = ProcessesList.get(ID);
-		p1.ReadInformations();
+		int index = FindProcessWithID(ID);
+		Proces proces_kopia = processesList.get(index);
+		proces_kopia.ReadInformations();
 	}
 
 	

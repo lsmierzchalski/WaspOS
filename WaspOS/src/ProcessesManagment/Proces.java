@@ -85,6 +85,8 @@ public class Proces {
 		pcb.ProcessState = gotowy;
 	}
 	
+	//---odczytaj dane procesu----------------------------------------------------------------------------
+	
 	protected void ReadInformations() {
 		
 		System.out.println("------------------------------");
@@ -92,5 +94,15 @@ public class Proces {
 		System.out.println("Stan Procesu - " + pcb.ProcessState);
 		System.out.println("Pierwotny prirytet - " + pcb.BaseProcessPriority);
 	}
+	
+	//---Id get set---------------------------------------------------------------------------------------
+	
+	protected int GetID() {
+		
+		return pcb.ProcessID;
+	}
+	
+	
+	
 	
 }
