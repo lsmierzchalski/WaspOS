@@ -22,7 +22,7 @@ public class ProcessesManagment extends Proces {
 	}
 	
 	//---Dodaj nowy proces--------------------------------------------------------------------------------
-	
+
 	public void NewProcess(){
 		
 		Proces process = new Proces();
@@ -45,6 +45,15 @@ public class ProcessesManagment extends Proces {
 		process.CreateProcess(overseer.PickID(),ProgramPath_Original, Name);;
 	
 		ProcessesList.add(process);
+	}
+	
+	//---odczytaj dane procesu----------------------------------------------------------------------------
+	
+	public void ReadProcessInformations(int ID) {
+		
+		// do poprawienia zeby szukalo po id nie indeksie w liscie
+		Proces p1 = ProcessesList.get(ID);
+		p1.ReadInformations();
 	}
 
 	

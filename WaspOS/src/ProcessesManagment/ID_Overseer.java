@@ -31,12 +31,12 @@ public class ID_Overseer {
 				currentID = i;
 				FreeID[i] = 0;
 				
-				System.out.print(currentID);
+				//System.out.print(currentID);
 				
 				return currentID;
 			}
 		}
 		
-		return 0; // CO z bledem jak nie ma dostepnego id???
+		return 0;
 	}
 }
