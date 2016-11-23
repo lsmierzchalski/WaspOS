@@ -54,6 +54,8 @@ public class Proces {
 	
 		pcb.BaseProcessPriority = priorityOverseer.RollPriority();
 		
+		pcb.blocked = false;
+		
 		pcb.ProcessState = gotowy;
 	}
 		
@@ -66,6 +68,8 @@ public class Proces {
 		ProgramPath = ProgramPath_Original;
 		
 		pcb.BaseProcessPriority = priorityOverseer.RollPriority();
+		
+		pcb.blocked = false;
 		
 		pcb.ProcessState = gotowy;
 	}
@@ -81,6 +85,8 @@ public class Proces {
 		pcb.ProcessName = Name;
 		
 		pcb.BaseProcessPriority = priorityOverseer.RollPriority();
+		
+		pcb.blocked = false;
 		
 		pcb.ProcessState = gotowy;
 	}
@@ -102,7 +108,22 @@ public class Proces {
 		return pcb.ProcessID;
 	}
 	
+	protected void SetID(int ID) {
+		
+		pcb.ProcessID = ID;
+	}
 	
+	//---blocked get set-----------------------------------------------------------------------------------
+	
+	protected boolean GetBlocked() {
+		
+		return pcb.blocked;
+	}
+	
+	protected void SetBlocked(boolean blockedState) {
+		
+		pcb.blocked = blockedState;
+	}
 	
 	
 }

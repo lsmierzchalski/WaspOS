@@ -68,6 +68,22 @@ public class ProcessesManagment extends Proces {
 		return -1;
 	}
 	
+	//---blocked get set-----------------------------------------------------------------------------------
+	
+	public boolean GetBlockedWithID(int ID) {
+		
+		int index = FindProcessWithID(ID);
+		Proces proces_kopia = processesList.get(index);
+		return proces_kopia.GetBlocked();
+	}
+	
+	protected void SetBlocked(int ID, boolean blockedState) {
+		
+		int index = FindProcessWithID(ID);
+		Proces proces_kopia = processesList.get(index);
+		proces_kopia.SetBlocked(blockedState);
+	}
+	
 	//---odczytaj dane procesu----------------------------------------------------------------------------
 	
 	public void ReadProcessInformations(int ID) {
