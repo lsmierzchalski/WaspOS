@@ -17,6 +17,8 @@ public class Main {
 		m.ReadProcessInformations(1);
 		m.ReadProcessInformations(2);
 		
-		//testt
+		m.CheckStates();
+		
+		System.out.println(m.processesList.size());
 	}
 }

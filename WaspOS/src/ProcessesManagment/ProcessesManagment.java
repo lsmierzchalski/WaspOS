@@ -11,7 +11,13 @@ public class ProcessesManagment extends Proces {
 	
 	public List<Proces> processesList;
 	
+	public int currentlyHandledProcessID;
+		
 	private ID_Overseer overseer;
+	
+	private ProcessStateOverseer stateOverseer;
+	
+	private List<Integer> finishedProcessList;
 	
 	//===METODY==========================================================================================
 	
@@ -21,6 +27,8 @@ public class ProcessesManagment extends Proces {
 		
 		processesList = new LinkedList<Proces>();
 		overseer = new ID_Overseer();
+		stateOverseer = new ProcessStateOverseer();
+		finishedProcessList = new LinkedList<Integer>();
 	}
 	
 	//---Dodaj nowy proces--------------------------------------------------------------------------------
@@ -53,34 +61,35 @@ public class ProcessesManagment extends Proces {
 	
 	private void  DeleteProcess() {
 		
-		//processesList.get(0).pcb.ProcessState
+		for (int i = 0; i < finishedProcessList.size(); i++) {
+			
+			int index = FindProcessWithID(finishedProcessList.get(i));
+			processesList.remove(index);
+		}
 		
+		finishedProcessList.clear();
+	}
+	
+	public void DeleteProcessWithID(int ID) {
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		int index = FindProcessWithID(ID);
+		processesList.remove(index);
 	}
 	
 	//---sprawdz stany -> poszukiwanie procesow do usunieica---------------------------------------------
 	
-	private void CheckStates() {
+	public void CheckStates() {
 		
+		for (int i = 0; i < processesList.size(); i++) {
+			
+			if(processesList.get(i).pcb.ProcessState == stateOverseer.zakonczony) {
+				
+				finishedProcessList.add(processesList.get(i).pcb.ProcessID);
+			}
+		}
 		
-		
-		
-		
-		
-		
-		
-		
+		DeleteProcess();
 	}
-	
 	
 	//---odszukiwanie procesu o podanym ID---------------------------------------------------------------
 	

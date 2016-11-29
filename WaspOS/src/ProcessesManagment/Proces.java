@@ -13,13 +13,7 @@ public class Proces extends PCB{
 		
 		private PriorityOverseer priorityOverseer = new PriorityOverseer();
 		
-	//---Stany-------------------------------------------------------------------------------------------
-		
-		private int nowy = 0;
-		private int gotowy = 1;
-		private int aktywny = 2;
-		private int czekajacy = 3;
-		private int zakonczony = 4;
+		private ProcessStateOverseer stateOverseer = new ProcessStateOverseer();
 	
 	//===METODY==========================================================================================
 	
@@ -27,7 +21,7 @@ public class Proces extends PCB{
 		
 	protected void CreateProcess(int ID){
 			
-		pcb.ProcessState = nowy;
+		pcb.ProcessState = stateOverseer.nowy;
 		
 		pcb.ProcessID = ID;
 	
@@ -35,12 +29,12 @@ public class Proces extends PCB{
 		
 		pcb.blocked = false;
 		
-		pcb.ProcessState = gotowy;
+		pcb.ProcessState = stateOverseer.zakonczony;
 	}
 		
 	protected void CreateProcess(int ID,String ProgramPath_Original){
 		
-		pcb.ProcessState = nowy;
+		pcb.ProcessState = stateOverseer.nowy;
 		
 		pcb.ProcessID = ID;
 		
@@ -50,12 +44,12 @@ public class Proces extends PCB{
 		
 		pcb.blocked = false;
 		
-		pcb.ProcessState = gotowy;
+		pcb.ProcessState = stateOverseer.gotowy;
 	}
 	
 	protected void CreateProcess(int ID,String ProgramPath_Original, String Name) {
 		
-		pcb.ProcessState = nowy;
+		pcb.ProcessState = stateOverseer.nowy;
 		
 		pcb.ProcessID = ID;
 		
@@ -67,7 +61,7 @@ public class Proces extends PCB{
 		
 		pcb.blocked = false;
 		
-		pcb.ProcessState = gotowy;
+		pcb.ProcessState = stateOverseer.gotowy;
 	}
 	
 	//---odczytaj dane procesu----------------------------------------------------------------------------
