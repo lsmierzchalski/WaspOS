@@ -1,6 +1,6 @@
 package ProcessesManagment;
 
-public class Proces {
+public class Proces extends PCB{
 
 	//===ZMIENNE=========================================================================================
 	
@@ -17,30 +17,9 @@ public class Proces {
 		
 		private int nowy = 0;
 		private int gotowy = 1;
-		
-		
-		
-		
-		
-		
-		
-	//---PCB---------------------------------------------------------------------------------------------
-		
-		public class PCB {
-			
-			private int ProcessID;
-			private String ProcessName;
-			private int ProcessState;
-			private int BaseProcessPriority;
-			private int CurrentProcessPriority;
-			private boolean blocked;
-		// do dodania DANE PROCESORA
-		}
-	
-	
-	
-	
-	
+		private int aktywny = 2;
+		private int czekajacy = 3;
+		private int zakonczony = 4;
 	
 	//===METODY==========================================================================================
 	
@@ -101,19 +80,15 @@ public class Proces {
 		System.out.println("Pierwotny prirytet - " + pcb.BaseProcessPriority);
 	}
 	
-	//---Id get set---------------------------------------------------------------------------------------
+	//---Id get -------------------------------------------------------------------------------------------
 	
 	protected int GetID() {
 		
 		return pcb.ProcessID;
 	}
 	
-	protected void SetID(int ID) {
-		
-		pcb.ProcessID = ID;
-	}
-	
 	//---blocked get set-----------------------------------------------------------------------------------
+	
 	
 	protected boolean GetBlocked() {
 		
@@ -125,5 +100,34 @@ public class Proces {
 		pcb.blocked = blockedState;
 	}
 	
+	//---stan procesu get i set----------------------------------------------------------------------------
 	
+	protected int GetState() {
+		
+		return pcb.ProcessState;
+	}
+	
+	protected void SetState(int State) {
+		
+		pcb.ProcessState = State;
+	}
+	
+	//---pierwotny priorytet procesu get-------------------------------------------------------------------
+	
+	protected int GetBasePriority() {
+		
+		return pcb.BaseProcessPriority;
+	}
+	
+	//---obecny priorytet procesu get set------------------------------------------------------------------
+	
+	protected int GetCurrentPriority() {
+		
+		return pcb.CurrentProcessPriority;
+	}
+	
+	protected void SetCurrentPriority(int Priority) {
+		
+		pcb.CurrentProcessPriority = Priority;
+	}
 }

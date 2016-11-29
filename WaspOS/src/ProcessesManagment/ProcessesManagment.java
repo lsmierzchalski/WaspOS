@@ -49,6 +49,39 @@ public class ProcessesManagment extends Proces {
 		processesList.add(process);
 	}
 	
+	//---usun proces-------------------------------------------------------------------------------------
+	
+	private void  DeleteProcess() {
+		
+		//processesList.get(0).pcb.ProcessState
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+	
+	//---sprawdz stany -> poszukiwanie procesow do usunieica---------------------------------------------
+	
+	private void CheckStates() {
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+	
+	
 	//---odszukiwanie procesu o podanym ID---------------------------------------------------------------
 	
 	public int FindProcessWithID(int ID) {
@@ -77,13 +110,54 @@ public class ProcessesManagment extends Proces {
 		return proces_kopia.GetBlocked();
 	}
 	
-	protected void SetBlocked(int ID, boolean blockedState) {
+	public void SetBlocked(int ID, boolean blockedState) {
 		
 		int index = FindProcessWithID(ID);
 		Proces proces_kopia = processesList.get(index);
 		proces_kopia.SetBlocked(blockedState);
 	}
 	
+	//---stan procesu get i set----------------------------------------------------------------------------
+	
+	public int GetStateWithID(int ID) {
+		
+		int index = FindProcessWithID(ID);
+		Proces proces_kopia = processesList.get(index);
+		return proces_kopia.GetState();
+	}
+	
+	public void SetState(int ID, int State) {
+		
+		int index = FindProcessWithID(ID);
+		Proces proces_kopia = processesList.get(index);
+		proces_kopia.SetState(State);
+	}
+	
+	//---pierwotny priorytet procesu get-------------------------------------------------------------------
+	
+	public int GetBasePriorityWithID(int ID) {
+		
+		int index = FindProcessWithID(ID);
+		Proces proces_kopia = processesList.get(index);
+		return proces_kopia.GetBasePriority();
+	}
+	
+	//---obecny priorytet procesu get set------------------------------------------------------------------
+	
+	public int GetCurrentPrirityWithID(int ID) {
+		
+		int index = FindProcessWithID(ID);
+		Proces proces_kopia = processesList.get(index);
+		return proces_kopia.GetCurrentPriority();
+	}
+	
+	public void SetCurrentPririty(int ID, int Priority) {
+		
+		int index = FindProcessWithID(ID);
+		Proces proces_kopia = processesList.get(index);
+		proces_kopia.SetCurrentPriority(Priority);
+	}
+
 	//---odczytaj dane procesu----------------------------------------------------------------------------
 	
 	public void ReadProcessInformations(int ID) {
@@ -92,26 +166,4 @@ public class ProcessesManagment extends Proces {
 		Proces proces_kopia = processesList.get(index);
 		proces_kopia.ReadInformations();
 	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
