@@ -1,5 +1,5 @@
 package core;
-import ProcessorManager.*;
+import processorManager.*;
 
 public class Main {
 	public static void main(String[] args) {
