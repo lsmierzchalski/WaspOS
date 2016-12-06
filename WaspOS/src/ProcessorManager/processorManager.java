@@ -1,6 +1,6 @@
 package ProcessorManager;
-//import ProcessesManagment.Proces; => wrzucanie procesu do RUNNING i NEXTTRY, zwracanie danych procesu
-//import ProcessesManagment.ProcessesManagment => dostep do processesList
+import ProcessesManagment.Proces; 
+import ProcessesManagment.ProcessesManagment
 
 // USTAWIÆ POCZ¥TKOWE WARTOŒCI PÓL RUNNING I NEXTTRY (!)
 
@@ -9,7 +9,7 @@ package ProcessorManager;
  * 
  * @author £UKASZ WOLNIAK
  */
-Proces RUNNING; 
+public Proces RUNNING; 
 
 /**
  * Pole przechowuj¹ce kandydata na kolejny proces do uruchomienia.
@@ -18,7 +18,7 @@ Proces RUNNING;
  * 
  * @author £UKASZ WOLNIAK
  */
-Proces NEXTTRY;
+public Proces NEXTTRY;
 
 /**
  * Pole przechowuj¹ce liczbe procesów wys³anych na RUNNING. 
@@ -28,35 +28,70 @@ Proces NEXTTRY;
  */
 private int sendProcessToRunningCounter = 0;
 
-public class processorManager {
-
 /**
- * Pêtla sprawdzaj¹ca, czy w polu NEXTTRY jest na pewno proces o najwy¿szym piorytecie.
+ * Funkcja sprawdzaj¹ca, czy w polu RUNNING jest na pewno proces o najwy¿szym piorytecie z dostepnych tych na liscie procesow.
  * Je¿eli na liœcie jest proces o wiêkszym piorytecie - zmieniane jest pole NEXTTRY.
  * 
  * @author £UKASZ WOLNIAK
  */
-for(Proces processFromList : processesList){
-	if(processFromList.GetCurrentPriority() > NEXTTRY.GetCurrentPriority()){
-		NEXTTRY = processFromList;
+private void checkRUNNING(){
+	for(Proces processFromList : processesList){
+		if(processFromList.GetCurrentPriority() > RUNNING.GetCurrentPriority()){
+			RUNNING = processFromList;
+		}
+	}
+	return true;
+}
+
+/**
+ * Funkcja sprawdzaj¹ca, czy w polu NEXTTRY jest na pewno kolejny proces o najwy¿szym piorytecie.
+ * Je¿eli na liœcie jest proces o wiêkszym piorytecie - zmieniane jest pole NEXTTRY.
+ * 
+ * @author £UKASZ WOLNIAK
+ */
+private void checkNEXTTRY(){
+	for(Proces processFromList : processesList){
+		if(processFromList.GetCurrentPriority() > NEXTTRY.GetCurrentPriority()){
+			if(RUNNING!=processFromList){
+				NEXTTRY = processFromList;
+			}
+		}
+	}
+	return true;
+}
+
+private void checkStarving(){
+	if(sendProcessToRunningCounter%3){
+		private Proces weakestProcess = processesList.get(1);
+		for(Proces processFromList : processesList){
+			if(processFromList.GetCurrentPriority() < weakestProcess.GetCurrentPriority()){
+				weakestProcess = processFromList;
+			}
+		}
+		for(Proces processFromList : processesList){
+			if(processFromList.GetID() == weakestProcess.GetID()){
+				processFromList.SetCurrentPriority(processFromList.GetCurrentPiority()+1);
+			}
+		}
+		checkRUNNING();
+		checkNEXTTRY();
 	}
 }
 
-/*** ... ***/
+public class processorManager {
+	checkRUNNING();
+	checkNEXTTRY();
+	
+	if(NEXTTRY.GetBlocked()){
+		
+	}
 
 /**
  * Instrukcja warunkowa + Pêtla rozwi¹zuj¹ca problem g³odzenia piorytetów.
  * Je¿eli zmienna sendProcessToRunningCounter jest podzielna bez reszty przez 3 (czyl i co 3 wyslane procesy), to obecny piorytet procesu o najmniejszym piorytecie jest zwiêkszany o 1.
- * 
+ * Wywolane zostaje rownie¿ sprawdzenie pola najpierw RUNNING (czy czasem zwiekszony proces nie ma wiekszego piorytetu niz ten w RUNNING) oraz NEXTTRY (jezeli nie ma wiekszy od tego w RUNNING, to moze ma wiekszy chociaz od tego w NEXTTRY).
  * @author £UKASZ WOLNIAK
  */
-if(sendProcessToRunningCounter%3){
-	Proces weakestProcess = processesList.get(1);
-	for(Proces processFromList : processesList){
-		if(processFromList.GetCurrentPriority() < weakestProcess.GetCurrentPriority()){
-			weakestProcess = processFromList;
-		}
-	}
-	weakestProcess.SetCurrentPriority(weakestProcess.GetCurrentPiority()+1);
-}
+
+	checkStarving();
 }
