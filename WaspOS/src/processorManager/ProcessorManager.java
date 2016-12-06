@@ -3,6 +3,7 @@ import ProcessesManagment.Proces;
 import ProcessesManagment.ProcessesManagment
 
 // CO USTAWIÆ JAKO POCZ¥TKOWA WARTOSC POLA RUNNING (!), BO W NEXTTRY MOZE BYC OBOJETNIE JAKI PROCES BO I TAK SPRAWDZAM NA POCZATKU CZY W NEXTTRY JEST NAJWIEKSZY NA BANK
+// numberOfAdd - POLE DO ZROBIENIA PRZEZ GRACJANA!
 /**
  * Pole przechowuj¹ce aktualnie uruchomiony proces.
  * 
@@ -28,31 +29,44 @@ public static Proces NEXTTRY;
 private static int sendProcessToRunningCounter = 0;
 
 /**
- * Funkcja sprawdzaj¹ca, czy w polu RUNNING jest na pewno proces o najwy¿szym piorytecie z dostepnych tych na liscie procesow.
+ * Funkcja sprawdzaj¹ca, czy w polu RUNNING jest na pewno proces o najwy¿szym piorytecie z dostepnych tych na liscie procesow + FCFS.
  * Je¿eli na liœcie jest proces o wiêkszym piorytecie - zmieniane jest pole NEXTTRY.
  * 
  * @author £UKASZ WOLNIAK
  */
 private void checkRUNNING(){
 	for(Proces processFromList : processesList){
-		if((processFromList.GetCurrentPriority() > RUNNING.GetCurrentPriority()) && processFromList.GetBlocked()==false && rocessFromList.GetState()!=4){
+		if((processFromList.GetCurrentPriority() >= RUNNING.GetCurrentPriority()) && processFromList.GetBlocked()==false && rocessFromList.GetState()!=4){
+			if(processFromList.GetCurrentPriority() == RUNNING.GetCurrentPriority()){
+				if(processFormList.GetNumberOfAdd() < RUNNING.processFormList.GetNumberOfAdd()){
+					RUNNING = processFromList;
+				}
+			}
+			else{
 			RUNNING = processFromList;
+			}
 		}
 	}
 }
 
 /**
- * Funkcja sprawdzaj¹ca, czy w polu NEXTTRY jest na pewno kolejny proces o najwy¿szym piorytecie.
+ * Funkcja sprawdzaj¹ca, czy w polu NEXTTRY jest na pewno kolejny proces o najwy¿szym piorytecie + FCFS.
  * Je¿eli na liœcie jest proces o wiêkszym piorytecie - sprawdzamy czy czasem te piorytet nie jest aby w polu RUNNING, zmieniane jest pole NEXTTRY.
  * 
  * @author £UKASZ WOLNIAK
  */
 private void checkNEXTTRY(){
 	for(Proces processFromList : processesList){
-		if((processFromList.GetCurrentPriority() > NEXTTRY.GetCurrentPriority()) && processFromList.GetState()!=4){
+		if((processFromList.GetCurrentPriority() >= NEXTTRY.GetCurrentPriority()) && processFromList.GetState()!=4){
 			if(RUNNING!=processFromList){
-				
-				NEXTTRY = processFromList;
+				if(processFromList.GetCurrentPriority() == NEXTTRY.GetCurrentPriority()){
+					if(processFormList.GetNumberOfAdd() < NEXTTRY.processFormList.GetNumberOfAdd()){
+						NEXTTRY = processFromList;
+					}
+				}
+				else{
+					NEXTTRY = processFromList;
+				}
 			}
 		}
 	}
@@ -68,10 +82,15 @@ private void checkStarving(){
 	if(sendProcessToRunningCounter%3){
 		private Proces weakestProcess = processesList.get(1);
 		for(Proces processFromList : processesList){
-			if(processFromList.GetCurrentPriority() < weakestProcess.GetCurrentPriority()){
-				weakestProcess = processFromList;
+			if(processFromList.GetCurrentPriority() <= weakestProcess.GetCurrentPriority()){
+				if(processFormList.GetNumberOfAdd() == weakestProcess.processFormList.GetNumberOfAdd()){
+					if(processFormList.GetNumberOfAdd() < NEXTTRY.processFormList.GetNumberOfAdd()){
+					weakestProcess = processFromList;
+					}
 			}
-		}
+				else{
+					weakestProcess = processFromList;
+				}
 		for(Proces processFromList : processesList){
 			if(processFromList.GetID() == weakestProcess.GetID()){
 				processFromList.SetCurrentPriority(processFromList.GetCurrentPiority()+1);
@@ -79,7 +98,7 @@ private void checkStarving(){
 		}
 		checkRUNNING();
 		checkNEXTTRY();
-	}
+	} 
 }
 
 /**
