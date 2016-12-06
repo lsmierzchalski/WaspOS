@@ -2,8 +2,9 @@ package processorManager;
 import ProcessesManagment.Proces; 
 import ProcessesManagment.ProcessesManagment
 
-// CO USTAWIÆ JAKO POCZ¥TKOWA WARTOSC POLA RUNNING (!), BO W NEXTTRY MOZE BYC OBOJETNIE JAKI PROCES BO I TAK SPRAWDZAM NA POCZATKU CZY W NEXTTRY JEST NAJWIEKSZY NA BANK
-// numberOfAdd - POLE DO ZROBIENIA PRZEZ GRACJANA!
+// numberOfAdd i GetNumberOfAdd - POLE i GETTER DO ZROBIENIA PRZEZ GRACJANA!
+//EMPTY - Pusty proces do wrzucenia na poczatku do RUNNING i NEXTTRY oraz do wrzucania po usunieciu procesu tez wlasnie w pole RUNNING (no i w szczegolnym wypadku moze gdy NEXTTRY znow bedzie null) - bo inaczej nie porownam piorytetów
+// MOJE GETTERY : Co jest akurat w RUNNING i NEXTTRY, Za ile jakis proces bedzie mial zwiekszony dynamicznie piorytet + MOZE TEKSTY GDY WYOWLUJE FUNKCJE POSZCZEGOLNE(?)
 /**
  * Pole przechowuj¹ce aktualnie uruchomiony proces.
  * 
@@ -112,10 +113,12 @@ public class ProcessorManager {
 	//JEZELI PROCES NIE JEST ZABLOKOWANY TO WRZUCAMY GO DO RUNNING I WRZUCAMY NOWY DO NEXTTRY, A JEZELI NIE TO Z LISTY SZUKAMY NOWY DO RUNNINGU (BO W RUNNING SPRAWDZAMY CZY NIE JEST BLOKED)
 	if(NEXTTRY.GetBlocked()==false){
 		RUNNING = NEXTTRY;
+		sendProcessToRunningCounter++;
 		checkNEXTTRY();
 	}
 	else{
 		checkRUNNING();
+		sendProcessToRunningCounter++;
 	}
 	checkStarving();
 }
