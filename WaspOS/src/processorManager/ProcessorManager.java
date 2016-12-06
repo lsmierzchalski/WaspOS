@@ -1,6 +1,7 @@
 package processorManager;
 import ProcessesManagment.Proces; 
 import ProcessesManagment.ProcessesManagment
+
 // CO USTAWIÆ JAKO POCZ¥TKOWA WARTOSC POLA RUNNING (!), BO W NEXTTRY MOZE BYC OBOJETNIE JAKI PROCES BO I TAK SPRAWDZAM NA POCZATKU CZY W NEXTTRY JEST NAJWIEKSZY NA BANK
 /**
  * Pole przechowuj¹ce aktualnie uruchomiony proces.
