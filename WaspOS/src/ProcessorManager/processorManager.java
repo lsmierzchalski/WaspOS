@@ -9,7 +9,7 @@ package ProcessorManager;
  * 
  * @author £UKASZ WOLNIAK
  */
-//Proces RUNNING; 
+Proces RUNNING; 
 
 /**
  * Pole przechowuj¹ce kandydata na kolejny proces do uruchomienia.
@@ -18,8 +18,15 @@ package ProcessorManager;
  * 
  * @author £UKASZ WOLNIAK
  */
-//Proces NEXTTRY;
+Proces NEXTTRY;
 
+/**
+ * Pole przechowuj¹ce liczbe procesów wys³anych na RUNNING. 
+ * Co trzy procesy (gdy pole jest modulo 3 bez reszty) zwiekszany jest o 1 obecny piorytet (currentPiority) procesu o najmniejszym piorytecie (currentPiority).
+ * 
+ * @author £UKASZ WOLNIAK
+ */
+private int sendProcessToRunningCounter = 0;
 
 public class processorManager {
 
@@ -30,11 +37,26 @@ public class processorManager {
  * @author £UKASZ WOLNIAK
  */
 for(Proces processFromList : processesList){
-	if(processFromList.GetCurrentPriority()>NEXTTRY.GetCurrentPriority()){
-	NEXTTRY = processFromList;
+	if(processFromList.GetCurrentPriority() > NEXTTRY.GetCurrentPriority()){
+		NEXTTRY = processFromList;
 	}
 }
 
+/*** ... ***/
 
-
+/**
+ * Instrukcja warunkowa + Pêtla rozwi¹zuj¹ca problem g³odzenia piorytetów.
+ * Je¿eli zmienna sendProcessToRunningCounter jest podzielna bez reszty przez 3 (czyl i co 3 wyslane procesy), to obecny piorytet procesu o najmniejszym piorytecie jest zwiêkszany o 1.
+ * 
+ * @author £UKASZ WOLNIAK
+ */
+if(sendProcessToRunningCounter%3){
+	Proces weakestProcess = processesList.get(1);
+	for(Proces processFromList : processesList){
+		if(processFromList.GetCurrentPriority() < weakestProcess.GetCurrentPriority()){
+			weakestProcess = processFromList;
+		}
+	}
+	weakestProcess.SetCurrentPriority(weakestProcess.GetCurrentPiority()+1);
+}
 }
