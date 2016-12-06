@@ -8,7 +8,7 @@ import ProcessesManagment.ProcessesManagment
  * 
  * @author £UKASZ WOLNIAK
  */
-public Proces RUNNING; 
+public static Proces RUNNING; 
 
 /**
  * Pole przechowuj¹ce kandydata na kolejny proces do uruchomienia.
@@ -17,7 +17,7 @@ public Proces RUNNING;
  * 
  * @author £UKASZ WOLNIAK
  */
-public Proces NEXTTRY;
+public static Proces NEXTTRY;
 
 /**
  * Pole przechowuj¹ce liczbe procesów wys³anych na RUNNING. 
@@ -25,7 +25,7 @@ public Proces NEXTTRY;
  * 
  * @author £UKASZ WOLNIAK
  */
-private int sendProcessToRunningCounter = 0;
+private static int sendProcessToRunningCounter = 0;
 
 /**
  * Funkcja sprawdzaj¹ca, czy w polu RUNNING jest na pewno proces o najwy¿szym piorytecie z dostepnych tych na liscie procesow.
