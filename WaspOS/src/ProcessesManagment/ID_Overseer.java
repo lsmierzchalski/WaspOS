@@ -39,4 +39,9 @@ public class ID_Overseer {
 		
 		return 0;
 	}
+	
+	public void ClearID(int ID) {
+		
+		FreeID[ID] = 1;
+	}
 }

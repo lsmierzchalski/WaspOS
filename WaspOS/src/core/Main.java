@@ -9,16 +9,31 @@ public class Main {
 		//test dostepnosci
 		ProcessesManagment m = new ProcessesManagment();
 	
-		m.NewProcess();
-		m.NewProcess();
-		m.NewProcess();
+		m.NewProcess_XC("dupa");
+		m.NewProcess_XC("pizda");
+		m.NewProcess_XC("huj");
+		
+		m.ReadProcessListInformations();
 		
 		m.ReadProcessInformations(0);
 		m.ReadProcessInformations(1);
 		m.ReadProcessInformations(2);
 		
-		m.CheckStates();
+		m.DeleteProcessWithID(2);
 		
-		System.out.println(m.processesList.size());
+		m.ReadProcessListInformations();
+		
+		m.NewProcess_XC("nowy");
+		
+		m.ReadProcessListInformations();
+		
+		m.DeleteProcessWithName_XD("dupa");
+		
+		m.ReadProcessListInformations();
+		
+		m.NewProcess_XC("najnowszy");
+		
+		m.ReadProcessListInformations();
+		
 	}
 }

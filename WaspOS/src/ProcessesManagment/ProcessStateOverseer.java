@@ -2,9 +2,9 @@ package ProcessesManagment;
 
 public class ProcessStateOverseer {
 
-	public int nowy = 0;
-	public int gotowy = 1;
-	public int aktywny = 2;
-	public int czekajacy = 3;
-	public int zakonczony = 4;
+	public int newbie = 0;
+	public int ready = 1;
+	public int active = 2;
+	public int waiting = 3;
+	public int finished = 4;
 }
