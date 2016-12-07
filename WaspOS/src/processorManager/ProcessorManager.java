@@ -1,10 +1,15 @@
 package processorManager;
 import ProcessesManagment.Proces; 
-import ProcessesManagment.ProcessesManagment
+import ProcessesManagment.ProcessesManagment;
 
-// numberOfAdd i GetNumberOfAdd - POLE i GETTER DO ZROBIENIA PRZEZ GRACJANA!
-//EMPTY - Pusty proces do wrzucenia na poczatku do RUNNING i NEXTTRY oraz do wrzucania po usunieciu procesu tez wlasnie w pole RUNNING (no i w szczegolnym wypadku moze gdy NEXTTRY znow bedzie null) - bo inaczej nie porownam piorytetów
-// MOJE GETTERY : Co jest akurat w RUNNING i NEXTTRY, Za ile jakis proces bedzie mial zwiekszony dynamicznie piorytet + MOZE TEKSTY GDY WYOWLUJE FUNKCJE POSZCZEGOLNE(?)
+// Rejestr D jako licznik wykonanych rozkazow - DO ZROBIENIA PRZEZ JARKA!
+// EMPTY - Pusty proces do wrzucenia na poczatku do RUNNING i NEXTTRY!
+// + wywolanie INTERPRETERA!
+// + POSTARZANIE PROCESOW gdy getCommantCounter() % 3!
+// + MOJE GETTERY : Co jest akurat w RUNNING i NEXTTRY + MOZE TEKSTY GDY WYOWLUJE FUNKCJE POSZCZEGOLNE(?)!
+// ? WSZYSTKO W RUN ?
+// ? JAREK ZWROCI MI ZERO TO ZNOW DZIALAM ?
+// !!! PROTEZY OD JARKA I GRACJANA !!!
 /**
  * Pole przechowuj¹ce aktualnie uruchomiony proces.
  * 
@@ -22,14 +27,6 @@ public static Proces RUNNING;
 public static Proces NEXTTRY;
 
 /**
- * Pole przechowuj¹ce liczbe procesów wys³anych na RUNNING. 
- * Co trzy procesy (gdy pole jest modulo 3 bez reszty) zwiekszany jest o 1 obecny piorytet (currentPiority) procesu o najmniejszym piorytecie (currentPiority).
- * 
- * @author £UKASZ WOLNIAK
- */
-private static int sendProcessToRunningCounter = 0;
-
-/**
  * Funkcja sprawdzaj¹ca, czy w polu RUNNING jest na pewno proces o najwy¿szym piorytecie z dostepnych tych na liscie procesow + FCFS.
  * Je¿eli na liœcie jest proces o wiêkszym piorytecie - zmieniane jest pole NEXTTRY.
  * 
@@ -37,10 +34,11 @@ private static int sendProcessToRunningCounter = 0;
  */
 private void checkRUNNING(){
 	for(Proces processFromList : processesList){
-		if((processFromList.GetCurrentPriority() >= RUNNING.GetCurrentPriority()) && processFromList.GetBlocked()==false && rocessFromList.GetState()!=4){
+		if((processFromList.GetCurrentPriority() >= RUNNING.GetCurrentPriority()) && processFromList.GetState()==1){
 			if(processFromList.GetCurrentPriority() == RUNNING.GetCurrentPriority()){
 				if(processFormList.GetNumberOfAdd() < RUNNING.processFormList.GetNumberOfAdd()){
 					RUNNING = processFromList;
+					RUNNING = RUNNING.SetState(2);
 				}
 			}
 			else{
@@ -58,7 +56,7 @@ private void checkRUNNING(){
  */
 private void checkNEXTTRY(){
 	for(Proces processFromList : processesList){
-		if((processFromList.GetCurrentPriority() >= NEXTTRY.GetCurrentPriority()) && processFromList.GetState()!=4){
+		if((processFromList.GetCurrentPriority() >= NEXTTRY.GetCurrentPriority()) && (processFromList.GetState()==1  || processFromList.GetState()==3)){
 			if(RUNNING!=processFromList){
 				if(processFromList.GetCurrentPriority() == NEXTTRY.GetCurrentPriority()){
 					if(processFormList.GetNumberOfAdd() < NEXTTRY.processFormList.GetNumberOfAdd()){
@@ -80,7 +78,6 @@ private void checkNEXTTRY(){
  * @author £UKASZ WOLNIAK
  */
 private void checkStarving(){
-	if(sendProcessToRunningCounter%3){
 		private Proces weakestProcess = processesList.get(1);
 		for(Proces processFromList : processesList){
 			if(processFromList.GetCurrentPriority() <= weakestProcess.GetCurrentPriority()){
@@ -100,6 +97,14 @@ private void checkStarving(){
 		checkRUNNING();
 		checkNEXTTRY();
 	} 
+	}	
+}
+
+/**
+ * 
+ */
+private void checkAging(){
+	
 }
 
 /**
@@ -108,17 +113,18 @@ private void checkStarving(){
  * @author £UKASZ WOLNIAK
  */
 public class ProcessorManager {
-	//SPRAWDZENIE CZY NA PEWNO W NEXTTRY JEST PROCES O NAJWYZCZYM PIORYTECIE
-	checkNEXTTRY();
-	//JEZELI PROCES NIE JEST ZABLOKOWANY TO WRZUCAMY GO DO RUNNING I WRZUCAMY NOWY DO NEXTTRY, A JEZELI NIE TO Z LISTY SZUKAMY NOWY DO RUNNINGU (BO W RUNNING SPRAWDZAMY CZY NIE JEST BLOKED)
-	if(NEXTTRY.GetBlocked()==false){
-		RUNNING = NEXTTRY;
-		sendProcessToRunningCounter++;
+	//SPRAWDZAMY CZY PROCES W RUNNING JEST ZABLOKOWANY LUB ZAKONCZONY
+	IF(RUNNING.GetState()==4 || RUNNING.GetState()==3){
+		//SPRAWDZENIE CZY NA PEWNO W NEXTTRY JEST PROCES O NAJWYZCZYM PIORYTECIE
 		checkNEXTTRY();
+		//JEZELI PROCES NIE JEST ZABLOKOWANY TO WRZUCAMY GO DO RUNNING I WRZUCAMY NOWY DO NEXTTRY, A JEZELI NIE TO Z LISTY SZUKAMY NOWY DO RUNNINGU (BO W RUNNING SPRAWDZAMY CZY NIE JEST BLOKED)
+		if(NEXTTRY.GetBlocked()==false){
+			RUNNING = NEXTTRY;
+			checkNEXTTRY();
+		}
+		else{
+			checkRUNNING();
+		}
+		checkStarving();
 	}
-	else{
-		checkRUNNING();
-		sendProcessToRunningCounter++;
-	}
-	checkStarving();
 }
