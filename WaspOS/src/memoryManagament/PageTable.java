@@ -34,10 +34,10 @@ public class PageTable {
 		else
 			return this.framesNumber[pageNumber];
 	}
-	
+
 	public int getIndex(int pageInRam) {
-		for(int i=0;i<this.framesNumber.length;i++) {
-			if(this.framesNumber[i]==pageInRam)
+		for (int i = 0; i < this.framesNumber.length; i++) {
+			if (this.framesNumber[i] == pageInRam)
 				return i;
 		}
 		return -1;

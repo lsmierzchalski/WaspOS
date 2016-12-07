@@ -105,11 +105,11 @@ public class RAM {
 			if (this.processNameInFrame[i].equals(processName)) {
 				this.freeFrame[i] = true;
 				this.FIFO.remove(i);
-				for(int j=0;j<pageTables.size();j++) {
-					if(this.pageTables.get(j).processName.equals(processName))
+				for (int j = 0; j < pageTables.size(); j++) {
+					if (this.pageTables.get(j).processName.equals(processName))
 						this.pageTables.remove(j);
 				}
-					
+
 				for (int j = 0; j < 16; j++)
 					ram[i * 16 + j] = ' ';
 			}

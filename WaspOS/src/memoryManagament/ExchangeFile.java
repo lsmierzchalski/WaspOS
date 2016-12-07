@@ -33,7 +33,7 @@ public class ExchangeFile {
 			// wczytanie danych do stringa
 			while (read.hasNextLine()) {
 				processData += read.nextLine();
-				processData+=';';
+				processData += ';';
 			}
 
 			read.close();
@@ -73,7 +73,7 @@ public class ExchangeFile {
 
 		} catch (FileNotFoundException e) {
 			System.out.println("Blad: Plik nie istnieje");
-		} 
+		}
 		PageTable ret = null;
 		return ret;
 
@@ -87,9 +87,9 @@ public class ExchangeFile {
 
 			while (read.hasNextLine()) {
 				String procName = read.next();
-				//System.out.print(procName+" ");
+				// System.out.print(procName+" ");
 				int pageNum = read.nextInt();
-				//System.out.println(pageNum);
+				// System.out.println(pageNum);
 				read.nextLine();
 				String chc = read.nextLine();
 				// System.out.println(chc);
