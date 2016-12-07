@@ -13,6 +13,12 @@ public class Main {
 		m.NewProcess_XC("pizda");
 		m.NewProcess_XC("huj");
 		
+		m.GetBlockedWithID(2);
+		
+		
+
+		
+		
 		m.ReadProcessListInformations();
 		
 		m.ReadProcessInformations(0);
@@ -34,6 +40,10 @@ public class Main {
 		m.NewProcess_XC("najnowszy");
 		
 		m.ReadProcessListInformations();
+		
+		m.processesList.get(1).pcb.A = 10;
+		
+		m.ReadProcessInformations(1);
 		
 	}
 }

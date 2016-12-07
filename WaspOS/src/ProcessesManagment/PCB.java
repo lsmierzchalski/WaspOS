@@ -1,6 +1,6 @@
 package ProcessesManagment;
 
-public class PCB {
+public class PCB{
 	
 	protected int ProcessID;
 	protected String ProcessName;
@@ -8,7 +8,11 @@ public class PCB {
 	protected int BaseProcessPriority;
 	protected int CurrentProcessPriority;
 	protected boolean blocked;
-	// do dodania DANE PROCESORA
-	// do dodania DANE Z PAMIECI
-	// do dodania DANE DO KOMUNIKACJI
+	protected int commandCounter;
+	protected int whenCameToList;
+	public int A;
+	public int B;
+	public int C;
+	public int D;
+	public int Z;
 }

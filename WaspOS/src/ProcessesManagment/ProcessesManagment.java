@@ -10,9 +10,7 @@ public class ProcessesManagment extends Proces {
 	//***ZMIENNE*****************************************************************************************
 	
 	public List<Proces> processesList;
-	
-	public int currentlyHandledProcessID;
-		
+
 	//---pomocnicze--------------------------------------------------------------------------------------
 	
 	private ID_Overseer idoverseer;
@@ -20,6 +18,8 @@ public class ProcessesManagment extends Proces {
 	private ProcessStateOverseer stateOverseer;
 	
 	private List<Integer> finishedProcessList;
+	
+	private int processNumber;
 	
 	//***METODY******************************************************************************************
 	
@@ -31,6 +31,7 @@ public class ProcessesManagment extends Proces {
 		idoverseer = new ID_Overseer();
 		stateOverseer = new ProcessStateOverseer();
 		finishedProcessList = new LinkedList<Integer>();
+		processNumber = 1;
 	}
 	
 	//===Dodaj/Usun Procesy===============================================================================
@@ -40,17 +41,19 @@ public class ProcessesManagment extends Proces {
 	public void NewProcess_XC(String Name){
 		
 		Proces process = new Proces();
-		process.CreateProcess(idoverseer.PickID(),Name);
+		process.CreateProcess(idoverseer.PickID(),Name, processNumber);
 	
 		processesList.add(process);
+		processNumber++;
 	}
 	
 	public void NewProcess_forUser(String ProgramPath_Original, String Name) {
 		
 		Proces process = new Proces();
-		process.CreateProcess(idoverseer.PickID(),ProgramPath_Original, Name);;
+		process.CreateProcess(idoverseer.PickID(),ProgramPath_Original, Name, processNumber);
 	
 		processesList.add(process);
+		processNumber++;
 	}
 	
 	//---usun proces-------------------------------------------------------------------------------------

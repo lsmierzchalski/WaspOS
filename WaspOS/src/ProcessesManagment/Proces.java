@@ -21,7 +21,7 @@ public class Proces extends PCB{
 	
 	//---Stworz nowy proces------------------------------------------------------------------------------
 		
-	protected void CreateProcess(int ID,String name){
+	protected void CreateProcess(int ID,String name, int number){
 		
 		pcb.ProcessState = stateOverseer.newbie;
 		
@@ -37,10 +37,26 @@ public class Proces extends PCB{
 		
 		pcb.blocked = false;
 		
+		pcb.A = 0;
+		
+		pcb.B = 0;
+		
+		pcb.C = 0;
+		
+		pcb.D = 0;
+		
+		pcb.Z = 0;
+		
+		pcb.commandCounter = 0;
+		
+		pcb.commandCounter = 0;
+		
+		pcb.whenCameToList = number;
+		
 		pcb.ProcessState = stateOverseer.ready;
 	}
 	
-	protected void CreateProcess(int ID,String ProgramPath_Original, String Name) {
+	protected void CreateProcess(int ID,String ProgramPath_Original, String Name, int number) {
 		
 		pcb.ProcessState = stateOverseer.newbie;
 		
@@ -58,6 +74,20 @@ public class Proces extends PCB{
 		
 		pcb.blocked = false;
 		
+		pcb.A = 0;
+		
+		pcb.B = 0;
+		
+		pcb.C = 0;
+		
+		pcb.D = 0;
+		
+		pcb.Z = 0;
+		
+		pcb.commandCounter = 0;
+		
+		pcb.whenCameToList = number;
+		
 		pcb.ProcessState = stateOverseer.ready;
 	}
 	
@@ -72,18 +102,25 @@ public class Proces extends PCB{
 		System.out.println("Pierwotny prirytet - " + pcb.BaseProcessPriority);
 		System.out.println("Obecny prirytet - " + pcb.CurrentProcessPriority);
 		System.out.println("Stan zamka - " + pcb.blocked);
+		System.out.println("Rejestr A - " + pcb.A);
+		System.out.println("Rejestr B - " + pcb.B);
+		System.out.println("Rejestr C - " + pcb.C);
+		System.out.println("Rejestr D - " + pcb.D);
+		System.out.println("Rejestr Z - " + pcb.Z);
+		System.out.println("Liczba wykonanych rozkazow - " + pcb.commandCounter);
+		System.out.println("Ogolny numer procesu - " + pcb.whenCameToList);
 	}
 	
 	//---Id get -------------------------------------------------------------------------------------------
 	
-	protected int GetID() {
+	public int GetID() {
 		
 		return pcb.ProcessID;
 	}
 	
 	//---name get -----------------------------------------------------------------------------------------
 	
-	protected String GetName() {
+	public String GetName() {
 		
 		return pcb.ProcessName;
 	}
@@ -91,50 +128,50 @@ public class Proces extends PCB{
 	//---blocked get set-----------------------------------------------------------------------------------
 	
 	
-	protected boolean GetBlocked() {
+	public boolean GetBlocked() {
 		
 		return pcb.blocked;
 	}
 	
-	protected void SetBlocked(boolean blockedState) {
+	public void SetBlocked(boolean blockedState) {
 		
 		pcb.blocked = blockedState;
 	}
 	
 	//---stan procesu get i set----------------------------------------------------------------------------
 	
-	protected int GetState() {
+	public int GetState() {
 		
 		return pcb.ProcessState;
 	}
 	
-	protected void SetState(int State) {
+	public void SetState(int State) {
 		
 		pcb.ProcessState = State;
 	}
 	
 	//---pierwotny priorytet procesu get-------------------------------------------------------------------
 	
-	protected int GetBasePriority() {
+	public int GetBasePriority() {
 		
 		return pcb.BaseProcessPriority;
 	}
 	
 	//---obecny priorytet procesu get set------------------------------------------------------------------
 	
-	protected int GetCurrentPriority() {
+	public int GetCurrentPriority() {
 		
 		return pcb.CurrentProcessPriority;
 	}
 	
-	protected void SetCurrentPriority(int Priority) {
+	public void SetCurrentPriority(int Priority) {
 		
 		pcb.CurrentProcessPriority = Priority;
 	}
 	
 	//---pcb get-------------------------------------------------------------------------------------------
 	
-	protected PCB GetPCB() {
+	public PCB GetPCB() {
 		
 		return pcb;
 	}
