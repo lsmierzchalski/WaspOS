@@ -2,6 +2,7 @@ package memoryManagament;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -9,6 +10,7 @@ import java.util.Scanner;
 public class ExchangeFile {
 	File exchange = new File("exchangefile.txt");
 
+	//stworzenie pliku wymiany
 	public ExchangeFile() {
 		try {
 			if (this.exchange.exists()) {
@@ -17,7 +19,7 @@ public class ExchangeFile {
 			} else
 				this.exchange.createNewFile();
 		} catch (IOException e) {
-			System.out.println("Blad zapisu do pliku");
+			System.out.println("Memory error: creating exchange file failed");
 		}
 	}
 
@@ -57,7 +59,7 @@ public class ExchangeFile {
 				pageIndex++;
 			}
 
-			// przepisanie tego co by³o
+			// przepisanie tego co bylo
 			Scanner scan = new Scanner(this.exchange);
 			while (scan.hasNextLine()) {
 				push.println(scan.nextLine());
@@ -65,34 +67,34 @@ public class ExchangeFile {
 			push.close();
 			scan.close();
 
+			//zmiana pliku tymczasowego w domyslny plik wymiany
 			this.exchange.delete();
 			kopia.renameTo(this.exchange);
-
+			//zwrÃ³cenie tablicy stronic procesu ktory zostal zaladowany do pamieci
 			PageTable ret = new PageTable(processData.length(), process_name);
 			return ret;
 
 		} catch (FileNotFoundException e) {
-			System.out.println("Blad: Plik nie istnieje");
+			System.out.println("Memory error: loading data to exchange file failed");
 		}
 		PageTable ret = null;
 		return ret;
 
 	}
 
+	//usuwanie danych procesu z pliku wymiany
 	public void deleteProcessData(String process_name) {
 		try {
 			Scanner read = new Scanner(this.exchange);
 			File newfile = new File("exchangefile_copy.txt");
 			PrintWriter push = new PrintWriter(newfile);
 
+			//wpisywanie do pliku tymczasowego wszystkich danych oprocz danych usuwanego procesu
 			while (read.hasNextLine()) {
 				String procName = read.next();
-				// System.out.print(procName+" ");
 				int pageNum = read.nextInt();
-				// System.out.println(pageNum);
 				read.nextLine();
 				String chc = read.nextLine();
-				// System.out.println(chc);
 				if (!process_name.equals(procName)) {
 					push.println(procName + " " + pageNum);
 					push.println(chc);
@@ -101,10 +103,11 @@ public class ExchangeFile {
 			}
 			read.close();
 			push.close();
+			//zmiana pliku tymczasowego w domyslny plik wymiany
 			this.exchange.delete();
 			newfile.renameTo(this.exchange);
 		} catch (FileNotFoundException e) {
-			System.out.println("Wyj¹tek w pamiêci, nie znaleniono pliku");
+			System.out.println("Memory error: deleting data from exchange file failed");
 		}
 
 	}
@@ -113,32 +116,57 @@ public class ExchangeFile {
 	public String getFrame(String processName, int pageNumber) {
 		try {
 			Scanner search = new Scanner(exchange);
+			File newFile=new File("exchangefile_copy.txt");
+			PrintWriter writeToNewFile=new PrintWriter(newFile);
 			String check = null;
 			int pageNr = -1;
-			String procName = "";
-			boolean odczytanoPoprawnie = false;
+			String procName = "",rightFrame="";
+			boolean rightScan = false;
+			//szukamy zadana stronice
 			while (search.hasNextLine()) {
 				check = search.nextLine();
 				if (check.length() != 16) {
-					String podziel[] = check.split(" ");
-					procName = podziel[0];
-					pageNr = Integer.parseInt(podziel[1]);
+					String divide[] = check.split(" ");
+					procName = divide[0];
+					pageNr = Integer.parseInt(divide[1]);
+					//jezeli to szukana stronica
 					if (processName.equals(procName) && pageNumber == pageNr) {
-						check = search.nextLine();
-						odczytanoPoprawnie = true;
-						break;
+						rightFrame = search.nextLine();
+						rightScan = true;
+						
+					} else {	//jezeli to nie ta stronica, wpisujemy do pliku tymczasowego
+						
+						writeToNewFile.println(procName+" "+pageNr);
+						writeToNewFile.println(search.nextLine());
 					}
 				}
 			}
 			search.close();
-			if (odczytanoPoprawnie)
-				return check;
+			writeToNewFile.close();
+			
+			//zamieniamy plik tymczasowy na wlasiwy plik wymiany
+			this.exchange.delete();
+			newFile.renameTo(this.exchange);
+			
+			if (rightScan)
+				return rightFrame;
 			else
 				return null;
 
 		} catch (FileNotFoundException e) {
-			System.out.println("NIe ma pliku");
+			System.out.println("Memory error: getting page form exchange file failed");
 			return null;
+		}
+	}
+	
+	//dodaje stronice do pliku wymiany
+	public void addPageToExchangefile(String processName,int pageNumber,String data){
+		try {
+			FileWriter add=new FileWriter(this.exchange,true);
+			add.write(processName+" "+ pageNumber+"\n"+ data+"\n");
+			add.close();
+		} catch (IOException e) {
+			System.out.println("Memory error: write to exchange file failed ");
 		}
 	}
 

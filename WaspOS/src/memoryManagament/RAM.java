@@ -10,9 +10,10 @@ public class RAM {
 	private boolean freeFrame[] = new boolean[16];
 	private String processNameInFrame[] = new String[16];
 	private Queue<Integer> FIFO = new LinkedList<Integer>();
-	private List<PageTable> pageTables = new ArrayList<PageTable>();
-	ExchangeFile exchangeFile = new ExchangeFile();
+	public List<PageTable> pageTables = new ArrayList<PageTable>();
+	private ExchangeFile exchangeFile = new ExchangeFile();
 
+	//konstruktor, ustawienie podstawowych parametrow
 	public RAM() {
 		for (int i = 0; i < 16; i++) {
 			this.freeFrame[i] = true;
@@ -22,8 +23,11 @@ public class RAM {
 		}
 	}
 
-	public char getCommand(int licznikRozkazow, String processName) {
+	//metoda dla interpretera, zwraca znak o ktory prosi interpreter
+	public char getCommand(int programCounter, String processName) {
+		//szukany znak
 		char search;
+		//index tablicy stron szukanego procesu w kolekcji pagetables
 		int pageTableIndex = -1;
 		// szukanie tablicy stron z odpowiednim procesem
 		for (int i = 0; i < this.pageTables.size(); i++) {
@@ -33,7 +37,7 @@ public class RAM {
 
 		// wyznaczenie nr strony ktora musi byc w ramie przed zwroceniem
 		// odpowiedniego znaku
-		int pageNumber = licznikRozkazow / 16;
+		int pageNumber = programCounter / 16;
 
 		// sprawdzenie w ktorej ramce sa dane, zwraca -1 gdy nie ma w ramie
 		// odpowiedniej strony
@@ -46,44 +50,55 @@ public class RAM {
 			// szukanie wolnej ramki
 			// jezeli wszystkie ramki sa zajete
 			if (FIFO.size() == 16) {
+				//algorytm fifo, pobieram index ramki ktÃ³ra jest juz najdluzej zajeta w ramie
 				framePosition = FIFO.poll();
 
+				// zaznaczenie w tablicy stron procesu ktÃ³rego pamiÃªÃ¦ zwalniamy
+				// ze nie jest juz w ramie
+				for (int i = 0; i < this.pageTables.size(); i++) {
+					//szukanie procesu ktory jest w ramce ktora chemy zwolnic
+					if (this.pageTables.get(i).processName == this.processNameInFrame[framePosition]) {
+						//wyznaczenie odpowiednich wartosci i zwrocenie stronicy do pliku wymiany
+						int help = this.pageTables.get(i).getIndex(framePosition);
+						this.pageTables.get(i).inRAM[help] = false;
+						String data="";
+						for(int j=0;j<16;j++)
+							data+=ram[framePosition*16+j];
+						this.exchangeFile.addPageToExchangefile(this.pageTables.get(i).processName, help, data);
+					}
+				}
+				//wrzucenie do ramu wymaganych danych po zwolnieniu zajetej ramki
 				for (int j = 0; j < 16; j++)
 					this.ram[framePosition * 16 + j] = dane.charAt(j);
 
-				// zaznaczenie w tablicy stron procesu którego pamiêæ zwalniamy
-				// ze nie jest juz w ramie
-				for (int i = 0; i < this.pageTables.size(); i++) {
-					if (this.pageTables.get(i).processName == this.processNameInFrame[framePosition]) {
-						int help = this.pageTables.get(i).getIndex(framePosition);
-						this.pageTables.get(i).inRAM[help] = false;
-					}
-				}
-
 				FIFO.add(framePosition);
 
-			} else {
+			} else { //jezeli sa wolne ramki
 				for (int i = 0; i < 16; i++) {
+					//szukanie wolnej ramki
 					if (this.freeFrame[i] == true) {
+						//zapisanie do wolnej ramki odpowiednich danych
 						framePosition = i;
 
 						for (int j = 0; j < 16; j++)
 							ram[framePosition * 16 + j] = dane.charAt(j);
 
 						this.freeFrame[framePosition] = false;
-						this.processNameInFrame[framePosition] = processName;
 						FIFO.add(framePosition);
-
-						i = 16;
+						i = 16; //TODO
 					}
 				}
-				pageTables.get(pageTableIndex).inRAM[pageNumber] = true;
-				pageTables.get(pageTableIndex).framesNumber[pageNumber] = framePosition;
+				
 			}
+			//ustawienie nazwy procesu ktory od teraz bedzie w tej ramce
+			this.processNameInFrame[framePosition] = processName;
+			//ustawienie odpowiednich danych w tablicy stron procesu ktoremu przydzielamy pamiec
+			pageTables.get(pageTableIndex).inRAM[pageNumber] = true;
+			pageTables.get(pageTableIndex).framesNumber[pageNumber] = framePosition;
 		}
 
 		// zwrocenie odpowiedniego znaku
-		int positionInFrame = licznikRozkazow % 16;
+		int positionInFrame = programCounter % 16;
 		search = ram[framePosition * 16 + positionInFrame];
 		if (search == ';')
 			return '\n';
@@ -120,7 +135,7 @@ public class RAM {
 	}
 
 	// wypisanie procesow bedacych w pamieci
-	public void writePageTables() {
+	public void writeProcessesNamesInRam() {
 		for (int i = 0; i < this.pageTables.size(); i++)
 			System.out.println(pageTables.get(i).processName);
 	}
@@ -133,6 +148,11 @@ public class RAM {
 				System.out.print(ram[16 * i + j]);
 			System.out.println();
 		}
+	}
+	
+	//wypisanie aktualnego stanu kolejki fifo
+	public void writeQueue(){
+		System.out.println(this.FIFO);
 	}
 
 }
