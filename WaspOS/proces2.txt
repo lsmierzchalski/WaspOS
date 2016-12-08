@@ -1,0 +1,7 @@
+mov bx, 12
+mov cx, 112
+xor ax, ax
+add al, 657
+inc bx
+mov bx, 124
+div bx

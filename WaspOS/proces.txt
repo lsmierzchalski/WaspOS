@@ -1,0 +1,12 @@
+add eax, 124
+add ecx, ebx
+add zmienna, 25
+add eax, 124
+add ecx, ebx
+add zmienna, 25
+add eax, 124
+add ecx, ebx
+add zmienna, 25
+add eax, 124
+add ecx, ebx
+add zmienna, 25
