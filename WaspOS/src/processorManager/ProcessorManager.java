@@ -12,7 +12,7 @@ import ProcessesManagment.ProcessesManagment;
 // !!! SHELL!!
 
 /**
- * Proces bezczynnoœci, bym móg³ porównywaæ procesy z listy z polem RUNNING i NEXTTRY.
+ * Proces bezczynnoœci, bym móg³ porównywaæ procesy z listy z polem RUNNING i NEXTTRY oraz do wykorzystania gdy z pola NEXTTRY proces przechodzi do RUNNING (na chwile do momentu sprawdzenia pola NEXTTRY).
  * 
  * @author £UKASZ WOLNIAK
  */
@@ -36,8 +36,7 @@ public static Proces RUNNING = idleProcess;
 public static Proces NEXTTRY = idleProcess;
 
 /**
- * Funkcja sprawdzaj¹ca, czy w polu RUNNING jest na pewno proces o najwy¿szym piorytecie z dostepnych tych na liscie procesow + FCFS.
- * Je¿eli na liœcie jest proces o wiêkszym piorytecie - zmieniane jest pole NEXTTRY.
+ * Funkcja sprawdzaj¹ca, czy w polu RUNNING jest na pewno proces o najwy¿szym piorytecie z dostepnych tych na liscie procesow + zastosowanie algorytmu FCFS.
  * 
  * @author £UKASZ WOLNIAK
  */
@@ -61,8 +60,8 @@ private void checkRUNNING(){
 }
 
 /**
- * Funkcja sprawdzaj¹ca, czy w polu NEXTTRY jest na pewno kolejny proces o najwy¿szym piorytecie + FCFS.
- * Je¿eli na liœcie jest proces o wiêkszym piorytecie - sprawdzamy czy czasem te piorytet nie jest aby w polu RUNNING, zmieniane jest pole NEXTTRY.
+ * Funkcja sprawdzaj¹ca, czy w polu NEXTTRY jest na pewno kolejny proces o najwy¿szym piorytecie + zastosowanie algorytmu FCFS.
+ * Je¿eli na liœcie jest proces o wiêkszym piorytecie; jezeli taki proces istnieje, (lub ma taki sam piorytet ale wczesniej wszedl do listy) i nie jest ACTIVE to wstawiamy go do NEXTTRY.
  * 
  * @author £UKASZ WOLNIAK
  */
@@ -125,7 +124,7 @@ private void comapreNEXTTRYandRUNNING(){
 
 /**
  * Funkcja rozwi¹zuj¹ca problem g³odzenia piorytetów.
- * Co rozkaz zwiêkszany jest piorytet procesu o najmniejszym piorytecie z listy.
+ * Co rozkaz zwiêkszany jest piorytet procesu o najmniejszym piorytecie z listy a jezeli sa dwa o takim samy, wybierany jest ten co wczesniej wszedl na liste.
  * Wywolane zostaje rownie¿ funkcja compareNEXTTRYandWAITING.
  *
  * @author £UKASZ WOLNIAK
@@ -135,7 +134,7 @@ private void checkStarving(){
 	for(Proces processFromList : processesList){
 			if(processFromList.GetCurrentPriority() <= weakProcess.GetCurrentPriority()){
 				if(processFromList.GetCurrentPriority() == weakProcess.GetCurrentPriority()){
-				if(processFromList.GetWhenCameToList > weakProcess.GetWhenCameToList()){
+				if(processFromList.GetWhenCameToList < weakProcess.GetWhenCameToList()){
 					weakProcess = processFromList;
 				}	
 			}
@@ -167,10 +166,10 @@ private void changeWaiting(){
 }
 
 /**
- * Funkcja zwiekszajaca proces glodujacemu max, postarzanie procesow.
- * Je¿eli jakiœ proces czeka co najmniej 3 rozkazy (howLongWaiting) i wszedl najpozniej na liste to jego obecny piorytet jest zwiêkszany o 1 i howLongWaiting jest zerowane.
+ * Funkcja zwiekszajaca piorytet procesu czekajacego juz co najmniej 3 rozkazy - postarzanie procesow.
+ * Je¿eli jakiœ proces czeka co najmniej 3 rozkazy (howLongWaiting) (lub jezeli czekajacych jakas liczbe jest kilka, to ten ktory wszedl na liste wczesniej) to jego obecny piorytet jest zwiêkszany o 1 i howLongWaiting jest zerowane.
  * Na koncu sprawdzamy pola NEXTTRY i RUNNING;
- * ZALOZENIE : 2 procesy nie moga w tej samej chwili wejsc na liste (wiec wyiberamy tlyko jeden glodujacy a nie grupe glodujacych).
+ * ZALOZENIE : 2 procesy nie moga w tej samej chwili wejsc na liste (wiec wybieramy tylko jeden glodujacy a nie grupe glodujacych).
  *  
  * @author £UKASZ WOLNIAK
  */
@@ -194,6 +193,7 @@ private void checkAging(){
 	for(Proces processFromListCheck : processesList){
 		if(processFromListCheck.GetID() == weakestProcess.GetID()){
 			processFromListCheck.SetCurrentPriority(processFormListCheck()+1);
+			processFromListCheck.SetHowLongWaiting(0);
 		}
 	}
 	compareNEXTTRYandRUNNING();
