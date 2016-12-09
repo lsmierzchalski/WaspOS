@@ -4,15 +4,12 @@ import ProcessesManagment.ProcessesManagment;
 
 // Pole howLongWaiting + getter/setter - GRACJAN + getter whenCameToList (co proces dodany on ma sobie to inkrementowaæ co 1)!
 // + wywolanie INTERPRETERA!
-// + POSTARZANIE PROCESOW - jesli howLongWaitnig = 3, dynamiczny proces + 1, howLongWaiting = 0!
-// + Gdy schodzi z RUNNING proces, dynamicznyPiorytet = bazowy!
 // + MOJE GETTERY : Co jest akurat w RUNNING i NEXTTRY + MOZE TEKSTY GDY WYOWLUJE FUNKCJE POSZCZEGOLNE(?)!
-// + zabecpieczenie przed wartoscia NULL/0 w RUNNING i NEXTTRY!
 // ? WSZYSTKO W RUN ?
-// ? JAREK ZWROCI MI ZERO TO ZNOW DZIALAM ?
+// ? JAREK - ZWROCI MI ZERO TO ZNOW DZIALAM ?
 // !!! PROTEZY OD JARKA I GRACJANA !!!
-// PROGRAMY Z PLIKU!!!
-// SHELL!!
+// !!! PROGRAMY Z PLIKU!!!
+// !!! SHELL!!
 
 /**
  * Proces bezczynnoœci, bym móg³ porównywaæ procesy z listy z polem RUNNING i NEXTTRY.
@@ -22,9 +19,7 @@ import ProcessesManagment.ProcessesManagment;
 Proces idleProcess = new Proces();
 idleProcess.CreateProcess(0,idleProcess, 0);
 idleProcess.SetBasePririty(0);
-idleProcess.SetCurrentPririty(0);
-idleProcess.SetWhenCameToList(0);
-idleProcess.SetHowLongWaiting(0);
+idleProcess.SetCurrentPririty(idleProcess.GetBasePriority());
 
 /**
  * Pole przechowuj¹ce aktualnie uruchomiony proces.
@@ -74,18 +69,16 @@ private void checkRUNNING(){
 private void checkNEXTTRY(){
 	for(Proces processFromList : processesList){
 		if((processFromList.GetCurrentPriority() >= NEXTTRY.GetCurrentPriority()) && (processFromList.GetState()==1  || processFromList.GetState()==3)){
-			if(RUNNING!=processFromList){
 				if(processFromList.GetCurrentPriority() == NEXTTRY.GetCurrentPriority()){
-					if(processFormList.WhenCameToList() < NEXTTRY.processFormList.WhenCameToList()){
+					if(processFromList.WhenCameToList() < NEXTTRY.processFromList.WhenCameToList()){
 						NEXTTRY = SetCurrentPriority(NEXTTRY.GetBasePriority());
 						NEXTTRY = processFromList;
 					}
-				}
+			}
 				else{
 					NEXTTRY = SetCurrentPriority(NEXTTRY.GetBasePriority());
 					NEXTTRY = processFromList;
 				}
-			}
 		}
 	}
 }
@@ -94,6 +87,7 @@ private void checkNEXTTRY(){
  *  Funkcja porównuj¹ca pola NEXTTRY i RUNNING.
  *  Je¿eli proces w NEXTTRY : nie jest zablokowany, ma wiêkszy piorytet od procesu w RUNNING lub ma rowny piorytet, ale wczeœniej wszed³ na listê, to zamieniane jest pole RUNNING, a pole NEXTTRY odpowiednio uzupe³niane. 
  * 	je¿eli nie, do podmiany pola RUNNING wyszukiwany jest proces z listy RUNNING.
+ * 
  *  @author £UKASZ WOLNIAK
  */
 private void comapreNEXTTRYandRUNNING(){
@@ -104,6 +98,7 @@ private void comapreNEXTTRYandRUNNING(){
 				if(NEXTTRY.GetWhenCameToList() < RUNNING.GetWhenCameToList()){
 					RUNNING.SetCurrentPriority(RUNNING.GetBasePriority());
 					RUNNING = NEXTTRY;
+					RUNNING = RUNNING.SetState(2);
 					NEXTTRY = idleProcess;
 					checkNEXTTRY();
 				}
@@ -114,6 +109,7 @@ private void comapreNEXTTRYandRUNNING(){
 			else{
 				RUNNING.SetCurrentPriority(RUNNING.GetBasePriority());
 				RUNNING = NEXTTRY;
+				RUNNING = RUNNING.SetState(2);
 				NEXTTRY = idleProcess;
 				checkNEXTTRY();
 			}
@@ -151,7 +147,7 @@ private void checkStarving(){
 	}
 	for(Proces processFromListCheck : processesList){
 		if(processFromListCheck.GetID() == weakProcess.GetID()){
-			processFromListCheck.SetCurrentPriority(processFormListCheck()+1);
+			processFromListCheck.SetCurrentPriority(processFromListCheck.GetCurrentPriority()+1);
 		}
 	}
 	compareNEXTTRYandRUNNING();
@@ -194,6 +190,7 @@ private void checkAging(){
 
 		}
 	}
+	}
 	for(Proces processFromListCheck : processesList){
 		if(processFromListCheck.GetID() == weakestProcess.GetID()){
 			processFromListCheck.SetCurrentPriority(processFormListCheck()+1);
@@ -215,6 +212,10 @@ public class ProcessorManager {
 		}
 		//JEZELI PROCES NIE JEST ZABLOKOWANY, PIORYTET MA WIEKSZY, MOMENT WEJSCIA NA LISTE MNIEJSZY - WRZUCAMY GO DO RUNNING, NEXTTRY ODPOWIEDNIO ZMIENIAMY - funkcja compareRUNNINGandNEXTTRY
 		compareNEXTTRYandRUNNING();
-		// SPRAWDZAMY CZY JAKIS GLODUJE, 
+		// ROZWIAZUJEMY GLODOWANIE
 		checkStarving();
+		// ROZWIAZUJEMY CZEKANIE W NIESKONCZONOSC
+		checkAgig();
+		// MINAL ROZKAZ, WIEC ZWIEKSZAMY CZEKANKO - wywolujemy tu a nie na poczatku bo przy pierwszym wyborze wysdzloby ze czekaly rozkaz procesy
+		changeWaiting();
 	}
