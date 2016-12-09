@@ -2,11 +2,11 @@ package processorManager;
 import ProcessesManagment.Proces; 
 import ProcessesManagment.ProcessesManagment;
 
-// Pole howLongWaiting + getter/setter - GRACJAN + getter whenCameToList (co proces dodany on ma sobie to inkrementowaæ co 1)!
-// + wywolanie INTERPRETERA!
-// + MOJE GETTERY : Co jest akurat w RUNNING i NEXTTRY + MOZE TEKSTY GDY WYOWLUJE FUNKCJE POSZCZEGOLNE(?)!
-// ? WSZYSTKO W RUN ?
-// ? JAREK - ZWROCI MI ZERO TO ZNOW DZIALAM ?
+// + wywolanie INTERPRETERA !
+// + MOJE GETTERY : Co jest akurat w RUNNING i NEXTTRY + MOZE TEKSTY GDY WYOWLUJE FUNKCJE POSZCZEGOLNE(?) !
+// + WSZYSTKO W RUN ?
+// + JAREK - ZWROCI MI ZERO TO ZNOW DZIALAM ?
+// !!! Pole howLongWaiting + getter/setter - GRACJAN + getter whenCameToList (co proces dodany on ma sobie to inkrementowaæ co 1) !!!
 // !!! PROTEZY OD JARKA I GRACJANA !!!
 // !!! PROGRAMY Z PLIKU!!!
 // !!! SHELL!!
