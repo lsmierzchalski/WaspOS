@@ -175,4 +175,12 @@ public class Proces extends PCB{
 		
 		return pcb;
 	}
+	
+	//---when came to list get------------------------------------------------------------------------------
+	
+	public int GetWhenCameToList() {
+		
+		return pcb.whenCameToList;
+		
+	}
 }

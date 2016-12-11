@@ -10,6 +10,10 @@ public class ProcessesManagment extends Proces {
 	//***ZMIENNE*****************************************************************************************
 	
 	public List<Proces> processesList;
+	
+	public int nexttry;
+	
+	public int currentlyInProcess;
 
 	//---pomocnicze--------------------------------------------------------------------------------------
 	
@@ -214,6 +218,14 @@ public class ProcessesManagment extends Proces {
 		
 		int index = FindProcessWithID(ID);
 		return processesList.get(index).GetName();
+	}
+	
+	// get when came to list with id-----------------------------------------------------------------------
+	
+	public int GetWhenCameToListWithID(int ID) {
+		
+		int index = FindProcessWithID(ID);
+		return processesList.get(index).GetWhenCameToList();
 	}
 	
 	//===Shell=============================================================================================
