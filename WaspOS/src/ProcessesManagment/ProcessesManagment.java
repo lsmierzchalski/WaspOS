@@ -143,64 +143,6 @@ public class ProcessesManagment extends Proces {
 	
 	//---
 	
-	public boolean GetBlockedWithID(int ID) {
-		
-		int index = FindProcessWithID(ID);
-		return processesList.get(index).GetBlocked();
-	}
-	
-	public void SetBlocked(int ID, boolean blockedState) {
-		
-		int index = FindProcessWithID(ID);
-		processesList.get(index).SetBlocked(blockedState);
-	}
-	
-	//---
-	
-	public int GetStateWithID(int ID) {
-		
-		int index = FindProcessWithID(ID);
-		return processesList.get(index).GetState();
-	}
-	
-	public void SetState(int ID, int State) {
-		
-		int index = FindProcessWithID(ID);
-		processesList.get(index).SetState(State);
-	}
-	
-	//---
-	
-	public int GetBasePriorityWithID(int ID) {
-		
-		int index = FindProcessWithID(ID);
-		return processesList.get(index).GetBasePriority();
-	}
-	
-	//---
-	
-	public int GetCurrentPrirityWithID(int ID) {
-		
-		int index = FindProcessWithID(ID);
-		return processesList.get(index).GetCurrentPriority();
-	}
-	
-	public void SetCurrentPririty(int ID, int Priority) {
-		
-		int index = FindProcessWithID(ID);
-		processesList.get(index).SetCurrentPriority(Priority);
-	}
-
-	//---
-	
-	public PCB GetPCBWithID(int ID) {
-		
-		int index = FindProcessWithID(ID);
-		return processesList.get(index).pcb;
-	}
-	
-	//---
-	
 	public int GetIDwithName(String name) {
 		
 		int index = FindProcessWithName(name);
@@ -218,29 +160,87 @@ public class ProcessesManagment extends Proces {
 	//---
 	
 	public int GetWhenCameToListWithID(int ID) {
-		
+			
 		int index = FindProcessWithID(ID);
 		return processesList.get(index).GetWhenCameToList();
 	}
-	
-	public void SetWhenCameToListWithID(int ID, int whenCametoList) {
 		
+	public void SetWhenCameToListWithID(int ID, int whenCametoList) {
+			
 		int index = FindProcessWithID(ID);
 		processesList.get(index).SettWhenCameToList(whenCametoList);
 	}
 	
 	//---
 	
-	public int GetHowLongWaitingWithID(int ID) {
+	public int GetStateWithID(int ID) {
+			
+		int index = FindProcessWithID(ID);
+		return processesList.get(index).GetState();
+	}
 		
+	public void SetState(int ID, int State) {
+			
+		int index = FindProcessWithID(ID);
+		processesList.get(index).SetState(State);
+	}
+	
+	//---
+	
+	public int GetBasePriorityWithID(int ID) {
+			
+		int index = FindProcessWithID(ID);
+		return processesList.get(index).GetBasePriority();
+	}
+	
+	//---
+	
+	public int GetCurrentPrirityWithID(int ID) {
+			
+		int index = FindProcessWithID(ID);
+		return processesList.get(index).GetCurrentPriority();
+	}
+		
+	public void SetCurrentPririty(int ID, int Priority) {
+			
+		int index = FindProcessWithID(ID);
+		processesList.get(index).SetCurrentPriority(Priority);
+	}
+	
+	//---
+	
+	public int GetHowLongWaitingWithID(int ID) {
+			
 		int index = FindProcessWithID(ID);
 		return processesList.get(index).howLongWaiting;
 	}
-	
-	public void SetHowLongWaitingWithID(int ID, int howLong) {
 		
+	public void SetHowLongWaitingWithID(int ID, int howLong) {
+			
 		int index = FindProcessWithID(ID);
 		processesList.get(index).SetHowLongWaiting(howLong);
+	}
+	
+	//---
+	
+	public boolean GetBlockedWithID(int ID) {
+		
+		int index = FindProcessWithID(ID);
+		return processesList.get(index).GetBlocked();
+	}
+	
+	public void SetBlocked(int ID, boolean blockedState) {
+		
+		int index = FindProcessWithID(ID);
+		processesList.get(index).SetBlocked(blockedState);
+	}
+	
+	//---
+	
+	public PCB GetPCBWithID(int ID) {
+		
+		int index = FindProcessWithID(ID);
+		return processesList.get(index).pcb;
 	}
 	
 	//===Shell=============================================================================================

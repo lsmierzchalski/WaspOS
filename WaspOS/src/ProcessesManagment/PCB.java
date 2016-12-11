@@ -4,12 +4,14 @@ public class PCB{
 	
 	protected int ProcessID;
 	protected String ProcessName;
+	protected int whenCameToList;
 	protected int ProcessState;
 	protected int BaseProcessPriority;
 	protected int CurrentProcessPriority;
-	protected boolean blocked;
-	protected int whenCameToList;
 	protected int howLongWaiting;
+	protected boolean blocked;
+	
+	
 	
 	
 	

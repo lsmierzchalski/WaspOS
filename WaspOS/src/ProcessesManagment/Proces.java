@@ -54,6 +54,8 @@ public class Proces extends PCB{
 		pcb.whenCameToList = number;
 		
 		pcb.ProcessState = stateOverseer.ready;
+		
+		pcb.howLongWaiting = 0;
 	}
 	
 	protected void CreateProcess(int ID,String ProgramPath_Original, String Name, int number) {
@@ -89,6 +91,8 @@ public class Proces extends PCB{
 		pcb.whenCameToList = number;
 		
 		pcb.ProcessState = stateOverseer.ready;
+		
+		pcb.howLongWaiting = 0;
 	}
 	
 	//---odczytaj dane procesu----------------------------------------------------------------------------
@@ -98,17 +102,20 @@ public class Proces extends PCB{
 		System.out.println("------------------------------");
 		System.out.println("ID Procesu - " + pcb.ProcessID);
 		System.out.println("Nazwa Procesu - " + pcb.ProcessName);
+		System.out.println("Ogolny numer procesu - " + pcb.whenCameToList);
 		System.out.println("Stan Procesu - " + pcb.ProcessState);
 		System.out.println("Pierwotny prirytet - " + pcb.BaseProcessPriority);
 		System.out.println("Obecny prirytet - " + pcb.CurrentProcessPriority);
+		System.out.println("Czas oczekiwania procesu - " + pcb.howLongWaiting);
 		System.out.println("Stan zamka - " + pcb.blocked);
+		//procesor
 		System.out.println("Rejestr A - " + pcb.A);
 		System.out.println("Rejestr B - " + pcb.B);
 		System.out.println("Rejestr C - " + pcb.C);
 		System.out.println("Rejestr D - " + pcb.D);
 		System.out.println("Rejestr Z - " + pcb.Z);
 		System.out.println("Liczba wykonanych rozkazow - " + pcb.commandCounter);
-		System.out.println("Ogolny numer procesu - " + pcb.whenCameToList);
+		
 	}
 	
 	//---
@@ -127,26 +134,26 @@ public class Proces extends PCB{
 	
 	//---
 	
-	
-	public boolean GetBlocked() {
-		
-		return pcb.blocked;
+	public int GetWhenCameToList() {
+			
+		return pcb.whenCameToList;
+			
 	}
-	
-	public void SetBlocked(boolean blockedState) {
 		
-		pcb.blocked = blockedState;
+	public void SettWhenCameToList(int when) {
+			
+		pcb.whenCameToList = when;
 	}
-	
+		
 	//---
-	
-	public int GetState() {
 		
+	public int GetState() {
+			
 		return pcb.ProcessState;
 	}
-	
-	public void SetState(int State) {
 		
+	public void SetState(int State) {
+			
 		pcb.ProcessState = State;
 	}
 	
@@ -160,13 +167,37 @@ public class Proces extends PCB{
 	//---
 	
 	public int GetCurrentPriority() {
-		
+			
 		return pcb.CurrentProcessPriority;
 	}
-	
-	public void SetCurrentPriority(int Priority) {
 		
+	public void SetCurrentPriority(int Priority) {
+			
 		pcb.CurrentProcessPriority = Priority;
+	}
+	
+	//---
+		
+	public int GetHowLongWaiting() {
+			
+		return pcb.howLongWaiting;
+	}
+		
+	public void SetHowLongWaiting(int howLong) {
+			
+		pcb.howLongWaiting = howLong;
+	}	
+		
+	//---
+	
+	public boolean GetBlocked() {
+		
+		return pcb.blocked;
+	}
+	
+	public void SetBlocked(boolean blockedState) {
+		
+		pcb.blocked = blockedState;
 	}
 	
 	//---
@@ -174,30 +205,5 @@ public class Proces extends PCB{
 	public PCB GetPCB() {
 		
 		return pcb;
-	}
-	
-	//---
-	
-	public int GetWhenCameToList() {
-		
-		return pcb.whenCameToList;
-		
-	}
-	
-	public void SettWhenCameToList(int when) {
-		
-		pcb.whenCameToList = when;
-	}
-	
-	//---
-	
-	public int GetHowLongWaiting() {
-		
-		return pcb.howLongWaiting;
-	}
-	
-	public void SetHowLongWaiting(int howLong) {
-		
-		pcb.howLongWaiting = howLong;
 	}
 }
