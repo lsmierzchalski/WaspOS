@@ -5,6 +5,8 @@ import ProcessesManagment.ProcessesManagment;
 // + wywolanie INTERPRETERA !
 // + MOJE GETTERY : Co jest akurat w RUNNING i NEXTTRY + MOZE TEKSTY GDY WYOWLUJE FUNKCJE POSZCZEGOLNE(?) !
 // + WSZYSTKO W RUN ?
+// + czy referencja w RUNNING i NEXTTRY zadzia³a... ?
+// + Postarzanie procesu d³ugo aktywnego ?
 // + JAREK - ZWROCI MI ZERO TO ZNOW DZIALAM ?
 // !!! Pole howLongWaiting + getter/setter - GRACJAN + getter whenCameToList (co proces dodany on ma sobie to inkrementowaæ co 1) !!!
 // !!! PROTEZY OD JARKA I GRACJANA !!!
