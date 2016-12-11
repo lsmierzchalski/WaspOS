@@ -1,11 +1,11 @@
 package processorManager;
-import ProcessesManagment.Proces; 
+import ProcessesManagment.Proces;
 import ProcessesManagment.ProcessesManagment;
 
-// + wywolanie INTERPRETERA !
-//+ PROTEZY OD JARKA I GRACJANA !
+public class ProcessorManager {
 
-// PROCESOR DO MNIE + SHOW'Y CO JEST W REJESTRACH !!!
+// wywolanie INTERPRETERA !
+// PROCESSOR DO MNIE + SHOW'Y CO JEST W REJESTRACH !!!
 // + WSZYSTKO W RUN ?
 // + czy referencja w RUNNING i NEXTTRY zadzia³a... ?
 // + Postarzanie procesu w RUNNING ?
@@ -18,7 +18,7 @@ import ProcessesManagment.ProcessesManagment;
  * 
  * @author £UKASZ WOLNIAK
  */
-Proces idleProcess = new Proces();
+static Proces idleProcess = new Proces();
 idleProcess.CreateProcess(0,idleProcess, 0);
 idleProcess.SetBasePririty(0);
 idleProcess.SetCurrentPririty(idleProcess.GetBasePriority());
@@ -46,16 +46,16 @@ private void checkRUNNING(){
 	for(Proces processFromList : processesList){
 		if((processFromList.GetCurrentPriority() >= RUNNING.GetCurrentPriority()) && processFromList.GetState()==1){
 			if(processFromList.GetCurrentPriority() == RUNNING.GetCurrentPriority()){
-				if(processFormList.GetWhenCameToList() < RUNNING.processFormList.GetWhenCameToList()){
-					RUNNING = SetCurrentPriority(GetBasePriority());
+				if(processFormList.GetWhenCameToList() < RUNNING.GetWhenCameToList()){
+					RUNNING.SetCurrentPriority(RUNNING.GetBasePriority());
 					RUNNING = processFromList;
-					RUNNING = RUNNING.SetState(2);
+					RUNNING.SetState(2);
 				}
 			}
 			else{
-				RUNNING = SetCurrentPriority(RUNNING.GetBasePriority());
+				RUNNING.SetCurrentPriority(RUNNING.GetBasePriority());
 				RUNNING = processFromList;
-				RUNNING = RUNNING.SetState(2);
+				RUNNING.SetState(2);
 			}
 		}
 	}
@@ -71,13 +71,13 @@ private void checkNEXTTRY(){
 	for(Proces processFromList : processesList){
 		if((processFromList.GetCurrentPriority() >= NEXTTRY.GetCurrentPriority()) && (processFromList.GetState()==1  || processFromList.GetState()==3)){
 				if(processFromList.GetCurrentPriority() == NEXTTRY.GetCurrentPriority()){
-					if(processFromList.GetWhenCameToList() < NEXTTRY.processFromList.GetWhenCameToList()){
-						NEXTTRY = SetCurrentPriority(NEXTTRY.GetBasePriority());
+					if(processFromList.GetWhenCameToList() < NEXTTRY.GetWhenCameToList()){
+						NEXTTRY.SetCurrentPriority(NEXTTRY.GetBasePriority());
 						NEXTTRY = processFromList;
 					}
 			}
 				else{
-					NEXTTRY = SetCurrentPriority(NEXTTRY.GetBasePriority());
+					NEXTTRY.SetCurrentPriority(NEXTTRY.GetBasePriority());
 					NEXTTRY = processFromList;
 				}
 		}
@@ -99,7 +99,7 @@ private void comapreNEXTTRYandRUNNING(){
 				if(NEXTTRY.GetWhenCameToList() < RUNNING.GetWhenCameToList()){
 					RUNNING.SetCurrentPriority(RUNNING.GetBasePriority());
 					RUNNING = NEXTTRY;
-					RUNNING = RUNNING.SetState(2);
+					RUNNING.SetState(2);
 					NEXTTRY = idleProcess;
 					checkNEXTTRY();
 				}
@@ -110,7 +110,7 @@ private void comapreNEXTTRYandRUNNING(){
 			else{
 				RUNNING.SetCurrentPriority(RUNNING.GetBasePriority());
 				RUNNING = NEXTTRY;
-				RUNNING = RUNNING.SetState(2);
+				RUNNING.SetState(2);
 				NEXTTRY = idleProcess;
 				checkNEXTTRY();
 			}
@@ -198,7 +198,7 @@ private void checkAging(){
 			processFromListCheck.SetHowLongWaiting(0);
 		}
 	}
-	compareNEXTTRYandRUNNING();
+	comapreNEXTTRYandRUNNING();
 }
 
 /**
@@ -207,7 +207,8 @@ private void checkAging(){
  * @author £UKASZ WOLNIAK
  */
 public void showRUNNING(){
-	
+	System.out.println("\n\nObecnie w polu RUNNING znajduje sie proces o ponizszej zawartosci: \n\n");
+	RUNNING.ReadInformations();
 }
 
 /**
@@ -216,26 +217,28 @@ public void showRUNNING(){
  * @author £UKASZ WOLNIAK
  */
 public void showNEXTTRY(){
-	
+	System.out.println("\n\nObecnie w polu NEXTTRY znajduje sie proces o ponizszej zawartosci: \n\n");
+	NEXTTRY.ReadInformations();
 }
 
 /**
- * ZALOZENIE : Instancja klasy jest wywo³ywana po kazdym rozkazie.
+ * ZALOZENIE : funkcja Scheuler jest wywo³ywana po kazdym rozkazie.
  * 
  * @author £UKASZ WOLNIAK
  */
-public class ProcessorManager {
+public void Scheduler(){
 		//Jezeli proces zosta³ zablokowany lub zakonczony, pod RUNNING podstawiamy proces bezczynnoœci.
-		if(RUNNING.GetState()==3 || RUNNING.GetState==4){
+		if(RUNNING.GetState()==3 || RUNNING.GetState()==4){
 			RUNNING.SetCurrentPriority(RUNNING.GetBasePriority()); 
 			RUNNING = idleProcess;
 		}
 		//JEZELI PROCES NIE JEST ZABLOKOWANY, PIORYTET MA WIEKSZY, MOMENT WEJSCIA NA LISTE MNIEJSZY - WRZUCAMY GO DO RUNNING, NEXTTRY ODPOWIEDNIO ZMIENIAMY - funkcja compareRUNNINGandNEXTTRY
-		compareNEXTTRYandRUNNING();
+		comapreNEXTTRYandRUNNING;
 		// ROZWIAZUJEMY GLODOWANIE
 		checkStarving();
 		// ROZWIAZUJEMY CZEKANIE W NIESKONCZONOSC
 		checkAgig();
 		// MINAL ROZKAZ, WIEC ZWIEKSZAMY CZEKANKO - wywolujemy tu a nie na poczatku bo przy pierwszym wyborze wysdzloby ze czekaly rozkaz procesy
 		changeWaiting();
-	}
+}
+}
