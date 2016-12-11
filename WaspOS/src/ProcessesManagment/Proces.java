@@ -176,11 +176,28 @@ public class Proces extends PCB{
 		return pcb;
 	}
 	
-	//---when came to list get------------------------------------------------------------------------------
+	//---when came to list get set---------------------------------------------------------------------------
 	
 	public int GetWhenCameToList() {
 		
 		return pcb.whenCameToList;
 		
+	}
+	
+	public void SettWhenCameToList(int when) {
+		
+		pcb.whenCameToList = when;
+	}
+	
+	//---
+	
+	public int GetHowLongWaiting() {
+		
+		return pcb.howLongWaiting;
+	}
+	
+	public void SetHowLongWaiting(int howLong) {
+		
+		pcb.howLongWaiting = howLong;
 	}
 }

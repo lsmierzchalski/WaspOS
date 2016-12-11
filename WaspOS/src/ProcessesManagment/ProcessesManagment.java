@@ -11,10 +11,6 @@ public class ProcessesManagment extends Proces {
 	
 	public List<Proces> processesList;
 	
-	public int nexttry;
-	
-	public int currentlyInProcess;
-
 	//---pomocnicze--------------------------------------------------------------------------------------
 	
 	private ID_Overseer idoverseer;
@@ -40,7 +36,7 @@ public class ProcessesManagment extends Proces {
 	
 	//===Dodaj/Usun Procesy===============================================================================
 	
-	//---Dodaj nowy proces--------------------------------------------------------------------------------
+	//---
 
 	public void NewProcess_XC(String Name){
 		
@@ -60,7 +56,7 @@ public class ProcessesManagment extends Proces {
 		processNumber++;
 	}
 	
-	//---usun proces-------------------------------------------------------------------------------------
+	//---
 	
 	private void  DeleteProcess() {
 		
@@ -105,8 +101,7 @@ public class ProcessesManagment extends Proces {
 	
 	//===Szukanie procesow===============================================================================
 	
-	//---odszukiwanie procesu o podanym ID---------------------------------------------------------------
-	
+	//---
 	
 	public int FindProcessWithID(int ID) {
 		
@@ -125,7 +120,7 @@ public class ProcessesManagment extends Proces {
 		return -1;
 	}
 	
-	//---odszukiwanie procesu o podanej nazwie-----------------------------------------------------------
+	//---
 	
 	public int FindProcessWithName(String name) {
 		
@@ -146,7 +141,7 @@ public class ProcessesManagment extends Proces {
 	
 	//===Get/Set===========================================================================================
 	
-	//---blocked get set-----------------------------------------------------------------------------------
+	//---
 	
 	public boolean GetBlockedWithID(int ID) {
 		
@@ -160,7 +155,7 @@ public class ProcessesManagment extends Proces {
 		processesList.get(index).SetBlocked(blockedState);
 	}
 	
-	//---stan procesu get i set----------------------------------------------------------------------------
+	//---
 	
 	public int GetStateWithID(int ID) {
 		
@@ -174,7 +169,7 @@ public class ProcessesManagment extends Proces {
 		processesList.get(index).SetState(State);
 	}
 	
-	//---pierwotny priorytet procesu get-------------------------------------------------------------------
+	//---
 	
 	public int GetBasePriorityWithID(int ID) {
 		
@@ -182,7 +177,7 @@ public class ProcessesManagment extends Proces {
 		return processesList.get(index).GetBasePriority();
 	}
 	
-	//---obecny priorytet procesu get set------------------------------------------------------------------
+	//---
 	
 	public int GetCurrentPrirityWithID(int ID) {
 		
@@ -196,7 +191,7 @@ public class ProcessesManagment extends Proces {
 		processesList.get(index).SetCurrentPriority(Priority);
 	}
 
-	//---pcb get-------------------------------------------------------------------------------------------
+	//---
 	
 	public PCB GetPCBWithID(int ID) {
 		
@@ -204,7 +199,7 @@ public class ProcessesManagment extends Proces {
 		return processesList.get(index).pcb;
 	}
 	
-	//---get ID with name----------------------------------------------------------------------------------
+	//---
 	
 	public int GetIDwithName(String name) {
 		
@@ -212,7 +207,7 @@ public class ProcessesManagment extends Proces {
 		return processesList.get(index).GetID();
 	}
 	
-	//---get name with ID----------------------------------------------------------------------------------
+	//---
 	
 	public String GetNameWithID(int ID) {
 		
@@ -220,7 +215,7 @@ public class ProcessesManagment extends Proces {
 		return processesList.get(index).GetName();
 	}
 	
-	// get when came to list with id-----------------------------------------------------------------------
+	//---
 	
 	public int GetWhenCameToListWithID(int ID) {
 		
@@ -228,9 +223,27 @@ public class ProcessesManagment extends Proces {
 		return processesList.get(index).GetWhenCameToList();
 	}
 	
-	//===Shell=============================================================================================
+	public void SetWhenCameToListWithID(int ID, int whenCametoList) {
+		
+		int index = FindProcessWithID(ID);
+		processesList.get(index).SettWhenCameToList(whenCametoList);
+	}
 	
-	//---odczytaj dane listy procesow----------------------------------------------------------------------
+	//---
+	
+	public int GetHowLongWaitingWithID(int ID) {
+		
+		int index = FindProcessWithID(ID);
+		return processesList.get(index).howLongWaiting;
+	}
+	
+	public void SetHowLongWaitingWithID(int ID, int howLong) {
+		
+		int index = FindProcessWithID(ID);
+		processesList.get(index).SetHowLongWaiting(howLong);
+	}
+	
+	//===Shell=============================================================================================
 	
 	public void ReadProcessListInformations() {
 		
@@ -242,9 +255,7 @@ public class ProcessesManagment extends Proces {
 			System.out.println( i + ". " + processesList.get(i).GetID() + ", " + processesList.get(i).GetName());
 		}
 	}
-	
-	//---odczytaj dane procesu----------------------------------------------------------------------------
-	
+
 	public void ReadProcessInformations(int ID) {
 		
 		int index = FindProcessWithID(ID);
