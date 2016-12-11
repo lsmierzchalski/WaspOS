@@ -41,18 +41,40 @@ public class ProcessesManagment extends Proces {
 	public void NewProcess_XC(String Name){
 		
 		Proces process = new Proces();
-		process.CreateProcess(idoverseer.PickID(),Name, processNumber);
+		
+		int id = idoverseer.PickID();
+		
+		int i = FindProcessWithName(Name);
+		
+		if(i != -1) {
+			
+			Name = Name + id;
+		}
+		
+		process.CreateProcess(id,Name, processNumber);
 	
 		processesList.add(process);
+		
 		processNumber++;
 	}
 	
 	public void NewProcess_forUser(String ProgramPath_Original, String Name) {
 		
 		Proces process = new Proces();
-		process.CreateProcess(idoverseer.PickID(),ProgramPath_Original, Name, processNumber);
+		
+		int id = idoverseer.PickID();
+		
+		int i = FindProcessWithName(Name);
+		
+		if(i != -1) {
+			
+			Name = Name + id;
+		}
+		
+		process.CreateProcess(id,ProgramPath_Original, Name, processNumber);
 	
 		processesList.add(process);
+		
 		processNumber++;
 	}
 	
@@ -63,7 +85,6 @@ public class ProcessesManagment extends Proces {
 		for (int i = 0; i < finishedProcessList.size(); i++) {
 			
 			int index = FindProcessWithID(finishedProcessList.get(i));
-			idoverseer.ClearID(processesList.get(index).GetID());
 			processesList.remove(index);
 		}
 		
@@ -73,14 +94,12 @@ public class ProcessesManagment extends Proces {
 	public void DeleteProcessWithID(int ID) {
 		
 		int index = FindProcessWithID(ID);
-		idoverseer.ClearID(ID);
 		processesList.remove(index);
 	}
 	
 	public void DeleteProcessWithName_XD(String name) {
 		
 		int index = FindProcessWithName(name);
-		idoverseer.ClearID(processesList.get(index).GetID());
 		processesList.remove(index);
 	}
 	
@@ -256,7 +275,7 @@ public class ProcessesManagment extends Proces {
 		}
 	}
 
-	public void ReadProcessInformations(int ID) {
+	public void ReadProcessInformationsWithID(int ID) {
 		
 		int index = FindProcessWithID(ID);
 		processesList.get(index).ReadInformations();

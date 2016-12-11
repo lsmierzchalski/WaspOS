@@ -15,19 +15,20 @@ public class Main {
 		
 		m.ReadProcessListInformations();
 		
-		m.ReadProcessInformations(0);
-		m.ReadProcessInformations(1);
-		m.ReadProcessInformations(2);
+		m.ReadProcessInformationsWithID(0);
+		m.ReadProcessInformationsWithID(1);
+		m.ReadProcessInformationsWithID(2);
 		
-		/*
 		m.DeleteProcessWithID(2);
 		
 		m.ReadProcessListInformations();
 		
-		m.NewProcess_XC("nowy");
+		m.NewProcess_XC("dupa");
 		
 		m.ReadProcessListInformations();
 		
+		m.ReadProcessInformationsWithID(3);
+		/*
 		m.DeleteProcessWithName_XD("dupa");
 		
 		m.ReadProcessListInformations();
