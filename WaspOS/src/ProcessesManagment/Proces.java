@@ -111,21 +111,21 @@ public class Proces extends PCB{
 		System.out.println("Ogolny numer procesu - " + pcb.whenCameToList);
 	}
 	
-	//---Id get -------------------------------------------------------------------------------------------
+	//---
 	
 	public int GetID() {
 		
 		return pcb.ProcessID;
 	}
 	
-	//---name get -----------------------------------------------------------------------------------------
+	//---
 	
 	public String GetName() {
 		
 		return pcb.ProcessName;
 	}
 	
-	//---blocked get set-----------------------------------------------------------------------------------
+	//---
 	
 	
 	public boolean GetBlocked() {
@@ -138,7 +138,7 @@ public class Proces extends PCB{
 		pcb.blocked = blockedState;
 	}
 	
-	//---stan procesu get i set----------------------------------------------------------------------------
+	//---
 	
 	public int GetState() {
 		
@@ -150,14 +150,14 @@ public class Proces extends PCB{
 		pcb.ProcessState = State;
 	}
 	
-	//---pierwotny priorytet procesu get-------------------------------------------------------------------
+	//---
 	
 	public int GetBasePriority() {
 		
 		return pcb.BaseProcessPriority;
 	}
 	
-	//---obecny priorytet procesu get set------------------------------------------------------------------
+	//---
 	
 	public int GetCurrentPriority() {
 		
@@ -169,14 +169,14 @@ public class Proces extends PCB{
 		pcb.CurrentProcessPriority = Priority;
 	}
 	
-	//---pcb get-------------------------------------------------------------------------------------------
+	//---
 	
 	public PCB GetPCB() {
 		
 		return pcb;
 	}
 	
-	//---when came to list get set---------------------------------------------------------------------------
+	//---
 	
 	public int GetWhenCameToList() {
 		
