@@ -3,15 +3,15 @@ import ProcessesManagment.Proces;
 import ProcessesManagment.ProcessesManagment;
 
 // + wywolanie INTERPRETERA !
-// + MOJE GETTERY : Co jest akurat w RUNNING i NEXTTRY + MOZE TEKSTY GDY WYOWLUJE FUNKCJE POSZCZEGOLNE(?) !
+//+ PROTEZY OD JARKA I GRACJANA !
+
+// PROCESOR DO MNIE + SHOW'Y CO JEST W REJESTRACH !!!
 // + WSZYSTKO W RUN ?
 // + czy referencja w RUNNING i NEXTTRY zadzia³a... ?
-// + Postarzanie procesu d³ugo aktywnego ?
+// + Postarzanie procesu w RUNNING ?
 // + JAREK - ZWROCI MI ZERO TO ZNOW DZIALAM ?
-// !!! Pole howLongWaiting + getter/setter - GRACJAN + getter whenCameToList (co proces dodany on ma sobie to inkrementowaæ co 1) !!!
-// !!! PROTEZY OD JARKA I GRACJANA !!!
-// !!! PROGRAMY Z PLIKU!!!
-// !!! SHELL!!
+// PROGRAMY Z PLIKU !!!
+// SHELL !!!
 
 /**
  * Proces bezczynnoœci, bym móg³ porównywaæ procesy z listy z polem RUNNING i NEXTTRY oraz do wykorzystania gdy z pola NEXTTRY proces przechodzi do RUNNING (na chwile do momentu sprawdzenia pola NEXTTRY).
@@ -46,7 +46,7 @@ private void checkRUNNING(){
 	for(Proces processFromList : processesList){
 		if((processFromList.GetCurrentPriority() >= RUNNING.GetCurrentPriority()) && processFromList.GetState()==1){
 			if(processFromList.GetCurrentPriority() == RUNNING.GetCurrentPriority()){
-				if(processFormList.WhenCameToList() < RUNNING.processFormList.WhenCameToList()){
+				if(processFormList.GetWhenCameToList() < RUNNING.processFormList.GetWhenCameToList()){
 					RUNNING = SetCurrentPriority(GetBasePriority());
 					RUNNING = processFromList;
 					RUNNING = RUNNING.SetState(2);
@@ -71,7 +71,7 @@ private void checkNEXTTRY(){
 	for(Proces processFromList : processesList){
 		if((processFromList.GetCurrentPriority() >= NEXTTRY.GetCurrentPriority()) && (processFromList.GetState()==1  || processFromList.GetState()==3)){
 				if(processFromList.GetCurrentPriority() == NEXTTRY.GetCurrentPriority()){
-					if(processFromList.WhenCameToList() < NEXTTRY.processFromList.WhenCameToList()){
+					if(processFromList.GetWhenCameToList() < NEXTTRY.processFromList.GetWhenCameToList()){
 						NEXTTRY = SetCurrentPriority(NEXTTRY.GetBasePriority());
 						NEXTTRY = processFromList;
 					}
@@ -199,6 +199,24 @@ private void checkAging(){
 		}
 	}
 	compareNEXTTRYandRUNNING();
+}
+
+/**
+ * Funkcja przestawiajaca aktualna zawartosc pola RUNNING.
+ * 
+ * @author £UKASZ WOLNIAK
+ */
+public void showRUNNING(){
+	
+}
+
+/**
+ * Funkcja przestawiajaca aktualna zawartosc pola NEXTTRY.
+ * 
+ * @author £UKASZ WOLNIAK
+ */
+public void showNEXTTRY(){
+	
 }
 
 /**
