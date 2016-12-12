@@ -9,7 +9,7 @@ public class ProcessesManagment extends Proces {
 	
 	//***ZMIENNE*****************************************************************************************
 	
-	public List<Proces> processesList;
+	static public List<Proces> processesList;
 	
 	//---pomocnicze--------------------------------------------------------------------------------------
 	
@@ -76,6 +76,14 @@ public class ProcessesManagment extends Proces {
 		processesList.add(process);
 		
 		processNumber++;
+	}
+	
+	public Proces NewProcess_EmptyProcess(String Name) {
+		
+		Proces process = new Proces();
+		process.CreateProcess(-1, Name, -1);
+		
+		return process;
 	}
 	
 	//---

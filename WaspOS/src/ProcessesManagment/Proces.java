@@ -118,6 +118,8 @@ public class Proces extends PCB{
 		
 	}
 	
+	//-- Getery i Setery----------------------------------------------------------------------------------
+	
 	//---
 	
 	public int GetID() {
