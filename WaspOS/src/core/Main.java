@@ -1,13 +1,11 @@
 package core;
-import syncMethod.*;
-import ProcessesManagment.*;
 
 public class Main {
-	public static void main(String[] args) 
-	{
+	public static void main(String[] args) {
 		System.out.println("Wasp OS");
 		System.out.println("Grzegorz Osak");
 		System.out.println("Norbert Wo³owiec");
+<<<<<<< HEAD
 		
 		ProcessesManagment m = new ProcessesManagment();
 		m.NewProcess_XC("huj");
@@ -54,5 +52,7 @@ public class Main {
 		m.ReadProcessInformations(1);
 		*/
 >>>>>>> refs/remotes/origin/grutkowski
+=======
+>>>>>>> parent of e87adb4... Test
 	}
 }
