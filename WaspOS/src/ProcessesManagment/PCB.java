@@ -11,13 +11,7 @@ public class PCB{
 	protected int howLongWaiting;
 	protected boolean blocked;
 	
-	
-	
-	
-	
-	
-	protected int commandCounter;
-	
+	public int commandCounter;
 	public int A;
 	public int B;
 	public int C;

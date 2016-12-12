@@ -78,12 +78,11 @@ public class ProcessesManagment extends Proces {
 		processNumber++;
 	}
 	
-	public Proces NewProcess_EmptyProcess(String Name) {
+	public void NewProcess_EmptyProcess(Proces process, String name) {
 		
-		Proces process = new Proces();
-		process.CreateProcess(-1, Name, -1);
-		
-		return process;
+		process.CreateProcess(-1, name, -1);
+		process.SetBasePriority(0);
+		process.SetCurrentPriority(0);
 	}
 	
 	//---
@@ -195,7 +194,7 @@ public class ProcessesManagment extends Proces {
 	public void SetWhenCameToListWithID(int ID, int whenCametoList) {
 			
 		int index = FindProcessWithID(ID);
-		processesList.get(index).SettWhenCameToList(whenCametoList);
+		processesList.get(index).SetWhenCameToList(whenCametoList);
 	}
 	
 	//---

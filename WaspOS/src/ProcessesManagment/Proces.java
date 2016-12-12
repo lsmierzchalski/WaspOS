@@ -142,7 +142,7 @@ public class Proces extends PCB{
 			
 	}
 		
-	public void SettWhenCameToList(int when) {
+	public void SetWhenCameToList(int when) {
 			
 		pcb.whenCameToList = when;
 	}
