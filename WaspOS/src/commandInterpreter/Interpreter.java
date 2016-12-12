@@ -224,7 +224,7 @@ public class Interpreter {
 	  case "XS": // -- Wysłanie komunikatu;
 		  //sendMsg(paramI, paramII);
 	  break;
-	  case "XN": //-- znalezienie PCB (param1);
+	  case "XN": //-- znalezienie PCB (param1); 
 		  setValue("A", ProcessesManagment.FindProcessWithName(param1));
 	  break;   
 	  	  
