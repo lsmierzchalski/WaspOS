@@ -73,14 +73,16 @@ public class Interpreter {
 		setValue("C", PCBbox.C);
 		setValue("D", PCBbox.D);
 	
-		labels = PCBbox.labels;
+		labels = PCBbox.labels;  // Load map of labels 
+		
+		// First is uden to load chars of program
 		commandCounter= PCBbox.commandCounter;
+		
+		// Second used to interpret commands 
 		otherCounter = PCBbox.commandCounter;
+		
 		program = getProgram(commandCounter, RUNNING.GetName());
 		work(program, labels);	
-		
-		
-		PCBbox.commandCounter = commandCounter;
 		
 		setValue("PCBbox.A", getValue("A"));
 		setValue("PCBbox.B", getValue("B"));
@@ -248,7 +250,7 @@ public class Interpreter {
 		  FileSystem.appendToFile(param1,param2);
 	  break;
 	  case "WR": 
-		  FileSystem.appendToFile(param1,toString((getValue(param2)));
+		  FileSystem.appendToFile(param1,Integer.toString(getValue(param2)));
 	  break;
 	  case "DF":  //-- Delete file 
 		// deleteFile(paramI)
@@ -313,6 +315,7 @@ public class Interpreter {
 		   for(Character c : program.toCharArray()) {   
 			  if(c == '\n') 
 		      {
+				 otherCounter++;
 		         stan = 0;
 		         found = false;
 		         boolean rozkazToEtykieta = isLabel(command);
@@ -332,7 +335,7 @@ public class Interpreter {
 		        	 for(Character z : (command.toString()).toCharArray())
 		        	 {
 		        		 if(z != ':'){ temp +=z;} 
-		        		 else{ labels.put(temp, getValue("C"));}	
+		        		 else{ labels.put(temp, (otherCounter+1));}	
 		        	 }
 		        	 
 		        	 System.out.println("Etykieta: "+ temp);
@@ -357,13 +360,16 @@ public class Interpreter {
 		      if(c == ',')
 		      { 
 		    	stan++; 
+		    	otherCounter++;
 		    	found = true;
 		        manySpace = true;
 			    continue;
 			  }
 		      
 		      if(c==' ')
-		      {	  if(stan==1 && !found){continue;}
+		      {	 
+		    	  otherCounter++;
+		    	  if(stan==1 && !found){continue;}
 		    	  if(manySpace){continue;}
 		    	  else 
 		    	  { 
@@ -374,6 +380,7 @@ public class Interpreter {
 		      
 		      if(c != ' ')
 		      {
+		    	otherCounter++;
 		    	manySpace = false;
 			    switch(stan) {
 			    	case 0: command.append(c); break;
