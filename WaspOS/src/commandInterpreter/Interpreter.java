@@ -371,8 +371,8 @@ public class Interpreter {
 			    	case 0: command.append(c); break;
 			    	case 1: param1.append(c); break;
 			    	case 2: param2.append(c); break;
-			  }
+			    }
+		      }
 		   }
-	   }
-	}
+		}
 }
