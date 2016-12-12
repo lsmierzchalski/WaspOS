@@ -213,4 +213,9 @@ public class Proces extends PCB{
 		
 		return pcb;
 	}
+	
+	public void SetPCB(PCB setpcb) {
+		
+		pcb = setpcb;
+	}
 }
