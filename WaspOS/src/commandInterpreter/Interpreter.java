@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import ProcessesManagment.Proces.*;
+import ProcessesManagment.PCB.*;
+import core.Processor.*;
 
 public class Interpreter {
 	
@@ -44,9 +47,9 @@ public class Interpreter {
 	
 
 	
-	public static int RUN(Proces RUNNING)
+	public static int RUN(ProcessesManagment.Proces RUNNING)
 	{
-		PCB PCBbox= new ProcesessManagment.PCB();
+		ProcessesManagment.PCB PCBbox= new ProcessesManagment.PCB();
 		PCBbox = RUNNING.GetPCB();
 		
 		setValue("A", PCBbox.A);
