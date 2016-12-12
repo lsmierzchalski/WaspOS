@@ -6,6 +6,8 @@ import java.util.Map;
 
 import ProcessesManagment.Proces.*;
 import ProcessesManagment.PCB.*;
+import memoryManagament.RAM;
+import memoryManagament.RAM.*;
 import core.Processor.*;
 
 
@@ -129,7 +131,7 @@ public class Interpreter {
 	  	
 	    while(true)
 		{
-		 	znak = getCommand(commandCounter, procesName);
+		 	znak = RAM.getCommand(commandCounter, procesName);
 		 	program += znak;
 		 	commandCounter=commandCounter++;
 		 	
