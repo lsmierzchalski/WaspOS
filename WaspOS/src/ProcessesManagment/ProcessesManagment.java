@@ -78,11 +78,14 @@ public class ProcessesManagment extends Proces {
 		processNumber++;
 	}
 	
-	public void NewProcess_EmptyProcess(Proces process, String name) {
+	public Proces NewProcess_EmptyProcess(String Name) {
 		
-		process.CreateProcess(-1, name, -1);
+		Proces process = new Proces();
+		process.CreateProcess(-1, Name, -1);
 		process.SetBasePriority(0);
 		process.SetCurrentPriority(0);
+		
+		return process;
 	}
 	
 	//---
