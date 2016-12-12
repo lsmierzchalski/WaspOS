@@ -22,9 +22,12 @@ public class FileSystem {
 	//lista wpisów katalogowych gdzie kazdy wpis jest obiektem klasy File
 	private List<File> mainCatalog = new ArrayList<File>();
 	
-	//konstruktor nie robi nic ciekawego poprostu wype³nia tablice zankiem # by ³atwiej by³o j¹ czytaæ
+	//konstruktor nie robi nic ciekawego poprostu 
+	//wype³nia tablice zankiem # by ³atwiej by³o j¹ czytaæ
+	//dla pewnosci wypelnia bitVector zerami
 	public FileSystem(){
 		for(int i=0; i < DISK_SIZE; i++) hardDrive[i] = '#';
+		for(int i=0; i < NR_OF_BLOCKS; i++) bitVector[i] = false;
 	}
 	
 	//funkcja tworz¹ca plik wraz z dopisaniem do niego zawartoœci
@@ -35,248 +38,269 @@ public class FileSystem {
 	
 	//funkcja tworz¹ca pusty plik
 	public void createEmptyFile(String name){
-		
-		int indexBlockIndex = findEmptyBlock();
-		
-		if(!checkWhetherFileWithThatNameDoesNotExist(name)){
-			if(!(indexBlockIndex == -1)){
-				
-				//zajêcie bloku na blok indeksowy
-				bitVector[indexBlockIndex] = true;
-				//dodanie wpisu katologowego
-				mainCatalog.add(new File(name, indexBlockIndex, 0));
-				
-			}   //nie wiem czy to jest wymagane ale jest potem zmienie na angielskie zdania
-			else System.out.println("Nie mo¿esz utworzyæ pliku z powodu braku miejsca w pamiêci");
+
+		if(!isExistFileWithSameName(name)){
+			int indexFreeBlock = findFreeBlock();
+			if(indexFreeBlock != -1){
+				//System.out.println(indexFreeBlock);
+				mainCatalog.add(new File(name, indexFreeBlock, 0));
+				bitVector[indexFreeBlock] = true;
+			}
+			else System.out.println("ERROR");
 		}
-		else System.out.println("Nie mo¿esze utworzyæ pliku o takiej nazwie");
+		else System.out.println("ERROR");
 	}
 	
 	//funkcja dopisuje do pliku dane
 	public void appendToFile(String name, String content){
-		
-		int nrContentToEnter = content.length();
-		int index = 0;
+		int indexChar = 0;
 		String charTable = "";
-		
-		if(youHaveEnough(name, content.length())){
-			if(checkWhetherFileWithThatNameDoesNotExist(name)){
-				
-				if(getNumberFreePlaceInLastBlock(name) != 0){
-					System.out.println("o waæ panie ile miejsca->"+getNumberFreePlaceInLastBlock(name));
-					charTable = "";
-					for(int i = 0;i < getNumberFreePlaceInLastBlock(name) && index < nrContentToEnter; i++, index++){
-						charTable+= content.charAt(index);
+		if(isExistFileWithSameName(name)){
+			//System.out.println("wszystko gra");
+			if(isEnoughMemory(name, content.length())){
+				if(isFileHavePlace(name)){
+					for(; indexChar<getNrFreePlaceInLastBlock(name) && indexChar<content.length() ; indexChar++){
+						charTable+= content.charAt(indexChar);
 					}
-					System.out.println("to siê na razie nie wykona ->"+charTable);
-					appendToExistingBlock(name, charTable);
-					addSizeToFile(name, charTable.length());
-					//odpalic funkcje opisuj¹ca od zajêtego bloku
+					//System.out.println(charTable+" "+charTable.length());
+					//dodaæ znaki do ostatniego bloku
+					fillDataBusyBlock(name,charTable);
+					//zmieniæ rozmiar pliku
+					increaseSizeFile(name, charTable.length());
 				}
 				
-				while(index != nrContentToEnter){
-					charTable = "";
-					
-					for(int i = 0; i < BLOCK_SIZE && index < nrContentToEnter; i++,index++){
-						//System.out.println(content.charAt(index)+" "+index+" "+nrContentToEnter);
-						charTable+= content.charAt(index);
+				while(indexChar < content.length()){
+					charTable="";
+					for(int i = 0; i<BLOCK_SIZE && indexChar<content.length(); i++, indexChar++){
+						charTable+= content.charAt(indexChar);
 					}
-
-					int i = findEmptyBlock();
-					//System.out.println(name+" "+i+" "+charTable);
-					addNrBlockToBlockIndex(name, i);
-					appendToEmptyBlock(i, charTable);
-					addSizeToFile(name, charTable.length());
-					bitVector[i] = true;
-					
+					//System.out.println(charTable+" "+charTable.length());
+					int index = findFreeBlock();
+					//dodaæ nowy wpis do bloku indeksowego pliku
+					addEntryToBlockIndex(name, index);
+					//dodaæ znaki do nowego bloku
+					fillDataNewBlock(index, charTable);
+					bitVector[index] = true;
+					//zminieæ rozmiar pliku
+					increaseSizeFile(name, charTable.length());
 				}
-				
 			}
-			else System.out.println("Nie mo¿esze dopisaæ danych bo nie istnieje plik o takiej nazwie");
+			else System.out.println("ERROR");
 		}
-		else System.out.println("Nie mo¿esz dopisaæ danych poniewa¿ brakuje pamiêci");
+		else System.out.println("ERROR");
 		
 	}
 	
 	//funkcja odczytuj¹ca dane z pliku
 	public String getFileContent(String name){
+		String data = "";
 		
-		return "ala ma kota";
+		if(isExistFileWithSameName(name)){
+			int size = getSizeFile(name);
+			if(size > 0){
+				int blocks = size/BLOCK_SIZE;
+				if(size%BLOCK_SIZE != 0)blocks++;
+				String indexBlock = getBlockIndexFile(name);
+				for(int i=0; i<size/BLOCK_SIZE; i++){
+					
+					int index = (int)indexBlock.charAt(i)*BLOCK_SIZE;
+					for(int j=0; j<BLOCK_SIZE; j++){
+						
+						data+= hardDrive[index];
+						index++;		
+					}
+				}
+				if(size%BLOCK_SIZE > 0){
+					int index = (int)indexBlock.charAt(blocks-1)*BLOCK_SIZE;
+					for(int i=0; i<size%BLOCK_SIZE; i++){
+						data+= hardDrive[index];
+						index++;
+					}
+				}
+			}
+			else System.out.println("ERROR");
+		}
+		else System.out.println("ERROR");
+		return data;
 	}
 	
 	//funkcja usuwaj¹ca plik
 	public void deleteFile(String name){
-		
+		if(isExistFileWithSameName(name)){
+			//zwolnienie blokow pamieci
+			int size = getSizeFile(name);
+			if(size > 0){
+				int blocks = size/BLOCK_SIZE;
+				if(size%BLOCK_SIZE != 0)blocks++;
+				String indexBlock = getBlockIndexFile(name);
+				for(int i=0; i<size/BLOCK_SIZE; i++){
+					int index = (int)indexBlock.charAt(i);
+					bitVector[index] = false;
+				}
+				if(size%BLOCK_SIZE > 0){
+					int index = (int)indexBlock.charAt(blocks-1);
+					bitVector[index] = false;
+				}
+				//usuniecie wpisu katalogowego
+			}
+			bitVector[getIndexBlockIndexFile(name)] = false;
+			removeDirectoryEntry(name);
+		}
+		else System.out.println("ERROR");
 	}
 	
 	//______________________PONI¯EJ_FUNKCJE_POMOCNICZE_____________________________________
 	
-	//funkcja sprawdza czy nie istnieje plik o takiej samej nazwie
-	private boolean checkWhetherFileWithThatNameDoesNotExist(String name){
+	//sprawdza czy istnieje plik o takiej nazwie
+	private boolean isExistFileWithSameName(String name){
+		boolean exist = false;
 		
-		boolean fileWithSameName = false;
-		
-		for(int i = 0; i < mainCatalog.size(); i++){
-			
+		for(int i=0; i<mainCatalog.size(); i++){
 			if(mainCatalog.get(i).name.equals(name)){
-				fileWithSameName = true;
+				exist = true;
 			}
-			
 		}
 		
-		return fileWithSameName;
+		return exist;
 	}
 	
-	//funkcja znajduje pierszy pusty blok i zwraca jego indeks
-	private int findEmptyBlock(){
+	//zwraca index pierwszego wolnego bloku w pamieci
+	private int  findFreeBlock(){
+		int freeBlock = -1;
 		
-		int indexEmptyBlock = -1;
-		
-		for(int i = 0; i < NR_OF_BLOCKS; i++){
-			
+		for(int i=0; i<NR_OF_BLOCKS; i++){
 			if(bitVector[i] == false){
-				indexEmptyBlock = i;
+				freeBlock = i;
 				break;
 			}
 		}
 		
-		return indexEmptyBlock;
+		return freeBlock;
 	}
 	
-	//funkcja dopisuj¹ca indeks od bloku indeksowego plik o danej nazwie
-	private void addNrBlockToBlockIndex(String name, int n){
-		int nrBlockIndex = getIndexBlockIndexFile(name);
-		int size = getSizeFile(name);
-		int nrBloksFile = size / BLOCK_SIZE;
-		if(size % BLOCK_SIZE != 0) nrBloksFile++;
-		//System.out.println(nrBlockIndex+" "+size+" "+nrBloksFile+" "+nrBlockIndex * BLOCK_SIZE + nrBloksFile + 1+"||||");
-		hardDrive[nrBlockIndex * BLOCK_SIZE + nrBloksFile] = (char) n;
+	//sprawdzenie czy wystarczy pamiêci by dopisaæ dane do pliku
+	public boolean isEnoughMemory(String name, int neededMemory){
+		boolean isEnough = false;
+		int freeMemory = BLOCK_SIZE * numberOfFreeBlocks();
+		if(isFileHavePlace(name)){
+			int size = getSizeFile(name);
+			int howMany = size % 32;
+			freeMemory+= howMany;
+		}
+		if(freeMemory >= neededMemory) isEnough = true;
+		return isEnough;
 	}
 	
-	//funkcja dodaje rozmiar do pliku
-	private void addSizeToFile(String name, int n){
+	//zwraca liczbe wolnych blokow danych
+	public int numberOfFreeBlocks(){
+		int nr = 0;
 		
-		for(int i = 0; i < mainCatalog.size(); i++){
-			if(mainCatalog.get(i).name.equals(name)){
-				mainCatalog.get(i).size += n;
-				break;
-			}
+		for(int i=0; i<NR_OF_BLOCKS; i++){
+			if(bitVector[i] == false) nr++;
 		}
 		
+		return nr;
 	}
 	
-	//funkcja dopisuje dane do pustego bloku
-	private void appendToEmptyBlock(int index_block, String charTab){
-		int j = index_block * BLOCK_SIZE;
-		for(int i = 0; i < charTab.length(); i++,j++){
-			hardDrive[j] = charTab.charAt(i);
-		}
+	//sprawdzenie czy plik ma nie wype³niony w ca³oœci bloku
+	public boolean isFileHavePlace(String name){
+		boolean have = false;
+		if(getSizeFile(name) % BLOCK_SIZE != 0) have = true;
+		return have;
 	}
 	
-	//funkcja dopisuje dane do juz istniejacego blku
-	private void appendToExistingBlock(String name, String charTab){
-		int lastBlock = getIndexLastDataBlock(name);
-		int index = lastBlock * BLOCK_SIZE + BLOCK_SIZE - getNumberFreePlaceInLastBlock(name);
-		for(int i = 0; i < charTab.length(); i++){
-			hardDrive[index] = charTab.charAt(i);
-			index++;
-		}
-	}
-	
-	//funkcja sprawdza czy jest wystarczaj¹co du¿o miejsca by dopisaæ dane
-	private boolean youHaveEnough(String name, int spaceNeeded){//:)
-		
-		boolean enoughSpace = false;
-		
-		int freeSpace = getNumberFreePlaceInLastBlock(name) + numberOfFreeBlocks() * BLOCK_SIZE;
-		
-		if(freeSpace > spaceNeeded) enoughSpace = true;
-		
-		return enoughSpace;
-	}
-	
-	//funkcja zwraca liczbê wolnych bloków w pamiêci
-	private int numberOfFreeBlocks(){
-		int numberOfFreeBlocks = 0;
-		
-		for(int i = 0; i < NR_OF_BLOCKS; i++){
-			if(bitVector[i] == false) numberOfFreeBlocks++;
-		}
-		
-		return numberOfFreeBlocks;
-	}
-	
-	//fukcja zwracaj¹ca wolne miejsce w ostatnim bloku danych
-	private int getNumberFreePlaceInLastBlock(String name){
-		int number = 0; 
-		
-		int indexLastBlock = getIndexLastDataBlock(name);
-		
-		if(indexLastBlock != -1){
-			number = 32 - (getSizeFile(name) % BLOCK_SIZE);
-		}
-		//System.out.println(number+" "+indexLastBlock);
-		if(number == 32) number = 0;
-		return number;
-	}
-	
-	//fukcja zwracja¹ca indeks ostatniego bloku
-	private int getIndexLastDataBlock(String name){
-		
-		int indexLastBlock = -1;
-		
-		int size = getSizeFile(name);
-		
-		if(size != 0){
-			int nrOccupiedBlock = size / BLOCK_SIZE;
-			if((size % BLOCK_SIZE) != 0) nrOccupiedBlock++;
-			
-			indexLastBlock = getIndexBlockIndexFile(name) * BLOCK_SIZE + nrOccupiedBlock;
-			
-			//System.out.println(nrOccupiedBlock+" "+indexLastBlock+" "+size);//mo¿e siê przydaæ
-			
-		}
-		return indexLastBlock;
-	}
-	
-	//fukcja zwraca obiekt typu File o danej nazwie
-	private File getFile(String name){
-		
-		int index = -1;
-		
-		for(int i = 0; i < mainCatalog.size(); i++){
-			if(mainCatalog.get(i).equals(name)){
-				index = i;
-			}
-		}
-		return mainCatalog.get(index);
-		
-	}
-	
-	//fukcja zwraca indeks bloku indeksowego pliku o danej nazwie
-	private int getIndexBlockIndexFile(String name){
-		
-		int indexBlock = -1;
-		
-		for(int i = 0; i < mainCatalog.size(); i++){
-			if(mainCatalog.get(i).name.equals(name)){
-				indexBlock = mainCatalog.get(i).block_index;
-			}
-		}
-		return indexBlock;
-	}
-	
-	//fukcja zwraca rozmiar pliku o danej nazwie
+	//zwraca rozmiar pliku
 	private int getSizeFile(String name){
-			
-		int size = -1;
-			
-		for(int i = 0; i < mainCatalog.size(); i++){
+		int size = 0;
+		for(int i=0; i<mainCatalog.size(); i++){
 			if(mainCatalog.get(i).name.equals(name)){
 				size = mainCatalog.get(i).size;
 			}
 		}
 		return size;
+	}
+	
+	//zwraca index bloku indexowego
+	private int getIndexBlockIndexFile(String name){
+		int index = 0;
+		for(int i=0; i<mainCatalog.size(); i++){
+			if(mainCatalog.get(i).name.equals(name)){
+			index = mainCatalog.get(i).block_index;
+			}
+		}
+		return index;
+	}
+	
+	//zwraca blok indeksowy
+	public String getBlockIndexFile(String name){
+		int index = getIndexBlockIndexFile(name)*BLOCK_SIZE;
+		String charTab = "";
+		for(int i=0; i<BLOCK_SIZE; i++){
+			charTab+= hardDrive[index];
+			index++;
+		}
+		return charTab;
+	}
+	
+	//zwraca index ostatniego bloku indexowego
+	//ufam tobie
+	public int getIndexLastBlockFile(String name){
+		int index = -1;
+		int size = getSizeFile(name);
+		int indexBlockIndexFile = getIndexBlockIndexFile(name);
+		int howManyBlocks = size / BLOCK_SIZE - 1;
+		if(size % BLOCK_SIZE != 0) howManyBlocks++;
+		index = (int)hardDrive[indexBlockIndexFile*BLOCK_SIZE + howManyBlocks];
+		return index;
+	}
+	
+	//zwraca liczbe wolnych miejsc w ostatnim bloku pliku
+	public int getNrFreePlaceInLastBlock(String name){
+		int freePlace = 0;
+		freePlace = BLOCK_SIZE - (getSizeFile(name) % BLOCK_SIZE);
+		return freePlace;
+	}
+	
+	//wype³nia dany blok znakami
+	private void fillDataNewBlock(int indexBlock, String charTable){
+		int index = indexBlock * BLOCK_SIZE;
+		for(int i = 0; i<charTable.length(); i++, index++){
+			hardDrive[index] = charTable.charAt(i);
+		}
+	}
+	
+	//zwieksza rozmiar pliku
+	private void increaseSizeFile(String name, int n){
+		for(int i=0; i<mainCatalog.size(); i++){
+			if(mainCatalog.get(i).name.equals(name)){
+				mainCatalog.get(i).size+= n;
+			}
+		}
+	}
+	
+	//dodaje wpis do bloku indeksowego pliku
+	private void addEntryToBlockIndex(String name, int index){
+		int i = getIndexBlockIndexFile(name) * BLOCK_SIZE + getSizeFile(name) / BLOCK_SIZE;
+		hardDrive[i] = (char) index;
+		//System.out.println(i+" "+index);
+	}
+	
+	//wype³nia ostatni blok znakami
+	private void fillDataBusyBlock(String name, String charTable){
+		int index = getIndexLastBlockFile(name) * BLOCK_SIZE + getSizeFile(name) % BLOCK_SIZE;
+		for(int i=0; i<charTable.length(); i++){
+			hardDrive[index] = charTable.charAt(i);
+			index++;
+		}
+	}
+	
+	//usuwa wpis katalogowy pliku o danej nazwie
+	private void removeDirectoryEntry(String name){
+		for(int i=0; i<mainCatalog.size(); i++){
+			if(mainCatalog.get(i).name.equals(name)){
+				mainCatalog.remove(i);
+			}
+		}
 	}
 	
 	//______________________PONI¯EJ_FUNKCJE_DO_"DIAGNOSTYKI"_MODU£U________________________
@@ -352,7 +376,7 @@ public class FileSystem {
 		else{
 			System.out.println("NR\tNAME\tB.I\tSIZE");
 			for(int i = 0; i < mainCatalog.size(); i++){
-				System.out.print(i+"\t");
+				System.out.print((i+1)+"\t");
 				System.out.print(mainCatalog.get(i).name+"\t");
 				System.out.print(mainCatalog.get(i).block_index+"\t");
 				System.out.print(mainCatalog.get(i).size);
@@ -360,6 +384,15 @@ public class FileSystem {
 			}
 		}
 		System.out.print("\n");
+	}
+	
+	
+	public void x(){
+		createFileWithContent("a","aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+	}
+	
+	public void y(){
+		createFileWithContent("basn","Mrok wieczorny, babcia siwa\nprzy kominku g³ow¹ kiwa.");
 	}
 	
 }
