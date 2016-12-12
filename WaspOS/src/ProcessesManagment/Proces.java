@@ -96,7 +96,7 @@ public class Proces extends PCB{
 		return pcb.blocked;
 	}
 	
-	protected void SetBlocked(boolean blockedState) {
+	public void SetBlocked(boolean blockedState) {
 		
 		pcb.blocked = blockedState;
 	}
@@ -108,7 +108,7 @@ public class Proces extends PCB{
 		return pcb.ProcessState;
 	}
 	
-	protected void SetState(int State) {
+	public void SetState(int State) {
 		
 		pcb.ProcessState = State;
 	}
