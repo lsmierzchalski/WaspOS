@@ -8,11 +8,12 @@ import ProcessesManagment.Proces.*;
 import ProcessesManagment.PCB.*;
 import core.Processor.*;
 
+
+
 public class Interpreter {
 	
-	// PCB pbccos = new PCB();
-	// pcbcos = ProcesMangment.RUNNING.GetPCB();
-	// pcbcos.
+	
+	
 	//ProcesMangment.RUNNING.SetPCB(pcbcos);
 /*
 
@@ -47,18 +48,34 @@ public class Interpreter {
 	
 
 	
+	static Map<String, Integer> labels = new HashMap<String, Integer>();  
+	static int commandCounter=0; 
+	static int otherCounter=0;
 	public static int RUN(ProcessesManagment.Proces RUNNING)
 	{
+		// Create Box for PCB
+		
 		ProcessesManagment.PCB PCBbox= new ProcessesManagment.PCB();
+		
+		// Put to Box a PCB from current Process
 		PCBbox = RUNNING.GetPCB();
 		
+		String program ="";
+		// Copy PCB to rejetrs of Procesor
 		setValue("A", PCBbox.A);
 		setValue("B", PCBbox.B);
 		setValue("C", PCBbox.C);
 		setValue("D", PCBbox.D);
+	
+		labels = PCBbox.labels;
+		commandCounter= PCBbox.commandCounter;
+		otherCounter = PCBbox.commandCounter;
+		program = getProgram(commandCounter, RUNNING.GetName());
+		work(program, labels);	
 		
-		static int counter = PCBbox.commandCounter;
-		static Map<String, Integer> labels = new HashMap<String, Integer>();  
+		
+		
+		
 		
 		
 		RUNNING.SetPCB(PCBbox);
@@ -68,10 +85,10 @@ public class Interpreter {
 	private static int getValue(String param1)
 	{
 	   switch(param1) {
-	      case "A": return Processor.A;
-	      case "B": return Processor.B;
-	      case "C": return Processor.C;
-	      case "D": return Processor.D;
+	      case "A": return core.Processor.A;
+	      case "B": return core.Processor.B;
+	      case "C": return core.Processor.C;
+	      case "D": return core.Processor.D;
 	      //case "RUNNING.PCB.A": return RUNNING.PCB.A;
 	      //case "RUNNING.PCB.B": return RUNNING.PCB.B;
 	      //case "RUNNING.PCB.C": return RUNNING.PCB.C;
@@ -82,10 +99,10 @@ public class Interpreter {
 	}
 	private static int setValue(String param1, int value) {
 	   switch(param1) {
-	      case "A":  Processor.A = value; break;
-	      case "B":  Processor.B = value; break;
-	      case "C":  Processor.C = value; break;
-	      case "D":  Processor.D = value; break;
+	      case "A":  core.Processor.A = value; break;
+	      case "B":  core.Processor.B = value; break;
+	      case "C":  core.Processor.C = value; break;
+	      case "D":  core.Processor.D = value; break;
 	      //case "RUNNING.PCB.A":  RUNNING.PCB.A = value;
 	      //case "RUNNING.PCB.B":  RUNNING.PCB.B = value;
 	      //case "RUNNING.PCB.C":  RUNNING.PCB.C = value;
@@ -106,21 +123,23 @@ public class Interpreter {
 		}
 	}
 
-  /*private static String getCommand(RUNNING.PCB.commandCounter, RUNNING.PCB.ProcesName)
+  private static String getProgram(int commandCounter, String procesName)
 	{
-		String program ="";
-		licznik = RUNNING.PCB.commandCounter;
-		 	while(true)
-		 	{
-		 		znak = getCommand(licznik RUNNING.PCB.ProcesName);
-		 		program += znak;
-		 		licznik++;
-		 		if(znak== '\n'){
-		 			break;
-		 		}		 		
-		 	}
+	  	char znak;
+	  	String program ="";
+	  	
+	    while(true)
+		{
+		 	znak = getCommand(commandCounter, procesName);
+		 	program += znak;
+		 	commandCounter=commandCounter++;
+		 	
+		 	if(znak== '\n'){
+		 		break;
+		 	}		 		
+		}
 		return program;
-	}*/
+	}
 
  	
 	private static void doCommand(String rozkaz, String param1, String parametr, boolean argDrugiJestRejestrem, Map<String, Integer> labels) {
@@ -172,9 +191,8 @@ public class Interpreter {
 			  setValue("C", labels.get(param1));
 			  System.out.println(getValue("C"));
 		  } 
-		  else 
-			  {System.out.println("Error");}
-		  break;
+		  break; 
+			 
 	  
 	  case "HLT": // Koniec programu
           System.out.println("HLT, End porgram"); 
@@ -310,10 +328,10 @@ public class Interpreter {
 		         }else if(poprawnoscRozkazu || poprawnoscRejestru) {
 		            doCommand(command.toString(), param1.toString(), param2.toString(), argDrugiJestRejestrem, labels);
 		            
-		            System.out.println("A: "+Processor.A);
-		            System.out.println("B: "+Processor.B);
-		            System.out.println("C: "+Processor.C);
-		            System.out.println("D: "+Processor.D); 
+		            System.out.println("A: "+core.Processor.A);
+		            System.out.println("B: "+core.Processor.B);
+		            System.out.println("C: "+core.Processor.C);
+		            System.out.println("D: "+core.Processor.D); 
 		         }
 
 		         command.delete(0, command.length());
@@ -351,8 +369,4 @@ public class Interpreter {
 		      }
 		   }
 		}
-	public static void main(String args[]) {
-		String program = "AD A,B\n";
-		prog(program , labels);
-	}
 }
