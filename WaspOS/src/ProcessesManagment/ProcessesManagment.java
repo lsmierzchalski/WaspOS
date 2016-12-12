@@ -220,6 +220,12 @@ public class ProcessesManagment extends Proces {
 		return processesList.get(index).GetBasePriority();
 	}
 	
+	public int SetBasePriorityWithID(int ID, int priority) {
+		
+		int index = FindProcessWithID(ID);
+		return processesList.get(index).GetBasePriority();
+	}
+	
 	//---
 	
 	public int GetCurrentPrirityWithID(int ID) {

@@ -166,6 +166,11 @@ public class Proces extends PCB{
 		return pcb.BaseProcessPriority;
 	}
 	
+	public void SetBasePriority(int priority) {
+		
+		pcb.BaseProcessPriority = priority;
+	}
+	
 	//---
 	
 	public int GetCurrentPriority() {
