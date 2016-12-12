@@ -38,8 +38,7 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	private void checkRUNNING(){
-		for(Iterator<Proces> processesFromList = ProcessesManagment.processesList.iterator(); processesFromList.hasNext();){
-			Proces processFromList = processesFromList.next();
+		for(Proces processFromList : ProcessesManagment.processesList){
 			if((processFromList.GetCurrentPriority() >= RUNNING.GetCurrentPriority()) && processFromList.GetState()==1){
 				if(processFromList.GetCurrentPriority() == RUNNING.GetCurrentPriority()){
 					if(processFromList.GetWhenCameToList() < RUNNING.GetWhenCameToList()){
@@ -64,8 +63,7 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	private void checkNEXTTRY(){
-		for(Iterator<Proces> processesFromList = ProcessesManagment.processesList.iterator(); processesFromList.hasNext();){
-			Proces processFromList = processesFromList.next();
+		for(Proces processFromList : ProcessesManagment.processesList){
 			if((processFromList.GetCurrentPriority() >= NEXTTRY.GetCurrentPriority()) && (processFromList.GetState()==1  || processFromList.GetState()==3)){
 					if(processFromList.GetCurrentPriority() == NEXTTRY.GetCurrentPriority()){
 						if(processFromList.GetWhenCameToList() < NEXTTRY.GetWhenCameToList()){
@@ -130,8 +128,7 @@ public class ProcessorManager {
 	 */
 	private void checkStarving(){
 		Proces weakProcess = ProcessesManagment.processesList.get(1);
-		for(Iterator<Proces> processesFromList = ProcessesManagment.processesList.iterator(); processesFromList.hasNext();){
-			Proces processFromList = processesFromList.next();
+		for(Proces processFromList : ProcessesManagment.processesList){
 				if(processFromList.GetCurrentPriority() <= weakProcess.GetCurrentPriority()){
 					if(processFromList.GetCurrentPriority() == weakProcess.GetCurrentPriority()){
 					if(processFromList.GetWhenCameToList() < weakProcess.GetWhenCameToList()){
