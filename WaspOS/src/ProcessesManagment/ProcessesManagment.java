@@ -1,4 +1,4 @@
-package processorManager;
+package ProcessesManagment;
 import java.lang.Object;
 import java.util.LinkedList;
 import java.util.List;

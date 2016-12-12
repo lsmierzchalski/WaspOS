@@ -1,4 +1,4 @@
-package processorManager;
+package ProcessesManagment;
 
 public class PCB{
 	
