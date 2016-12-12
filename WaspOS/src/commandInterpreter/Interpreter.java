@@ -78,7 +78,17 @@ public class Interpreter {
 		otherCounter = PCBbox.commandCounter;
 		program = getProgram(commandCounter, RUNNING.GetName());
 		work(program, labels);	
-				
+		
+		
+		PCBbox.commandCounter = commandCounter;
+		
+		setValue("PCBbox.A", getValue("A"));
+		setValue("PCBbox.B", getValue("B"));
+		setValue("PCBbox.C", getValue("C"));
+		setValue("PCBbox.D", getValue("D"));
+		setValue("PCBbox.commandCounter",commandCounter);
+		PCBbox.labels = labels;
+		
 		RUNNING.SetPCB(PCBbox);
 		return 0;
 	}
@@ -105,10 +115,10 @@ public class Interpreter {
 	      case "C":  core.Processor.C = value; break;
 	      case "D":  core.Processor.D = value; break;
 	      case "PCBbox.A":  Interpreter.PCBbox.A = value;
-	      //case "RUNNING.PCB.B":  RUNNING.PCB.B = value;
-	      //case "RUNNING.PCB.C":  RUNNING.PCB.C = value;
-	      //case "RUNNING.PCB.D":  RUNNING.PCB.D = value;
-	      //case "RUNNING.PCB.commandCounter": RUNNING.PCB.commandCounter = value;
+	      case "PCBbox.B":  Interpreter.PCBbox.B = value;
+	      case "PCBbox.C":  Interpreter.PCBbox.C = value;
+	      case "PCBbox.D":  Interpreter.PCBbox.D = value;
+	      case "PCBbox.commandCounter": Interpreter.PCBbox.commandCounter =value;
 	   }
 	   return 0;
 	}
@@ -238,14 +248,14 @@ public class Interpreter {
 		  FileSystem.appendToFile(param1,param2);
 	  break;
 	  case "WR": 
-		  FileSystem.appendToFile(param1,getValue(param2));
+		  FileSystem.appendToFile(param1,toString((getValue(param2)));
 	  break;
 	  case "DF":  //-- Delete file 
 		// deleteFile(paramI)
 		  FileSystem.deleteFile(param1);
       break;
 	  case "PO":  //-- Print Output 	
-		  System.out.println(rejestr);
+		  System.out.println(param1);
 	  break;
 	  }
 	}
