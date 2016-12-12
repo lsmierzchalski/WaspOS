@@ -1,9 +1,13 @@
 package commandInterpreter;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.processing.Processor;
+
+import processorManager.*;
+import fileSystem.*;
+import ProcessesManagment.*;
 
 public class Interpreter {
 	
@@ -39,24 +43,22 @@ public class Interpreter {
 + * DF -- Delete file 		String Name DF <String> 
 + * PO -- Print Output 		String Register
 
-*/	
+*/		
 	
-	
-
+	static PCB PCBbox= new PCB();
+	static int counter = PCBbox.commandCounter;
+	static Map<String, Integer> labels = new HashMap<String, Integer>();  
 	
 	public static int RUN(Proces RUNNING)
 	{
-		PCB PCBbox= new ProcesessManagment.PCB();
+		counter = PCBbox.commandCounter;
 		PCBbox = RUNNING.GetPCB();
+		Map<String, Integer> labels;  
 		
 		setValue("A", PCBbox.A);
 		setValue("B", PCBbox.B);
 		setValue("C", PCBbox.C);
 		setValue("D", PCBbox.D);
-		
-		static int counter = PCBbox.commandCounter;
-		static Map<String, Integer> labels = new HashMap<String, Integer>();  
-		
 		
 		RUNNING.SetPCB(PCBbox);
 		return 0;
