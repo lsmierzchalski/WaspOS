@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import ProcessesManagment.*;
 import ProcessesManagment.Proces.*;
 import ProcessesManagment.PCB.*;
 import memoryManagament.RAM;
 import memoryManagament.RAM.*;
 import core.Processor.*;
+import fileSystem.FileSystem;
 
 
 
@@ -19,13 +21,13 @@ public class Interpreter {
 	//ProcesMangment.RUNNING.SetPCB(pcbcos);
 /*
 
-+ * XR -- Czytanie komunikatu 	
-+ * XS -- Wysłanie komunikatu 	String processName, String communicate XS <String>,<String>
-+ * XN -- Znalezienie PCB 		String processName XN <String>
-+ * XY -- Uruchomienie procesu 	String processName XY <String>
-+ * XC -- Utworzenie procesu 	String processName, String fileName XC <String><String>
-+ * XD -- Usunięcie procesu 		String processName XD <String>
-+ * XZ -- Zatrzymanie procesu 	String processName XZ <String>
+ * XR -- Czytanie komunikatu 	
+ * XS -- Wysłanie komunikatu 	String processName, String communicate XS <String>,<String>
+ * XN -- Znalezienie PCB 		String processName XN <String>
+ * XY -- Uruchomienie procesu 	String processName XY <String>
+ * XC -- Utworzenie procesu 	String processName, String fileName XC <String><String>
+ * XD -- Usunięcie procesu 		String processName XD <String>
+ * XZ -- Zatrzymanie procesu 	String processName XZ <String>
   
    <> commandInterpreter <>
 + * AD -- Dodawanie  		String Register, String Register || String Register, float number AD <String>,<String> || AD <String>,<int>
@@ -35,34 +37,38 @@ public class Interpreter {
 + * MV -- Move 				String Register, String Register MV <String>,<String>
 + * $: -- Etykieta JM		String labelName+ ":" ex. MyLabel:
 + * HLT -- Koniec programu	  
- 
-   <> Interpreter <>
 + * MN -- Move number 		String Register, INT Number   MV <String>,<INT>
  
    <> fileManger <>
-+ * CF -- Create file 		String Name, String content CR <String>,<String>
-+ * OF -- Open file 		String Name CR <String>,<String>
-+ * DF -- Delete file 		String Name DF <String> 
-+ * PO -- Print Output 		String Register
+ * MF -- Create file 		String Name, String content CR <String>,<String>
+ * WF -- Zapisanie do pliku	String Name WR <String>,<String>
+ * DF -- Delete file 		String Name DF <String> 
+ * PO -- Print Output 		String Register
 
 */	
 	
 	
 
-	
+	// Labels for JM commands is saved in:
 	static Map<String, Integer> labels = new HashMap<String, Integer>();  
+	
+	// counter to read from memory
 	static int commandCounter=0; 
+	
+	// other counter not matter - too many explain
 	static int otherCounter=0;
+	
+	// Create Box for PCB
+	static ProcessesManagment.PCB PCBbox= new ProcessesManagment.PCB();
 	public static int RUN(ProcessesManagment.Proces RUNNING)
 	{
-		// Create Box for PCB
-		
 		ProcessesManagment.PCB PCBbox= new ProcessesManagment.PCB();
 		
 		// Put to Box a PCB from current Process
 		PCBbox = RUNNING.GetPCB();
-		
+		// Set porgram variable
 		String program ="";
+		
 		// Copy PCB to rejetrs of Procesor
 		setValue("A", PCBbox.A);
 		setValue("B", PCBbox.B);
@@ -74,11 +80,7 @@ public class Interpreter {
 		otherCounter = PCBbox.commandCounter;
 		program = getProgram(commandCounter, RUNNING.GetName());
 		work(program, labels);	
-		
-		
-		
-		
-		
+				
 		RUNNING.SetPCB(PCBbox);
 		return 0;
 	}
@@ -104,7 +106,7 @@ public class Interpreter {
 	      case "B":  core.Processor.B = value; break;
 	      case "C":  core.Processor.C = value; break;
 	      case "D":  core.Processor.D = value; break;
-	      //case "RUNNING.PCB.A":  RUNNING.PCB.A = value;
+	      case "PCBbox.A":  Interpreter.PCBbox.A = value;
 	      //case "RUNNING.PCB.B":  RUNNING.PCB.B = value;
 	      //case "RUNNING.PCB.C":  RUNNING.PCB.C = value;
 	      //case "RUNNING.PCB.D":  RUNNING.PCB.D = value;
@@ -112,6 +114,8 @@ public class Interpreter {
 	   }
 	   return 0;
 	}
+	
+	// Checking: Is command is the label?
 	private static boolean isLabel(StringBuilder command)
 	{
 		if(command.charAt(command.length()-1)==':')
@@ -124,13 +128,15 @@ public class Interpreter {
 		}
 	}
 
-  private static String getProgram(int commandCounter, String procesName)
+	
+ 	private static String getProgram(int commandCounter, String procesName)
 	{
 	  	char znak;
 	  	String program ="";
 	  	
 	    while(true)
 		{
+	    	// Load char from RAM
 		 	znak = RAM.getCommand(commandCounter, procesName);
 		 	program += znak;
 		 	commandCounter=commandCounter++;
@@ -142,47 +148,47 @@ public class Interpreter {
 		return program;
 	}
 
- 	
-	private static void doCommand(String rozkaz, String param1, String parametr, boolean argDrugiJestRejestrem, Map<String, Integer> labels) {
+ 	// Follow the recognized command
+	private static void doCommand(String rozkaz, String param1, String param2, boolean argDrugiJestRejestrem, Map<String, Integer> labels) {
 	  switch(rozkaz) {
 
 	   case "AD":  // Dodawanie wartości
 	      if(argDrugiJestRejestrem) {
-	         setValue(param1, getValue(param1) + getValue(parametr));
+	         setValue(param1, getValue(param1) + getValue(param2));
 	      } else {
-	    	  setValue(param1, getValue(param1) + Integer.parseInt(parametr));
+	    	  setValue(param1, getValue(param1) + Integer.parseInt(param2));
 	      }
 	      break;
 
 	   case "MU": // Mnożenie wartości
 		  if(argDrugiJestRejestrem) {
-			 setValue(param1, getValue(param1) * getValue(parametr));
+			 setValue(param1, getValue(param1) * getValue(param2));
 		  } else {
-			 setValue(param1, getValue(param1) * Integer.parseInt(parametr));
+			 setValue(param1, getValue(param1) * Integer.parseInt(param2));
 		  }
 	      break;
 	   
 	  case "SB": // Odejmowanie wartości
 		  if(argDrugiJestRejestrem) {
-			  setValue(param1, getValue(param1) - getValue(parametr));
+			  setValue(param1, getValue(param1) - getValue(param2));
 		  } else {
-			 setValue(param1, getValue(param1) - Integer.parseInt(parametr));
+			 setValue(param1, getValue(param1) - Integer.parseInt(param2));
 		  }
 	      break;
 	      
 	  case "MV": // Umieszczenie wartości 
 		  if(argDrugiJestRejestrem) {
-			 setValue(param1, getValue(parametr));
+			 setValue(param1, getValue(param2));
 		  } else {
-			 setValue(param1, Integer.parseInt(parametr));
+			 setValue(param1, Integer.parseInt(param2));
 		  }
 		  break;
 		
 	  case "MN":  // Umieszczenie wartości MN
 		  if(argDrugiJestRejestrem) {
-				 setValue(param1, getValue(parametr));
+				 setValue(param1, getValue(param2));
 		  } else {
-				 setValue(param1, Integer.parseInt(parametr));
+				 setValue(param1, Integer.parseInt(param2));
 		  }
 		  break;
 	  
@@ -211,44 +217,43 @@ public class Interpreter {
 		  //sendMsg(paramI, paramII);
 	  break;
 	  case "XN": //-- znalezienie PCB (param1);
-		  // findPCB(param1)
+		  setValue("A", ProcessesManagment.FindProcessWithName(param1));
 	  break;   
-	  
-	  
+	  	  
 	  case "XC":  //-- tworzenie procesu (param1);
-		  //stworzProces(param1,parametr);
+		  ProcessesManagment.NewProcess_XC(param1)
 	  break;
 	  case "XY":  //-- Uruchomienie procesu 
-		  //runProces(param1);
+		  
 	  break;
 	  case "XD":  //-- usuwanie procesu (param1);
-		  //usunProces(param1);
+		  ProcessesManagment.DeleteProcessWithName_XD(param1);
 	  break;
 	  case "XZ":  //-- Zatrzymanie procesu 
 		  //stopProces(param1);
 	  break;
-	  
-	  
-	  case "CF":  //-- Create file 
-		 // createFile(paramI,paramII)
+	 	  
+	  case "MF":  //-- Create file 
+		  FileSystem.createFileWithContent(param1,param2);
 	  break;
-	  case "OF":  //-- Open file 
-		// openFile(paramI,paramII)
+	  case "WF":  
+		  FileSystem.appendToFile(param1,param2);
+	  break;
+	  case "WR": 
+		  FileSystem.appendToFile(param1,getValue(param2));
 	  break;
 	  case "DF":  //-- Delete file 
 		// deleteFile(paramI)
+		  FileSystem.deleteFile(param1);
       break;
 	  case "PO":  //-- Print Output 	
-		 //printInfo(paramI)
+		  System.out.println(rejestr);
 	  break;
-
 	  }
-	 
 	}
 	
 	public static void work(String program, Map<String, Integer> labels)
 	{
-
 		   ArrayList<String> rozkazy = new ArrayList<String>();				//  [*] USTALONE ROZKAZY [*]  //
 
 		   // ROZKAZY ARYTMETYCZNE DWUARGUMENTOWE
@@ -271,8 +276,8 @@ public class Interpreter {
 		   rozkazy.add("XY"); // String processName
 		   rozkazy.add("XZ"); // String processName
 		   rozkazy.add("JN"); // String Address
-		   rozkazy.add("JM"); // INT Address
-		   rozkazy.add("MF");
+		   rozkazy.add("JM"); // String label
+		   rozkazy.add("MF"); // String Name
 		   rozkazy.add("DF"); // String name
 		   rozkazy.add("PO"); 
 
