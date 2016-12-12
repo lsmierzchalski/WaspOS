@@ -59,11 +59,9 @@ public class Interpreter {
 	static int otherCounter=0;
 	
 	// Create Box for PCB
-	static ProcessesManagment.PCB PCBbox= new ProcessesManagment.PCB();
-	public static int RUN(ProcessesManagment.Proces RUNNING)
+	static PCB PCBbox= new PCB();
+	public static int RUN(Proces RUNNING)
 	{
-		ProcessesManagment.PCB PCBbox= new ProcessesManagment.PCB();
-		
 		// Put to Box a PCB from current Process
 		PCBbox = RUNNING.GetPCB();
 		// Set porgram variable
@@ -371,8 +369,8 @@ public class Interpreter {
 			    	case 0: command.append(c); break;
 			    	case 1: param1.append(c); break;
 			    	case 2: param2.append(c); break;
-			  }
+			    }
+		      }
 		   }
-	   }
-	}
+		}
 }
