@@ -292,7 +292,7 @@ public class Interpreter {
 
 		case "HLT": // Koniec programu
 			ProcessorManager.RUNNING.SetState(4);
-			break;
+			return;
 
 		case "XR": // czytanie komunikatu;
 			// readMsg();
@@ -335,6 +335,7 @@ public class Interpreter {
 			System.out.println(param1);
 			break;
 		}
+		ProcessorManager.RUNNING.SetState(1);
 	}
 
 	public void work(String program, HashMap<String, Integer> labels) {

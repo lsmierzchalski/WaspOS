@@ -136,11 +136,11 @@ public class Shell {
 	}
 	
 	private void prun() {
-		
+		processorManager.showRUNNING();
 	}
 	
 	private void pnex() {
-		
+		processorManager.showNEXTTRY();
 	}
 	
 	private void step() {

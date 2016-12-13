@@ -1,16 +1,16 @@
 MF arytmetykaPlik
-XC procesArytmetyka,arytmetykaPlik
+XC procesArytmetyka,arytmetykaPlik.txt
 XY procesArytmetyka
 MN A,3
 MN B,6
 ADD A,C
-WF arytmetykaPlik,Wynik3+6=
-WF arytmetykaPlik,A
+WF arytmetykaPlik.txt,Wynik3+6=
+WF arytmetykaPlik.txt,A
 MU B,A
-WF arytmetykaPlik,Wynik6*9=
-WF arytmetykaPlik,B
+WF arytmetykaPlik.txt,Wynik6*9=
+WF arytmetykaPlik.txt,B
 SB B,A
-WF arytmetykaPlik,Wynik45-9=
-WF arytmetykaPlik,B
+WF arytmetykaPlik.txt,Wynik45-9=
+WF arytmetykaPlik.txt,B
 XZ procesArytmetyka
 HLT

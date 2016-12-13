@@ -16,7 +16,7 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	
-	private Process idleProcess;
+	public static Process idleProcess;
 	
 	/**
 	 * Pole przechowuj¹ce aktualnie uruchomiony proces.
@@ -32,12 +32,12 @@ public class ProcessorManager {
 	 */
 	public static Process NEXTTRY;
 	
-	private ProcessesManagement processesManagment;
+	private ProcessesManagement processesManagement;
 	
 	private Interpreter interpreter;
 	
 	public ProcessorManager(ProcessesManagement processesManagment, Interpreter interpreter) {
-		this.processesManagment = processesManagment;
+		this.processesManagement = processesManagment;
 		this.interpreter = interpreter;
 		idleProcess = processesManagment.NewProcess_EmptyProcess("idleProcess");
 		RUNNING = idleProcess; 
@@ -51,7 +51,7 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	private void checkRUNNING(){
-		for(Process processFromList : processesManagment.processesList){
+		for(Process processFromList : processesManagement.processesList){
 			if((processFromList.GetCurrentPriority() >= RUNNING.GetCurrentPriority()) && processFromList.GetState()==1){
 				if(processFromList.GetCurrentPriority() == RUNNING.GetCurrentPriority()){
 					if(processFromList.GetWhenCameToList() < RUNNING.GetWhenCameToList()){
@@ -76,18 +76,19 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	private void checkNEXTTRY(){
-		for(Process processFromList : processesManagment.processesList){
-			if((processFromList.GetCurrentPriority() >= NEXTTRY.GetCurrentPriority()) && (processFromList.GetState()==1  || processFromList.GetState()==3)){
-					if(processFromList.GetCurrentPriority() == NEXTTRY.GetCurrentPriority()){
-						if(processFromList.GetWhenCameToList() < NEXTTRY.GetWhenCameToList()){
-							NEXTTRY.SetCurrentPriority(NEXTTRY.GetBasePriority());
-							NEXTTRY = processFromList;
-						}
-				}
-					else{
+		for(Process processFromList : processesManagement.processesList) {
+			if((processFromList.GetCurrentPriority() >= NEXTTRY.GetCurrentPriority()) 
+					&& (processFromList.GetState() == 1  || processFromList.GetState() == 3)) {
+				if(processFromList.GetCurrentPriority() == NEXTTRY.GetCurrentPriority()) {
+					if(processFromList.GetWhenCameToList() < NEXTTRY.GetWhenCameToList()) {
 						NEXTTRY.SetCurrentPriority(NEXTTRY.GetBasePriority());
 						NEXTTRY = processFromList;
 					}
+			}
+				else {
+					NEXTTRY.SetCurrentPriority(NEXTTRY.GetBasePriority());
+					NEXTTRY = processFromList;
+				}
 			}
 		}
 	}
@@ -101,7 +102,7 @@ public class ProcessorManager {
 	 */
 	private void compareNEXTTRYandRUNNING(){
 		checkNEXTTRY();
-		if(NEXTTRY.GetBlocked()==false){
+		if(!NEXTTRY.GetBlocked()){
 			if(NEXTTRY.GetCurrentPriority()>= RUNNING.GetCurrentPriority()){
 				if(NEXTTRY.GetCurrentPriority() == RUNNING.GetCurrentPriority()){
 					if(NEXTTRY.GetWhenCameToList() < RUNNING.GetWhenCameToList()){
@@ -140,8 +141,8 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	private void checkStarving(){
-		Process weakProcess = processesManagment.processesList.get(0);
-		for(Process processFromList : processesManagment.processesList){
+		Process weakProcess = processesManagement.processesList.get(0);
+		for(Process processFromList : processesManagement.processesList){
 				if(processFromList.GetCurrentPriority() <= weakProcess.GetCurrentPriority()){
 					if(processFromList.GetCurrentPriority() == weakProcess.GetCurrentPriority()){
 					if(processFromList.GetWhenCameToList() < weakProcess.GetWhenCameToList()){
@@ -154,7 +155,7 @@ public class ProcessorManager {
 	
 			}
 		}
-		for(Process processFromListCheck : processesManagment.processesList){
+		for(Process processFromListCheck : processesManagement.processesList){
 			if(processFromListCheck.GetID() == weakProcess.GetID()){
 				processFromListCheck.SetCurrentPriority(processFromListCheck.GetCurrentPriority()+1);
 			}
@@ -168,7 +169,7 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	private void changeWaiting(){
-		for(Process processFromList : processesManagment.processesList){
+		for(Process processFromList : processesManagement.processesList){
 			if(processFromList.GetState()!=2 && processFromList.GetState()!=4 && processFromList.GetState()!=4){
 				processFromList.SetHowLongWaiting(processFromList.GetHowLongWaiting()+1);
 			}
@@ -184,8 +185,8 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	private void checkAging(){
-		Process weakestProcess = processesManagment.processesList.get(0);
-		for(Process processFromList : processesManagment.processesList){
+		Process weakestProcess = processesManagement.processesList.get(0);
+		for(Process processFromList : processesManagement.processesList){
 			if(processFromList.GetHowLongWaiting() >= 3){
 				if(processFromList.GetHowLongWaiting() >= weakestProcess.GetHowLongWaiting()){
 					if(processFromList.GetHowLongWaiting() == weakestProcess.GetHowLongWaiting()){
@@ -200,7 +201,7 @@ public class ProcessorManager {
 			}
 		}
 		}
-		for(Process processFromListCheck : processesManagment.processesList){
+		for(Process processFromListCheck : processesManagement.processesList){
 			if(processFromListCheck.GetID() == weakestProcess.GetID()){
 				processFromListCheck.SetCurrentPriority(processFromListCheck.GetCurrentPriority()+1);
 				processFromListCheck.SetHowLongWaiting(0);
@@ -235,11 +236,28 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	public void Scheduler() {
+			System.out.println("run: " + RUNNING + " " + idleProcess);
 			//Jezeli proces zosta³ zablokowany lub zakonczony, pod RUNNING podstawiamy proces bezczynnoœci.
-			if(RUNNING.GetState() == 3 || RUNNING.GetState() ==4){
+			if(RUNNING.GetState() == 3 || RUNNING.GetState() == 4) {
 				RUNNING.SetCurrentPriority(RUNNING.GetBasePriority()); 
 				RUNNING = idleProcess;
 			}
+			
+			//if(NEXTTRY.GetState() == 4) {
+			//	NEXTTRY.SetCurrentPriority(NEXTTRY.GetBasePriority()); 
+			//	NEXTTRY = idleProcess;
+			///}
+			
+			//boolean isOk = false;
+			///for(Process p : processesManagement.processesList)
+			//	if(p.GetID() == NEXTTRY.GetID())
+			//		isOk = true;
+			
+			//if(!isOk) {
+			//	checkNEXTTRY();
+			//}
+			
+			System.out.println("run: " + RUNNING + " " + idleProcess);
 			//JEZELI PROCES NIE JEST ZABLOKOWANY, PIORYTET MA WIEKSZY, MOMENT WEJSCIA NA LISTE MNIEJSZY - WRZUCAMY GO DO RUNNING, NEXTTRY ODPOWIEDNIO ZMIENIAMY - funkcja compareRUNNINGandNEXTTRY
 			compareNEXTTRYandRUNNING();
 			// ROZWIAZUJEMY GLODOWANIE
@@ -249,6 +267,10 @@ public class ProcessorManager {
 			// MINAL ROZKAZ, WIEC ZWIEKSZAMY CZEKANKO - wywolujemy tu a nie na poczatku bo przy pierwszym wyborze wysdzloby ze czekaly rozkaz procesy
 			changeWaiting();
 			//Uruchomienie INTERPRETERA
-			interpreter.RUN(RUNNING);
+			
+			if(!RUNNING.equals(idleProcess))
+				interpreter.RUN(RUNNING);
+			else
+				System.out.println("KURWAAAAA");
 	}
 }

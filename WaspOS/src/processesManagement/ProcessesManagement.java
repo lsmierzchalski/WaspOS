@@ -3,6 +3,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import memoryManagement.RAM;
+import processorManager.ProcessorManager;
 
 public class ProcessesManagement extends Process {
 
@@ -86,9 +87,10 @@ public class ProcessesManagement extends Process {
 	
 	private void  DeleteProcess() {
 		for (int i = 0; i < finishedProcessList.size(); i++) {
-			
 			int index = FindProcessWithID(finishedProcessList.get(i));
 			RAM.deleteProcessData(processesList.get(index).GetName());
+			if(ProcessorManager.NEXTTRY.GetID() == processesList.get(index).GetID())
+				ProcessorManager.NEXTTRY = ProcessorManager.idleProcess;
 			processesList.remove(index);
 		}
 		
