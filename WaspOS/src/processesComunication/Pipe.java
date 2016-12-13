@@ -1,4 +1,4 @@
-package processesCommunication;
+package processesComunication;
 
 /**
  * G³ówna klasa wymiany danych pomiêdzy procesami.
@@ -23,8 +23,8 @@ public class Pipe {
 		// TODO utworzenie pliku do komunikacji na dysku
 		falseFile = "";
 		// TODO ustawienie nazwy pliku w PCB procesów,
-		a.pcb.fileName = "nazwaPliku";
-		b.pcb.fileName = "nazwaPliku";
+		//a.pcb.fileName = "nazwaPliku";
+		//b.pcb.fileName = "nazwaPliku";
 	}
 	
 	/**
