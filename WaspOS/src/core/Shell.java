@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import commandInterpreter.Interpreter;
@@ -13,7 +12,6 @@ import fileSystem.FileSystem;
 import memoryManagement.*;
 import processesManagement.ProcessesManagment;
 import processorManager.ProcessorManager;
-import java.util.Map;
 
 public class Shell {
 	private RAM RAM;
@@ -21,6 +19,7 @@ public class Shell {
 	private ProcessesManagment processesManagment;
 	private ProcessorManager processorManager;
 	private Interpreter interpreter;
+	private BufferedReader in;
 	
 	private String string;
 	
@@ -32,16 +31,17 @@ public class Shell {
 		allowedCommands.put("help", "exactly what you are reading");
 		allowedCommands.put("credits", "\\m/");
 		allowedCommands.put("logo", "draw wasp");
+		allowedCommands.put("load", "load program");
 		
 		new Processor();
 		
 		RAM = new RAM();
 		fileSystem = new FileSystem();
-		processesManagment = new ProcessesManagment();
+		processesManagment = new ProcessesManagment(RAM);
 		interpreter = new Interpreter(RAM, fileSystem, processesManagment);
 		processorManager = new ProcessorManager(processesManagment, interpreter);
 		
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		in = new BufferedReader(new InputStreamReader(System.in));
 		
 		System.out.println("Welcome in WaspOS 2016");
 		help();
@@ -57,6 +57,7 @@ public class Shell {
 			switch(string) {
 			case "help": help(); break;
 			case "logo": drawLogo(); break;
+			case "load": load(); break;
 			}
 			
 		} while(!string.equals("end"));
@@ -80,5 +81,21 @@ public class Shell {
 		  System.out.println(line);
 		}
 		br.close();
+	}
+	
+	private void load() throws IOException {
+		System.out.println("Enter path of program.");
+		switch(in.readLine()) {
+		case "program1":
+			processesManagment.NewProcess_forUser("program1", "program1");
+			break;
+		case "program2":
+			processesManagment.NewProcess_forUser("program2", "program2");
+			break;
+		case "program3":
+			processesManagment.NewProcess_forUser("program3", "program3");
+			break;
+		default: System.out.println("This file does not exist."); return;
+		}
 	}
 }

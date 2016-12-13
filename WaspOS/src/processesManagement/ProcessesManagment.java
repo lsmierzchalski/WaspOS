@@ -2,6 +2,8 @@ package processesManagement;
 import java.util.LinkedList;
 import java.util.List;
 
+import memoryManagement.RAM;
+
 public class ProcessesManagment extends Process {
 
 	// TO JEST KLASA Z METODAMI DLA WAS RESZTY NIE RUSZAC
@@ -18,14 +20,16 @@ public class ProcessesManagment extends Process {
 	
 	private List<Integer> finishedProcessList;
 	
+	private RAM RAM;
+	
 	private int processNumber;
 	
 	//***METODY******************************************************************************************
 	
 	//---Konstruktor-------------------------------------------------------------------------------------
 	
-	public ProcessesManagment(){
-		
+	public ProcessesManagment(RAM RAM) {
+		this.RAM = RAM;
 		processesList = new LinkedList<Process>();
 		idoverseer = new ID_Overseer();
 		stateOverseer = new ProcessStateOverseer();
@@ -38,43 +42,35 @@ public class ProcessesManagment extends Process {
 	//---
 
 	public void NewProcess_XC(String Name){
-		
 		Process process = new Process();
-		
 		int id = idoverseer.PickID();
-		
 		int i = FindProcessWithName(Name);
-		
+	
 		if(i != -1) {
 			
 			Name = Name + id;
 		}
 		
 		process.CreateProcess(id,Name, processNumber);
-	
-		processesList.add(process);
-		
+		processesList.add(process);	
 		processNumber++;
+		
+		RAM.loadDataProcess(Name, Name);
 	}
 	
 	public void NewProcess_forUser(String ProgramPath_Original, String Name) {
-		
 		Process process = new Process();
-		
-		int id = idoverseer.PickID();
-		
+		int id = idoverseer.PickID();	
 		int i = FindProcessWithName(Name);
 		
 		if(i != -1) {
-			
 			Name = Name + id;
 		}
-		
 		process.CreateProcess(id,ProgramPath_Original, Name, processNumber);
-	
 		processesList.add(process);
-		
 		processNumber++;
+		
+		RAM.loadDataProcess(Name, ProgramPath_Original);
 	}
 	
 	public  Process NewProcess_EmptyProcess(String Name) {
