@@ -44,9 +44,7 @@ public class Proces extends PCB{
 		pcb.C = 0;
 		
 		pcb.D = 0;
-		
-		pcb.Z = 0;
-		
+			
 		pcb.commandCounter = 0;
 		
 		pcb.commandCounter = 0;
@@ -84,8 +82,6 @@ public class Proces extends PCB{
 		
 		pcb.D = 0;
 		
-		pcb.Z = 0;
-		
 		pcb.commandCounter = 0;
 		
 		pcb.whenCameToList = number;
@@ -113,7 +109,6 @@ public class Proces extends PCB{
 		System.out.println("Rejestr B - " + pcb.B);
 		System.out.println("Rejestr C - " + pcb.C);
 		System.out.println("Rejestr D - " + pcb.D);
-		System.out.println("Rejestr Z - " + pcb.Z);
 		System.out.println("Liczba wykonanych rozkazow - " + pcb.commandCounter);
 		
 	}
@@ -212,5 +207,10 @@ public class Proces extends PCB{
 	public PCB GetPCB() {
 		
 		return pcb;
+	}
+	
+	public void SetPCB(PCB yourPCB) {
+		
+		pcb = yourPCB;
 	}
 }

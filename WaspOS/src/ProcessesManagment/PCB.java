@@ -1,5 +1,7 @@
 package ProcessesManagment;
 
+import java.util.HashMap;
+
 public class PCB{
 	
 	protected int ProcessID;
@@ -14,11 +16,11 @@ public class PCB{
 	
 	
 	
-	protected int commandCounter;
-	
+	public  int commandCounter;
+	public HashMap<String, Integer> labels = new HashMap<String, Integer>();
 	public int A;
 	public int B;
 	public int C;
 	public int D;
-	public int Z;
+
 }
