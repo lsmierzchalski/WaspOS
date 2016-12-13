@@ -137,7 +137,6 @@ public class Interpreter {
 
 		// First is uden to load chars of program
 		commandCounter = PCBbox.commandCounter;
-		System.out.println("Odebralem PCB z ccc: " + PCBbox.commandCounter);
 
 		// Second used to interpret commands
 		otherCounter = PCBbox.commandCounter;
@@ -219,7 +218,6 @@ public class Interpreter {
 	}
 
 	private String getProgram(String procesName) {
-		System.out.println("odebrany: " + commandCounter);
 		char znak;
 		String program = "";
 
@@ -292,7 +290,7 @@ public class Interpreter {
 
 		case "HLT": // Koniec programu
 			ProcessorManager.RUNNING.SetState(4);
-			return;
+			break;
 
 		case "XR": // czytanie komunikatu;
 			// readMsg();
@@ -335,7 +333,6 @@ public class Interpreter {
 			System.out.println(param1);
 			break;
 		}
-		ProcessorManager.RUNNING.SetState(1);
 	}
 
 	public void work(String program, HashMap<String, Integer> labels) {

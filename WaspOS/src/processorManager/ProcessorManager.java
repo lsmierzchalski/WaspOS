@@ -268,9 +268,6 @@ public class ProcessorManager {
 			changeWaiting();
 			//Uruchomienie INTERPRETERA
 			
-			if(!RUNNING.equals(idleProcess))
-				interpreter.RUN(RUNNING);
-			else
-				System.out.println("KURWAAAAA");
+			interpreter.RUN(RUNNING);
 	}
 }

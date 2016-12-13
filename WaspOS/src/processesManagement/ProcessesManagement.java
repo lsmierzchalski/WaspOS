@@ -89,8 +89,6 @@ public class ProcessesManagement extends Process {
 		for (int i = 0; i < finishedProcessList.size(); i++) {
 			int index = FindProcessWithID(finishedProcessList.get(i));
 			RAM.deleteProcessData(processesList.get(index).GetName());
-			if(ProcessorManager.NEXTTRY.GetID() == processesList.get(index).GetID())
-				ProcessorManager.NEXTTRY = ProcessorManager.idleProcess;
 			processesList.remove(index);
 		}
 		
