@@ -6,7 +6,7 @@ public class Proces extends PCB{
 	
 		private String ProgramPath;
 		
-		public PCB pcb = new PCB();
+		static public PCB pcb = new PCB();
 		
 		
 	//---zmienne pomocnicze------------------------------------------------------------------------------
@@ -204,12 +204,12 @@ public class Proces extends PCB{
 	
 	//---
 	
-	public PCB GetPCB() {
+	static public PCB GetPCB() {
 		
 		return pcb;
 	}
 	
-	public void SetPCB(PCB yourPCB) {
+	static public void SetPCB(PCB yourPCB) {
 		
 		pcb = yourPCB;
 	}
