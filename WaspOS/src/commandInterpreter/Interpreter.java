@@ -122,6 +122,9 @@ public class Interpreter {
 	}
 
 	public int RUN(Process RUNNING) {
+		if(ProcessorManager.RUNNING.GetState() == 4)
+			return -1;
+		ProcessorManager.RUNNING.printInformations();
 		// Put to Box a PCB from current Process
 		PCBbox = RUNNING.GetPCB();
 		// Set porgram variable
@@ -304,15 +307,18 @@ public class Interpreter {
 
 		case "XC": // -- tworzenie procesu (param1);
 			processesManagment.NewProcess_forUser(param2, param1);
+			processesManagment.getProcess(param1).SetState(3);
 			break;
 		case "XY": // -- Uruchomienie procesu
-
+			processesManagment.getProcess(param1).SetState(1);
+			processesManagment.getProcess(param1).SetCurrentPriority(1000);
 			break;
 		case "XD": // -- usuwanie procesu (param1);
-			System.out.println("interpreter: " + param1);
+			processesManagment.getProcess(param1).SetState(4);
 			processesManagment.DeleteProcessWithName_XD(param1);
 			break;
 		case "XZ": // -- Zatrzymanie procesu
+			processesManagment.getProcess(param1).SetState(3);
 			// stopProces(param1);
 			break;
 
@@ -370,7 +376,7 @@ public class Interpreter {
 						if (z != ':') {
 							temp += z;
 						} else {
-							labels.put(temp, (otherCounter + 1));
+							labels.put(temp, (otherCounter));
 						}
 					}
 

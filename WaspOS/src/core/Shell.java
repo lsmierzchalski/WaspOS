@@ -39,6 +39,7 @@ public class Shell {
 		allowedCommands.put("prun", "print running field");
 		allowedCommands.put("pnex", "print nexttry field");
 		allowedCommands.put("step", "do one step on processor");
+		allowedCommands.put("disc", "display disc");
 		
 		new Processor();
 		
@@ -72,6 +73,7 @@ public class Shell {
 			case "prun": prun(); break;
 			case "pnex": pnex(); break;
 			case "step": step(); break;
+			case "disc": disc(); break;
 			}		
 		} while(!string.equals("exit"));
 		
@@ -143,7 +145,43 @@ public class Shell {
 		processorManager.showNEXTTRY();
 	}
 	
-	private void step() {
+	private void step() throws IOException {
 		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+		processorManager.Scheduler();
+	}
+	
+	private void disc() {
+		fileSystem.showDiskAndVector();
+		fileSystem.showMainCatalog();
 	}
 }

@@ -275,14 +275,13 @@ public class ProcessesManagement extends Process {
 		}
 	}
 
-	public void printProcessInformations(int ID) {
-		if(ID < 0 || ID > processesList.size()-1) {
-			System.out.println("This process does not exist");
-			return;
-		}
-		
+	public void printProcessInformations(int ID) {	
 		int index = FindProcessWithID(ID);
-		processesList.get(index).printInformations();
+		
+		if(index < 0 || index > processesList.size()-1)
+			processesList.get(index).printInformations();
+		else
+			System.out.println("This process does not exist");
 	}
 	
 	/**
