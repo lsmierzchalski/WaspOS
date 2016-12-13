@@ -2,42 +2,41 @@ package fileSystem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import	fileSystem.File;
 
 public class FileSystem {
 
-	//podstawowe sta³e na których opieram dzia³eni dysku czyli jego wielkoœæ, rozmiar bloku i liczba tych ¿e bloków
-	private final int DISK_SIZE = 1024;
-	private final int BLOCK_SIZE = 32;
-	private final int NR_OF_BLOCKS = DISK_SIZE/BLOCK_SIZE;
+	//podstawowe staÂ³e na ktÃ³rych opieram dziaÂ³eni dysku czyli jego wielkoÅ“Ã¦, rozmiar bloku i liczba tych Â¿e blokÃ³w
+	private final static int DISK_SIZE = 1024;
+	private final static int BLOCK_SIZE = 32;
+	private final static int NR_OF_BLOCKS = DISK_SIZE/BLOCK_SIZE;
 	
-	//dysk (tablica bajtów(zanków))
-	private char[] hardDrive = new char[DISK_SIZE];
+	//dysk (tablica bajtÃ³w(zankÃ³w))
+	private static char[] hardDrive = new char[DISK_SIZE];
 		
 	//wektor bitowy
-	private boolean[] bitVector = new boolean[NR_OF_BLOCKS];
+	private static boolean[] bitVector = new boolean[NR_OF_BLOCKS];
 		
-	//lista wpisów katalogowych gdzie kazdy wpis jest obiektem klasy File
-	private List<File> mainCatalog = new ArrayList<File>();
+	//lista wpisÃ³w katalogowych gdzie kazdy wpis jest obiektem klasy File
+	private static List<File> mainCatalog = new ArrayList<File>();
 	
 	//konstruktor nie robi nic ciekawego poprostu 
-	//wype³nia tablice zankiem # by ³atwiej by³o j¹ czytaæ
+	//wypeÂ³nia tablice zankiem # by Â³atwiej byÂ³o jÂ¹ czytaÃ¦
 	//dla pewnosci wypelnia bitVector zerami
 	public FileSystem(){
 		for(int i=0; i < DISK_SIZE; i++) hardDrive[i] = '#';
 		for(int i=0; i < NR_OF_BLOCKS; i++) bitVector[i] = false;
 	}
 	
-	//funkcja tworz¹ca plik wraz z dopisaniem do niego zawartoœci
-	public void createFileWithContent(String name, String content){
+	//funkcja tworzÂ¹ca plik wraz z dopisaniem do niego zawartoÅ“ci
+	public static void createFileWithContent(String name, String content){
 		createEmptyFile(name);
 		appendToFile(name, content);
 	}
 	
-	//funkcja tworz¹ca pusty plik
-	public void createEmptyFile(String name){
+	//funkcja tworzÂ¹ca pusty plik
+	public static void createEmptyFile(String name){
 
 		if(!isExistFileWithSameName(name)){
 			int indexFreeBlock = findFreeBlock();
@@ -52,7 +51,7 @@ public class FileSystem {
 	}
 	
 	//funkcja dopisuje do pliku dane
-	public void appendToFile(String name, String content){
+	public static void appendToFile(String name, String content){
 		int indexChar = 0;
 		String charTable = "";
 		if(isExistFileWithSameName(name)){
@@ -63,9 +62,9 @@ public class FileSystem {
 						charTable+= content.charAt(indexChar);
 					}
 					//System.out.println(charTable+" "+charTable.length());
-					//dodaæ znaki do ostatniego bloku
+					//dodaÃ¦ znaki do ostatniego bloku
 					fillDataBusyBlock(name,charTable);
-					//zmieniæ rozmiar pliku
+					//zmieniÃ¦ rozmiar pliku
 					increaseSizeFile(name, charTable.length());
 				}
 				
@@ -76,12 +75,12 @@ public class FileSystem {
 					}
 					//System.out.println(charTable+" "+charTable.length());
 					int index = findFreeBlock();
-					//dodaæ nowy wpis do bloku indeksowego pliku
+					//dodaÃ¦ nowy wpis do bloku indeksowego pliku
 					addEntryToBlockIndex(name, index);
-					//dodaæ znaki do nowego bloku
+					//dodaÃ¦ znaki do nowego bloku
 					fillDataNewBlock(index, charTable);
 					bitVector[index] = true;
-					//zminieæ rozmiar pliku
+					//zminieÃ¦ rozmiar pliku
 					increaseSizeFile(name, charTable.length());
 				}
 			}
@@ -91,8 +90,8 @@ public class FileSystem {
 		
 	}
 	
-	//funkcja odczytuj¹ca dane z pliku
-	public String getFileContent(String name){
+	//funkcja odczytujÂ¹ca dane z pliku
+	public static String getFileContent(String name){
 		String data = "";
 		
 		if(isExistFileWithSameName(name)){
@@ -124,8 +123,8 @@ public class FileSystem {
 		return data;
 	}
 	
-	//funkcja usuwaj¹ca plik
-	public void deleteFile(String name){
+	//funkcja usuwajÂ¹ca plik
+	public static void deleteFile(String name){
 		if(isExistFileWithSameName(name)){
 			//zwolnienie blokow pamieci
 			int size = getSizeFile(name);
@@ -149,10 +148,10 @@ public class FileSystem {
 		else System.out.println("ERROR");
 	}
 	
-	//______________________PONI¯EJ_FUNKCJE_POMOCNICZE_____________________________________
+	//______________________PONIÂ¯EJ_FUNKCJE_POMOCNICZE_____________________________________
 	
 	//sprawdza czy istnieje plik o takiej nazwie
-	private boolean isExistFileWithSameName(String name){
+	private static boolean isExistFileWithSameName(String name){
 		boolean exist = false;
 		
 		for(int i=0; i<mainCatalog.size(); i++){
@@ -165,7 +164,7 @@ public class FileSystem {
 	}
 	
 	//zwraca index pierwszego wolnego bloku w pamieci
-	private int  findFreeBlock(){
+	private static int  findFreeBlock(){
 		int freeBlock = -1;
 		
 		for(int i=0; i<NR_OF_BLOCKS; i++){
@@ -178,8 +177,8 @@ public class FileSystem {
 		return freeBlock;
 	}
 	
-	//sprawdzenie czy wystarczy pamiêci by dopisaæ dane do pliku
-	public boolean isEnoughMemory(String name, int neededMemory){
+	//sprawdzenie czy wystarczy pamiÃªci by dopisaÃ¦ dane do pliku
+	public static boolean isEnoughMemory(String name, int neededMemory){
 		boolean isEnough = false;
 		int freeMemory = BLOCK_SIZE * numberOfFreeBlocks();
 		if(isFileHavePlace(name)){
@@ -192,7 +191,7 @@ public class FileSystem {
 	}
 	
 	//zwraca liczbe wolnych blokow danych
-	public int numberOfFreeBlocks(){
+	public static int numberOfFreeBlocks(){
 		int nr = 0;
 		
 		for(int i=0; i<NR_OF_BLOCKS; i++){
@@ -202,15 +201,15 @@ public class FileSystem {
 		return nr;
 	}
 	
-	//sprawdzenie czy plik ma nie wype³niony w ca³oœci bloku
-	public boolean isFileHavePlace(String name){
+	//sprawdzenie czy plik ma nie wypeÂ³niony w caÂ³oÅ“ci bloku
+	public static boolean isFileHavePlace(String name){
 		boolean have = false;
 		if(getSizeFile(name) % BLOCK_SIZE != 0) have = true;
 		return have;
 	}
 	
 	//zwraca rozmiar pliku
-	private int getSizeFile(String name){
+	private static int getSizeFile(String name){
 		int size = 0;
 		for(int i=0; i<mainCatalog.size(); i++){
 			if(mainCatalog.get(i).name.equals(name)){
@@ -221,7 +220,7 @@ public class FileSystem {
 	}
 	
 	//zwraca index bloku indexowego
-	private int getIndexBlockIndexFile(String name){
+	private static int getIndexBlockIndexFile(String name){
 		int index = 0;
 		for(int i=0; i<mainCatalog.size(); i++){
 			if(mainCatalog.get(i).name.equals(name)){
@@ -232,7 +231,7 @@ public class FileSystem {
 	}
 	
 	//zwraca blok indeksowy
-	public String getBlockIndexFile(String name){
+	public static String getBlockIndexFile(String name){
 		int index = getIndexBlockIndexFile(name)*BLOCK_SIZE;
 		String charTab = "";
 		for(int i=0; i<BLOCK_SIZE; i++){
@@ -244,7 +243,7 @@ public class FileSystem {
 	
 	//zwraca index ostatniego bloku indexowego
 	//ufam tobie
-	public int getIndexLastBlockFile(String name){
+	public static int getIndexLastBlockFile(String name){
 		int index = -1;
 		int size = getSizeFile(name);
 		int indexBlockIndexFile = getIndexBlockIndexFile(name);
@@ -255,14 +254,14 @@ public class FileSystem {
 	}
 	
 	//zwraca liczbe wolnych miejsc w ostatnim bloku pliku
-	public int getNrFreePlaceInLastBlock(String name){
+	public static int getNrFreePlaceInLastBlock(String name){
 		int freePlace = 0;
 		freePlace = BLOCK_SIZE - (getSizeFile(name) % BLOCK_SIZE);
 		return freePlace;
 	}
 	
-	//wype³nia dany blok znakami
-	private void fillDataNewBlock(int indexBlock, String charTable){
+	//wypeÂ³nia dany blok znakami
+	private static void fillDataNewBlock(int indexBlock, String charTable){
 		int index = indexBlock * BLOCK_SIZE;
 		for(int i = 0; i<charTable.length(); i++, index++){
 			hardDrive[index] = charTable.charAt(i);
@@ -270,7 +269,7 @@ public class FileSystem {
 	}
 	
 	//zwieksza rozmiar pliku
-	private void increaseSizeFile(String name, int n){
+	private static void increaseSizeFile(String name, int n){
 		for(int i=0; i<mainCatalog.size(); i++){
 			if(mainCatalog.get(i).name.equals(name)){
 				mainCatalog.get(i).size+= n;
@@ -279,14 +278,14 @@ public class FileSystem {
 	}
 	
 	//dodaje wpis do bloku indeksowego pliku
-	private void addEntryToBlockIndex(String name, int index){
+	private static void addEntryToBlockIndex(String name, int index){
 		int i = getIndexBlockIndexFile(name) * BLOCK_SIZE + getSizeFile(name) / BLOCK_SIZE;
 		hardDrive[i] = (char) index;
 		//System.out.println(i+" "+index);
 	}
 	
-	//wype³nia ostatni blok znakami
-	private void fillDataBusyBlock(String name, String charTable){
+	//wypeÂ³nia ostatni blok znakami
+	private static void fillDataBusyBlock(String name, String charTable){
 		int index = getIndexLastBlockFile(name) * BLOCK_SIZE + getSizeFile(name) % BLOCK_SIZE;
 		for(int i=0; i<charTable.length(); i++){
 			hardDrive[index] = charTable.charAt(i);
@@ -295,7 +294,7 @@ public class FileSystem {
 	}
 	
 	//usuwa wpis katalogowy pliku o danej nazwie
-	private void removeDirectoryEntry(String name){
+	private static void removeDirectoryEntry(String name){
 		for(int i=0; i<mainCatalog.size(); i++){
 			if(mainCatalog.get(i).name.equals(name)){
 				mainCatalog.remove(i);
@@ -303,10 +302,10 @@ public class FileSystem {
 		}
 	}
 	
-	//______________________PONI¯EJ_FUNKCJE_DO_"DIAGNOSTYKI"_MODU£U________________________
+	//______________________PONIÂ¯EJ_FUNKCJE_DO_"DIAGNOSTYKI"_MODUÂ£U________________________
 	
-	//fukcja s³u¿y do wyœwietlania zawartoœci tablicy dysku twardego
-	public void showHardDrive(){
+	//fukcja sÂ³uÂ¿y do wyÅ“wietlania zawartoÅ“ci tablicy dysku twardego
+	public static void showHardDrive(){
 		System.out.println("hardDrive");
 		int x = 1;
 		for(int i = 0; i < DISK_SIZE; i++){
@@ -322,8 +321,8 @@ public class FileSystem {
 		System.out.print("\n");
 	}
 	
-	//fukcja s³u¿y do wyœwietlania zawartoœci vektora bitów który przechowuje informacje o tym czy blok jest zajêty
-	public void showBitVector(){
+	//fukcja sÂ³uÂ¿y do wyÅ“wietlania zawartoÅ“ci vektora bitÃ³w ktÃ³ry przechowuje informacje o tym czy blok jest zajÃªty
+	public static void showBitVector(){
 		System.out.println("bitVector");
 		int y;
 		for(int i = 0; i < NR_OF_BLOCKS; i++){
@@ -335,8 +334,8 @@ public class FileSystem {
 		System.out.print("\n");
 	}
 
-	//fukcja s³u¿y do wyœwietlania zawartoœci tabilcy dysku twardego oraz vektora bitów
-	public void showDiskAndVector(){
+	//fukcja sÂ³uÂ¿y do wyÅ“wietlania zawartoÅ“ci tabilcy dysku twardego oraz vektora bitÃ³w
+	public static void showDiskAndVector(){
 		System.out.println("hardDrive");
 		int x = 0;
 		int y;
@@ -366,10 +365,9 @@ public class FileSystem {
 		System.out.print("\n");
 	}
 	
-	//fukcja s³u¿y do wyœwietlania zawartoœci g³ównego katalogu czyli trzy podstawowe informacje o plikach nawa, blok indeksowy, zormiar
-	public void showMainCatalog(){
+	//fukcja sÂ³uÂ¿y do wyÅ“wietlania zawartoÅ“ci gÂ³Ã³wnego katalogu czyli trzy podstawowe informacje o plikach nawa, blok indeksowy, zormiar
+	public static void showMainCatalog(){
 		System.out.println("mainCatalog");
-		int x;
 		if(mainCatalog.isEmpty()){
 			System.out.println("Main Catalog is Empty");
 		}
@@ -392,7 +390,7 @@ public class FileSystem {
 	}
 	
 	public void y(){
-		createFileWithContent("basn","Mrok wieczorny, babcia siwa\nprzy kominku g³ow¹ kiwa.");
+		createFileWithContent("basn","Mrok wieczorny, babcia siwa\nprzy kominku gÂ³owÂ¹ kiwa.");
 	}
 	
 }
