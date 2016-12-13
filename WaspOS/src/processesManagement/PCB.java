@@ -2,7 +2,7 @@ package processesManagement;
 
 import java.util.HashMap;
 
-public class PCB{
+public class PCB {
 	
 	protected int ProcessID;
 	protected String ProcessName;

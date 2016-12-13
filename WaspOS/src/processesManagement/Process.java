@@ -4,7 +4,7 @@ public class Process extends PCB{
 
 	//===ZMIENNE=========================================================================================
 	
-		private String ProgramPath;
+		//private String ProgramPath;
 		
 		public PCB pcb = new PCB();
 		
@@ -46,8 +46,7 @@ public class Process extends PCB{
 		pcb.D = 0;
 			
 		pcb.commandCounter = 0;
-		
-		pcb.commandCounter = 0;
+
 		
 		pcb.whenCameToList = number;
 		
@@ -57,12 +56,10 @@ public class Process extends PCB{
 	}
 	
 	protected void CreateProcess(int ID,String ProgramPath_Original, String Name, int number) {
-		
 		pcb.ProcessState = stateOverseer.newbie;
-		
 		pcb.ProcessID = ID;
 		
-		ProgramPath = ProgramPath_Original;
+		//ProgramPath = ProgramPath_Original;
 		
 		pcb.ProcessName = Name;
 		
@@ -93,24 +90,22 @@ public class Process extends PCB{
 	
 	//---odczytaj dane procesu----------------------------------------------------------------------------
 	
-	protected void ReadInformations() {
-		
+	public void printInformations() {
 		System.out.println("------------------------------");
-		System.out.println("ID Procesu - " + pcb.ProcessID);
-		System.out.println("Nazwa Procesu - " + pcb.ProcessName);
-		System.out.println("Ogolny numer procesu - " + pcb.whenCameToList);
-		System.out.println("Stan Procesu - " + pcb.ProcessState);
-		System.out.println("Pierwotny prirytet - " + pcb.BaseProcessPriority);
-		System.out.println("Obecny prirytet - " + pcb.CurrentProcessPriority);
-		System.out.println("Czas oczekiwania procesu - " + pcb.howLongWaiting);
-		System.out.println("Stan zamka - " + pcb.blocked);
+		System.out.println("ID - " + pcb.ProcessID);
+		System.out.println("name - " + pcb.ProcessName);
+		System.out.println("order number - " + pcb.whenCameToList);
+		System.out.println("state - " + pcb.ProcessState);
+		System.out.println("base priority - " + pcb.BaseProcessPriority);
+		System.out.println("current priority - " + pcb.CurrentProcessPriority);
+		System.out.println("waiting time - " + pcb.howLongWaiting);
+		System.out.println("lock state - " + pcb.blocked);
 		//procesor
-		System.out.println("Rejestr A - " + pcb.A);
-		System.out.println("Rejestr B - " + pcb.B);
-		System.out.println("Rejestr C - " + pcb.C);
-		System.out.println("Rejestr D - " + pcb.D);
-		System.out.println("Liczba wykonanych rozkazow - " + pcb.commandCounter);
-		
+		System.out.println("Register A - " + pcb.A);
+		System.out.println("Register B - " + pcb.B);
+		System.out.println("Register C - " + pcb.C);
+		System.out.println("Register D - " + pcb.D);
+		System.out.println("done command counter - " + pcb.commandCounter);
 	}
 	
 	//-- Getery i Setery----------------------------------------------------------------------------------

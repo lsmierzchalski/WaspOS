@@ -4,7 +4,7 @@ import java.util.List;
 
 import memoryManagement.RAM;
 
-public class ProcessesManagment extends Process {
+public class ProcessesManagement extends Process {
 
 	// TO JEST KLASA Z METODAMI DLA WAS RESZTY NIE RUSZAC
 	
@@ -28,7 +28,7 @@ public class ProcessesManagment extends Process {
 	
 	//---Konstruktor-------------------------------------------------------------------------------------
 	
-	public ProcessesManagment(RAM RAM) {
+	public ProcessesManagement(RAM RAM) {
 		this.RAM = RAM;
 		processesList = new LinkedList<Process>();
 		idoverseer = new ID_Overseer();
@@ -74,7 +74,6 @@ public class ProcessesManagment extends Process {
 	}
 	
 	public  Process NewProcess_EmptyProcess(String Name) {
-		
 		Process process = new Process();
 		process.CreateProcess(-1, Name, -1);
 		process.SetBasePriority(0);
@@ -86,10 +85,10 @@ public class ProcessesManagment extends Process {
 	//---
 	
 	private void  DeleteProcess() {
-		
 		for (int i = 0; i < finishedProcessList.size(); i++) {
 			
 			int index = FindProcessWithID(finishedProcessList.get(i));
+			RAM.deleteProcessData(processesList.get(index).GetName());
 			processesList.remove(index);
 		}
 		
@@ -97,25 +96,21 @@ public class ProcessesManagment extends Process {
 	}
 	
 	public void DeleteProcessWithID(int ID) {
-		
 		int index = FindProcessWithID(ID);
 		processesList.remove(index);
 	}
 	
 	public void DeleteProcessWithName_XD(String name) {
-		
 		int index = FindProcessWithName(name);
+		RAM.deleteProcessData(name);
 		processesList.remove(index);
 	}
 	
 	//---sprawdz stany -> poszukiwanie procesow do usunieica---------------------------------------------
 	
 	public void CheckStates() {
-		
 		for (int i = 0; i < processesList.size(); i++) {
-			
 			if(processesList.get(i).pcb.ProcessState == stateOverseer.finished) {
-				
 				finishedProcessList.add(processesList.get(i).pcb.ProcessID);
 			}
 		}
@@ -128,15 +123,11 @@ public class ProcessesManagment extends Process {
 	//---
 	
 	public int FindProcessWithID(int ID) {
-		
 		Process proces_kopia;
 		
 		for(int i = 0; i < processesList.size(); i++) {
-			
 			proces_kopia = processesList.get(i);
-			
 			if(proces_kopia.GetID() == ID) {
-				
 				return i;
 			}	
 		}
@@ -154,7 +145,7 @@ public class ProcessesManagment extends Process {
 			
 			proces_kopia = processesList.get(i);
 			
-			if(proces_kopia.GetName()== name) {
+			if(proces_kopia.GetName().equals(name)) {
 				
 				return i;
 			}	
@@ -275,20 +266,31 @@ public class ProcessesManagment extends Process {
 	
 	//===Shell=============================================================================================
 	
-	public void ReadProcessListInformations() {
-		
+	public void printProcessListInformations() {
 		System.out.println("------------------------------");
-		System.out.println("Lista Procesow:");
+		System.out.println("Processes list:");
 		
 		for(int i = 0; i < processesList.size(); i++) {
-			
 			System.out.println( i + ". " + processesList.get(i).GetID() + ", " + processesList.get(i).GetName());
 		}
 	}
 
-	public void ReadProcessInformationsWithID(int ID) {
+	public void printProcessInformations(int ID) {
+		if(ID < 0 || ID > processesList.size()-1) {
+			System.out.println("This process does not exist");
+			return;
+		}
 		
 		int index = FindProcessWithID(ID);
-		processesList.get(index).ReadInformations();
+		processesList.get(index).printInformations();
+	}
+	
+	/**
+	 * @warning niebezpieczna. uzycie nazwy, ktora nie istnieje powoduje blad przekroczenia listy [-1]
+	 * @param name
+	 * @return process by ID.
+	 */
+	public Process getProcess(String name) {
+		return processesList.get(FindProcessWithName(name));
 	}
 }

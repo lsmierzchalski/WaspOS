@@ -31,7 +31,7 @@ public class RAM {
 		int pageTableIndex = -1;
 		// szukanie tablicy stron z odpowiednim procesem
 		for (int i = 0; i < this.pageTables.size(); i++) {
-			if (this.pageTables.get(i).processName == processName)
+			if (this.pageTables.get(i).processName.equals(processName))
 				pageTableIndex = i;
 		}
 
@@ -55,10 +55,9 @@ public class RAM {
 				framePosition = FIFO.poll();
 
 				// zaznaczenie w tablicy stron procesu którego pamiêæ zwalniamy
-				// ze nie jest juz w ramie
 				for (int i = 0; i < this.pageTables.size(); i++) {
 					// szukanie procesu ktory jest w ramce ktora chemy zwolnic
-					if (this.pageTables.get(i).processName == this.processNameInFrame[framePosition]) {
+					if (this.pageTables.get(i).processName.equals(this.processNameInFrame[framePosition])) {
 						// wyznaczenie odpowiednich wartosci i zwrocenie
 						// stronicy do pliku wymiany
 						int help = this.pageTables.get(i).getIndex(framePosition);
@@ -79,7 +78,7 @@ public class RAM {
 			} else { // jezeli sa wolne ramki
 				for (int i = 0; i < 16; i++) {
 					// szukanie wolnej ramki
-					if (this.freeFrame[i] == true) {
+					if (this.freeFrame[i]) {
 						// zapisanie do wolnej ramki odpowiednich danych
 						framePosition = i;
 

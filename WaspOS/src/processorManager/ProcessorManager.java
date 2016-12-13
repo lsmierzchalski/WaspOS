@@ -1,10 +1,8 @@
 package processorManager;
 
 import commandInterpreter.Interpreter;
-import processesManagement.ProcessesManagment;
 import processesManagement.Process;
-
-import java.util.Iterator;
+import processesManagement.ProcessesManagement;
 
 public class ProcessorManager {
 	// + PETLA WHILE WSPOLPRACY Z JARKIEM TELEGRAMEM WIECZORKIEM!
@@ -34,12 +32,11 @@ public class ProcessorManager {
 	 */
 	public static Process NEXTTRY;
 	
-	
-	private ProcessesManagment processesManagment;
+	private ProcessesManagement processesManagment;
 	
 	private Interpreter interpreter;
 	
-	public ProcessorManager(ProcessesManagment processesManagment, Interpreter interpreter) {
+	public ProcessorManager(ProcessesManagement processesManagment, Interpreter interpreter) {
 		this.processesManagment = processesManagment;
 		this.interpreter = interpreter;
 		idleProcess = processesManagment.NewProcess_EmptyProcess("idleProcess");
@@ -143,7 +140,7 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	private void checkStarving(){
-		Process weakProcess = processesManagment.processesList.get(1);
+		Process weakProcess = processesManagment.processesList.get(0);
 		for(Process processFromList : processesManagment.processesList){
 				if(processFromList.GetCurrentPriority() <= weakProcess.GetCurrentPriority()){
 					if(processFromList.GetCurrentPriority() == weakProcess.GetCurrentPriority()){
@@ -187,7 +184,7 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	private void checkAging(){
-		Process weakestProcess = processesManagment.processesList.get(1);
+		Process weakestProcess = processesManagment.processesList.get(0);
 		for(Process processFromList : processesManagment.processesList){
 			if(processFromList.GetHowLongWaiting() >= 3){
 				if(processFromList.GetHowLongWaiting() >= weakestProcess.GetHowLongWaiting()){
@@ -213,25 +210,13 @@ public class ProcessorManager {
 	}
 	
 	/**
-	 * Funkcja przestawiajaca aktualna zawartosc pola RUNNING.
+	 * Funkcja przedstawiajaca aktualna zawartosc pola RUNNING.
 	 * 
 	 * @author £UKASZ WOLNIAK
 	 */
-	public void showRUNNING(){
-		System.out.println("\n\nObecnie w polu RUNNING znajduje sie proces o ponizszej zawartosci: \n\n");
-		System.out.println("Nazwa: ");
-		System.out.println(RUNNING.GetName());
-		System.out.println("ID: ");
-		System.out.println(RUNNING.GetID());
-		System.out.println("Numer porzadkowy: ");
-		System.out.println(RUNNING.GetWhenCameToList());
-		System.out.println("Piorytet bazowy: ");
-		System.out.println(RUNNING.GetBasePriority());
-		System.out.println("Piorytet dynamiczny: ");
-		System.out.println(RUNNING.GetCurrentPriority());
-		System.out.println("Stan: ");
-		System.out.println(RUNNING.GetState());
-		System.out.println("\n\n");
+	public void showRUNNING() {
+		System.out.println("\n\nNow in RUNNING field exist process: \n\n");
+		RUNNING.printInformations();
 	}
 	
 	/**
@@ -240,20 +225,8 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	public void showNEXTTRY(){
-		System.out.println("\n\nObecnie w polu NEXTTRY znajduje sie proces o ponizszej zawartosci: \n\n");
-		System.out.println("Nazwa: ");
-		System.out.println(NEXTTRY.GetName());
-		System.out.println("ID: ");
-		System.out.println(NEXTTRY.GetID());
-		System.out.println("Numer porzadkowy: ");
-		System.out.println(NEXTTRY.GetWhenCameToList());
-		System.out.println("Piorytet bazowy: ");
-		System.out.println(NEXTTRY.GetBasePriority());
-		System.out.println("Piorytet dynamiczny: ");
-		System.out.println(NEXTTRY.GetCurrentPriority());
-		System.out.println("Stan: ");
-		System.out.println(NEXTTRY.GetState());
-		System.out.println("\n\n");
+		System.out.println("\n\nNow in NEXTTRY field exist process: \n\n");
+		NEXTTRY.printInformations();
 	}
 	
 	/**
@@ -261,9 +234,9 @@ public class ProcessorManager {
 	 * 
 	 * @author £UKASZ WOLNIAK
 	 */
-	public void Scheduler(){
+	public void Scheduler() {
 			//Jezeli proces zosta³ zablokowany lub zakonczony, pod RUNNING podstawiamy proces bezczynnoœci.
-			if(RUNNING.GetState()==3 || RUNNING.GetState()==4){
+			if(RUNNING.GetState() == 3 || RUNNING.GetState() ==4){
 				RUNNING.SetCurrentPriority(RUNNING.GetBasePriority()); 
 				RUNNING = idleProcess;
 			}
