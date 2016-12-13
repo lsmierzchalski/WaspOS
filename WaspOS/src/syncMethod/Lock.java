@@ -1,34 +1,35 @@
 package syncMethod;
 
-import java.util.*;
-import ProcessesManagment.*;
+import java.util.LinkedList;
+import java.util.Queue;
+
+import processesManagement.Process;
 
 public class Lock 
-{
-	
+{	
 	public String name;
 	private boolean state;
-	private Proces lockingProces;
-	private Queue<Proces> queueWaitingProcesses = new LinkedList<Proces>();
-	public Lock(String name)
-	{
+	private Process lockingProces;
+	private Queue<Process> queueWaitingProcesses = new LinkedList<Process>();
+	
+	public Lock(String name) {
 		this.name=name;
 		this.setState(false);
 	}
-	public boolean isState() 
-	{
+	
+	public boolean isState()  {
 		return state;
 	}
-	public void setState(boolean state) 
-	{
+	
+	public void setState(boolean state)  {
 		this.state = state;
 	}
-	public void displayLockingProces()
-	{
+	
+	public void displayLockingProces() {
 		System.out.println(lockingProces.GetName());
 	}
-	public void lock(Proces procesWhichCloses)
-	{
+	
+	public void lock(Process procesWhichCloses) {
 		if(!isState())
 		{
 			//zamek jest otwarty, proces zamyka zamek i rusza dalej
@@ -44,8 +45,8 @@ public class Lock
 			
 		}
 	}
-	public void unlock(Proces procesWhichOpen)
-	{
+	
+	public void unlock(Process procesWhichOpen) {
 		//odblokowuje zamek i jeœli kolejka nie jest pusta to zeruje bit blocked pierwszego oczekujacego procesu.
 		if(procesWhichOpen == this.lockingProces)
 		{

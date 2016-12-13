@@ -1,6 +1,6 @@
-package ProcessesManagment;
+package processesManagement;
 
-public class Proces extends PCB{
+public class Process extends PCB{
 
 	//===ZMIENNE=========================================================================================
 	

@@ -2,22 +2,14 @@ package commandInterpreter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
-import ProcessesManagment.*;
-import ProcessesManagment.Proces.*;
-import ProcessesManagment.PCB.*;
-import memoryManagament.RAM;
-import memoryManagament.RAM.*;
-import core.Processor.*;
 import fileSystem.FileSystem;
-
-
+import processesManagement.PCB;
+import processesManagement.ProcessesManagment;
+import processesManagement.Process;
+import memoryManagement.RAM;
 
 public class Interpreter {
-	
-	
-	
 	//ProcesMangment.RUNNING.SetPCB(pcbcos);
 /*
 
@@ -47,20 +39,36 @@ public class Interpreter {
 
 */	
 	
-	
-
 	// Labels for JM commands is saved in:
-	static Map<String, Integer> labels = new HashMap<String, Integer>();  
+	private HashMap<String, Integer> labels;
 	
 	// counter to read from memory
-	static int commandCounter=0; 
+	private int commandCounter; 
 	
 	// other counter not matter - too many explain
-	static int otherCounter=0;
+	private int otherCounter;
 	
 	// Create Box for PCB
-	static PCB PCBbox= new PCB();
-	public static int RUN(Proces RUNNING)
+	private PCB PCBbox;
+	
+	private RAM RAM;
+	
+	private FileSystem fileSystem;
+	
+	private ProcessesManagment processesManagment;
+	
+	public Interpreter(RAM ram, FileSystem fileSystem, ProcessesManagment processesManagment) {
+		labels = new HashMap<String, Integer>();  
+		PCBbox = new PCB();
+		this.RAM = ram;
+		this.fileSystem = fileSystem;
+		this.processesManagment = processesManagment;
+		
+		commandCounter = 0; 
+		otherCounter = 0;
+	}
+
+	public int RUN(Process RUNNING)
 	{
 		// Put to Box a PCB from current Process
 		PCBbox = RUNNING.GetPCB();
@@ -95,7 +103,7 @@ public class Interpreter {
 		return 0;
 	}
 	
-	private static int getValue(String param1)
+	private int getValue(String param1)
 	{
 	   switch(param1) {
 	      case "A": return core.Processor.A;
@@ -110,23 +118,23 @@ public class Interpreter {
 	   }
 	   return 0;
 	}
-	private static int setValue(String param1, int value) {
+	private int setValue(String param1, int value) {
 	   switch(param1) {
 	      case "A":  core.Processor.A = value; break;
 	      case "B":  core.Processor.B = value; break;
 	      case "C":  core.Processor.C = value; break;
 	      case "D":  core.Processor.D = value; break;
-	      case "PCBbox.A":  Interpreter.PCBbox.A = value;
-	      case "PCBbox.B":  Interpreter.PCBbox.B = value;
-	      case "PCBbox.C":  Interpreter.PCBbox.C = value;
-	      case "PCBbox.D":  Interpreter.PCBbox.D = value;
-	      case "PCBbox.commandCounter": Interpreter.PCBbox.commandCounter =value;
+	      case "PCBbox.A":  PCBbox.A = value;
+	      case "PCBbox.B":  PCBbox.B = value;
+	      case "PCBbox.C":  PCBbox.C = value;
+	      case "PCBbox.D":  PCBbox.D = value;
+	      case "PCBbox.commandCounter": PCBbox.commandCounter =value;
 	   }
 	   return 0;
 	}
 	
 	// Checking: Is command is the label?
-	private static boolean isLabel(StringBuilder command)
+	private boolean isLabel(StringBuilder command)
 	{
 		if(command.charAt(command.length()-1)==':')
 		{
@@ -139,7 +147,7 @@ public class Interpreter {
 	}
 
 	
- 	private static String getProgram(int commandCounter, String procesName)
+ 	private String getProgram(int commandCounter, String procesName)
 	{
 	  	char znak;
 	  	String program ="";
@@ -159,7 +167,7 @@ public class Interpreter {
 	}
 
  	// Follow the recognized command
-	private static void doCommand(String rozkaz, String param1, String param2, boolean argDrugiJestRejestrem, Map<String, Integer> labels) {
+	private void doCommand(String rozkaz, String param1, String param2, boolean argDrugiJestRejestrem, HashMap<String, Integer> labels) {
 	  switch(rozkaz) {
 
 	   case "AD":  // Dodawanie wartości
@@ -227,34 +235,34 @@ public class Interpreter {
 		  //sendMsg(paramI, paramII);
 	  break;
 	  case "XN": //-- znalezienie PCB (param1); 
-		  setValue("A", ProcessesManagment.FindProcessWithName(param1));
+		  setValue("A", processesManagment.FindProcessWithName(param1));
 	  break;   
 	  	  
 	  case "XC":  //-- tworzenie procesu (param1);
-		  ProcessesManagment.NewProcess_XC(param1)
+		  processesManagment.NewProcess_XC(param1);
 	  break;
 	  case "XY":  //-- Uruchomienie procesu 
 		  
 	  break;
 	  case "XD":  //-- usuwanie procesu (param1);
-		  ProcessesManagment.DeleteProcessWithName_XD(param1);
+		  processesManagment.DeleteProcessWithName_XD(param1);
 	  break;
 	  case "XZ":  //-- Zatrzymanie procesu 
 		  //stopProces(param1);
 	  break;
 	 	  
 	  case "MF":  //-- Create file 
-		  FileSystem.createFileWithContent(param1,param2);
+		  fileSystem.createFileWithContent(param1,param2);
 	  break;
 	  case "WF":  
-		  FileSystem.appendToFile(param1,param2);
+		  fileSystem.appendToFile(param1,param2);
 	  break;
 	  case "WR": 
-		  FileSystem.appendToFile(param1,Integer.toString(getValue(param2)));
+		  fileSystem.appendToFile(param1,Integer.toString(getValue(param2)));
 	  break;
 	  case "DF":  //-- Delete file 
 		// deleteFile(paramI)
-		  FileSystem.deleteFile(param1);
+		  fileSystem.deleteFile(param1);
       break;
 	  case "PO":  //-- Print Output 	
 		  System.out.println(param1);
@@ -262,7 +270,7 @@ public class Interpreter {
 	  }
 	}
 	
-	public static void work(String program, Map<String, Integer> labels)
+	public void work(String program, HashMap<String, Integer> labels)
 	{
 		   ArrayList<String> rozkazy = new ArrayList<String>();				//  [*] USTALONE ROZKAZY [*]  //
 

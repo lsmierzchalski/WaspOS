@@ -1,4 +1,4 @@
-package ProcessesManagment;
+package processesManagement;
 
 public class ProcessStateOverseer {
 

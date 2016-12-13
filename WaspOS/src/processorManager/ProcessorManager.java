@@ -1,7 +1,9 @@
 package processorManager;
-import ProcessesManagment.Proces;
-import ProcessesManagment.ProcessesManagment;
+
 import commandInterpreter.Interpreter;
+import processesManagement.ProcessesManagment;
+import processesManagement.Process;
+
 import java.util.Iterator;
 
 public class ProcessorManager {
@@ -16,21 +18,35 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	
-	private static Proces idleProcess = ProcessesManagment.NewProcess_EmptyProcess("idleProcess");
+	private Process idleProcess;
 	
 	/**
 	 * Pole przechowuj¹ce aktualnie uruchomiony proces.
 	 * 
 	 * @author £UKASZ WOLNIAK
 	 */
-	public static Proces RUNNING = idleProcess; 
+	public static Process RUNNING;
 	
 	/**
 	 * Pole przechowuj¹ce kandydata na kolejny proces do uruchomienia.
 	 * 
 	 * @author £UKASZ WOLNIAK
 	 */
-	public static Proces NEXTTRY = idleProcess;
+	public static Process NEXTTRY;
+	
+	
+	private ProcessesManagment processesManagment;
+	
+	private Interpreter interpreter;
+	
+	public ProcessorManager(ProcessesManagment processesManagment, Interpreter interpreter) {
+		this.processesManagment = processesManagment;
+		this.interpreter = interpreter;
+		idleProcess = processesManagment.NewProcess_EmptyProcess("idleProcess");
+		RUNNING = idleProcess; 
+		NEXTTRY = idleProcess;
+	}
+	
 	
 	/**
 	 * Funkcja sprawdzaj¹ca, czy w polu RUNNING jest na pewno proces o najwy¿szym piorytecie z dostepnych tych na liscie procesow + zastosowanie algorytmu FCFS.
@@ -38,7 +54,7 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	private void checkRUNNING(){
-		for(Proces processFromList : ProcessesManagment.processesList){
+		for(Process processFromList : processesManagment.processesList){
 			if((processFromList.GetCurrentPriority() >= RUNNING.GetCurrentPriority()) && processFromList.GetState()==1){
 				if(processFromList.GetCurrentPriority() == RUNNING.GetCurrentPriority()){
 					if(processFromList.GetWhenCameToList() < RUNNING.GetWhenCameToList()){
@@ -63,7 +79,7 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	private void checkNEXTTRY(){
-		for(Proces processFromList : ProcessesManagment.processesList){
+		for(Process processFromList : processesManagment.processesList){
 			if((processFromList.GetCurrentPriority() >= NEXTTRY.GetCurrentPriority()) && (processFromList.GetState()==1  || processFromList.GetState()==3)){
 					if(processFromList.GetCurrentPriority() == NEXTTRY.GetCurrentPriority()){
 						if(processFromList.GetWhenCameToList() < NEXTTRY.GetWhenCameToList()){
@@ -127,8 +143,8 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	private void checkStarving(){
-		Proces weakProcess = ProcessesManagment.processesList.get(1);
-		for(Proces processFromList : ProcessesManagment.processesList){
+		Process weakProcess = processesManagment.processesList.get(1);
+		for(Process processFromList : processesManagment.processesList){
 				if(processFromList.GetCurrentPriority() <= weakProcess.GetCurrentPriority()){
 					if(processFromList.GetCurrentPriority() == weakProcess.GetCurrentPriority()){
 					if(processFromList.GetWhenCameToList() < weakProcess.GetWhenCameToList()){
@@ -141,7 +157,7 @@ public class ProcessorManager {
 	
 			}
 		}
-		for(Proces processFromListCheck : ProcessesManagment.processesList){
+		for(Process processFromListCheck : processesManagment.processesList){
 			if(processFromListCheck.GetID() == weakProcess.GetID()){
 				processFromListCheck.SetCurrentPriority(processFromListCheck.GetCurrentPriority()+1);
 			}
@@ -155,7 +171,7 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	private void changeWaiting(){
-		for(Proces processFromList : ProcessesManagment.processesList){
+		for(Process processFromList : processesManagment.processesList){
 			if(processFromList.GetState()!=2 && processFromList.GetState()!=4 && processFromList.GetState()!=4){
 				processFromList.SetHowLongWaiting(processFromList.GetHowLongWaiting()+1);
 			}
@@ -171,8 +187,8 @@ public class ProcessorManager {
 	 * @author £UKASZ WOLNIAK
 	 */
 	private void checkAging(){
-		Proces weakestProcess = ProcessesManagment.processesList.get(1);
-		for(Proces processFromList : ProcessesManagment.processesList){
+		Process weakestProcess = processesManagment.processesList.get(1);
+		for(Process processFromList : processesManagment.processesList){
 			if(processFromList.GetHowLongWaiting() >= 3){
 				if(processFromList.GetHowLongWaiting() >= weakestProcess.GetHowLongWaiting()){
 					if(processFromList.GetHowLongWaiting() == weakestProcess.GetHowLongWaiting()){
@@ -187,7 +203,7 @@ public class ProcessorManager {
 			}
 		}
 		}
-		for(Proces processFromListCheck : ProcessesManagment.processesList){
+		for(Process processFromListCheck : processesManagment.processesList){
 			if(processFromListCheck.GetID() == weakestProcess.GetID()){
 				processFromListCheck.SetCurrentPriority(processFromListCheck.GetCurrentPriority()+1);
 				processFromListCheck.SetHowLongWaiting(0);
@@ -260,6 +276,6 @@ public class ProcessorManager {
 			// MINAL ROZKAZ, WIEC ZWIEKSZAMY CZEKANKO - wywolujemy tu a nie na poczatku bo przy pierwszym wyborze wysdzloby ze czekaly rozkaz procesy
 			changeWaiting();
 			//Uruchomienie INTERPRETERA
-			Interpreter.RUN(RUNNING);
+			interpreter.RUN(RUNNING);
 	}
 }

@@ -1,4 +1,4 @@
-package ProcessesManagment;
+package processesManagement;
 
 import java.util.HashMap;
 
@@ -12,7 +12,6 @@ public class PCB{
 	protected boolean blocked;
 	protected int whenCameToList;
 	protected int howLongWaiting;
-	
 	
 	
 	

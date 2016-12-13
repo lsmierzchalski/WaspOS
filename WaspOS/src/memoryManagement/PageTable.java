@@ -1,4 +1,4 @@
-package memoryManagament;
+package memoryManagement;
 
 public class PageTable {
 	// w jakich ramkach jest dana strona programu

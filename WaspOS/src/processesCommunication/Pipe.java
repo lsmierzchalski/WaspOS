@@ -1,4 +1,4 @@
-package processesComunication;
+package processesCommunication;
 
 /**
  * G³ówna klasa wymiany danych pomiêdzy procesami.

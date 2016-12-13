@@ -1,15 +1,14 @@
-package ProcessesManagment;
-import java.lang.Object;
+package processesManagement;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ProcessesManagment extends Proces {
+public class ProcessesManagment extends Process {
 
 	// TO JEST KLASA Z METODAMI DLA WAS RESZTY NIE RUSZAC
 	
 	//***ZMIENNE*****************************************************************************************
 	
-	static public List<Proces> processesList;
+	public List<Process> processesList;
 	
 	//---pomocnicze--------------------------------------------------------------------------------------
 	
@@ -27,7 +26,7 @@ public class ProcessesManagment extends Proces {
 	
 	public ProcessesManagment(){
 		
-		processesList = new LinkedList<Proces>();
+		processesList = new LinkedList<Process>();
 		idoverseer = new ID_Overseer();
 		stateOverseer = new ProcessStateOverseer();
 		finishedProcessList = new LinkedList<Integer>();
@@ -40,7 +39,7 @@ public class ProcessesManagment extends Proces {
 
 	public void NewProcess_XC(String Name){
 		
-		Proces process = new Proces();
+		Process process = new Process();
 		
 		int id = idoverseer.PickID();
 		
@@ -60,7 +59,7 @@ public class ProcessesManagment extends Proces {
 	
 	public void NewProcess_forUser(String ProgramPath_Original, String Name) {
 		
-		Proces process = new Proces();
+		Process process = new Process();
 		
 		int id = idoverseer.PickID();
 		
@@ -78,9 +77,9 @@ public class ProcessesManagment extends Proces {
 		processNumber++;
 	}
 	
-	public static Proces NewProcess_EmptyProcess(String Name) {
+	public  Process NewProcess_EmptyProcess(String Name) {
 		
-		Proces process = new Proces();
+		Process process = new Process();
 		process.CreateProcess(-1, Name, -1);
 		process.SetBasePriority(0);
 		process.SetCurrentPriority(0);
@@ -134,7 +133,7 @@ public class ProcessesManagment extends Proces {
 	
 	public int FindProcessWithID(int ID) {
 		
-		Proces proces_kopia;
+		Process proces_kopia;
 		
 		for(int i = 0; i < processesList.size(); i++) {
 			
@@ -153,7 +152,7 @@ public class ProcessesManagment extends Proces {
 	
 	public int FindProcessWithName(String name) {
 		
-		Proces proces_kopia;
+		Process proces_kopia;
 		
 		for(int i = 0; i < processesList.size(); i++) {
 			
